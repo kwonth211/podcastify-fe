@@ -34,6 +34,23 @@ jobs:
           VITE_R2_BUCKET_NAME: ${{ secrets.VITE_R2_BUCKET_NAME }}
           VITE_R2_PUBLIC_URL: ${{ secrets.VITE_R2_PUBLIC_URL }}
 
+      - name: Verify Secrets (Debug)
+        run: |
+          echo "Account ID length: ${#CLOUDFLARE_ACCOUNT_ID}"
+          echo "Token length: ${#CLOUDFLARE_API_TOKEN}"
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "ERROR: CLOUDFLARE_ACCOUNT_ID is empty"
+            exit 1
+          fi
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "ERROR: CLOUDFLARE_API_TOKEN is empty"
+            exit 1
+          fi
+          echo "Secrets are set (lengths only for security)"
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -41,4 +58,3 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: podcastify-fe
           directory: dist
-          # 또는 gitSource를 사용하여 자동 배포 설정 가능
