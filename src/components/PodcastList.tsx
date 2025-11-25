@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
 import AudioPlayer from "./AudioPlayer";
 import type { PodcastFile } from "../types";
-//
 function PodcastList() {
   const [podcasts, setPodcasts] = useState<PodcastFile[]>([]);
   const [loading, setLoading] = useState(true);
