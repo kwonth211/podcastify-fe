@@ -55,16 +55,42 @@ yarn build
 2. R2 API 토큰 생성 (Access Key ID, Secret Access Key)
 3. 버킷에 오디오 파일 업로드 (예: `podcasts/2024-01-15.mp3` 형식)
 
-## GitHub Actions 배포
+## 배포
 
-GitHub Secrets에 다음 변수들을 설정하세요:
+배포 가이드는 [DEPLOYMENT.md](./DEPLOYMENT.md) 파일을 참고하세요.
 
-- `VITE_R2_ENDPOINT`
-- `VITE_R2_ACCESS_KEY_ID`
-- `VITE_R2_SECRET_ACCESS_KEY`
-- `VITE_R2_BUCKET_NAME`
-- `CLOUDFLARE_API_TOKEN` (Cloudflare Pages 배포용)
-- `CLOUDFLARE_ACCOUNT_ID` (Cloudflare Pages 배포용)
+### 빠른 시작
+
+1. **Cloudflare Pages 프로젝트 생성**
+   - Cloudflare Dashboard → Workers & Pages → Pages
+   - GitHub 저장소 연결 또는 GitHub Actions 사용
+
+2. **GitHub Secrets 설정**
+   - [GITHUB_SECRETS.md](./GITHUB_SECRETS.md) 참고
+
+3. **환경 변수 설정**
+   - Cloudflare Pages 대시보드에서 `VITE_R2_PUBLIC_URL` 설정
+
+4. **배포**
+   - `main` 브랜치에 push하면 자동 배포됩니다.
+
+### 필수 Secrets
+
+**R2 설정 (빌드용 - 서버 사이드 전용)**
+- `VITE_R2_ENDPOINT` - R2 엔드포인트 URL
+- `VITE_R2_BUCKET_NAME` - 버킷 이름
+- `VITE_R2_ACCESS_KEY_ID` - 빌드용 읽기 전용 Access Key ID
+- `VITE_R2_SECRET_ACCESS_KEY` - 빌드용 읽기 전용 Secret Access Key
+
+**Cloudflare Pages 배포**
+- `CLOUDFLARE_API_TOKEN` - Cloudflare API 토큰
+- `CLOUDFLARE_ACCOUNT_ID` - Cloudflare 계정 ID
+
+### 선택적 Secrets
+
+- `VITE_R2_PUBLIC_URL` - Public Development URL (런타임용)
+
+⚠️ **보안 주의**: 빌드용 토큰은 클라이언트 코드에 포함되지 않으며, 빌드 시에만 사용됩니다.
 
 ## 프로젝트 구조
 

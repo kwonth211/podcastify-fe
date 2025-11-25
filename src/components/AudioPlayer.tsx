@@ -8,7 +8,7 @@ const PlayerContainer = styled.div`
   padding: 2rem;
   color: white;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 `;
 
 const PlayerHeader = styled.div`
@@ -47,6 +47,52 @@ const Controls = styled.div`
   align-items: center;
   gap: 1rem;
   margin-top: 1rem;
+  flex-wrap: wrap;
+`;
+
+const ControlGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const SpeedButton = styled.button`
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  &.active {
+    background: white;
+    color: #667eea;
+    border-color: white;
+  }
+`;
+
+const DownloadButton = styled.button`
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 const PlayButton = styled.button`
@@ -104,11 +150,13 @@ function AudioPlayer({
   audioUrl,
   date,
   title = "Daily News Podcast",
+  onDownload,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -117,16 +165,43 @@ function AudioPlayer({
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
     const handleEnded = () => setIsPlaying(false);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", updateDuration);
     audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+
+    // 배속 설정
+    audio.playbackRate = playbackRate;
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", updateDuration);
       audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
     };
+  }, [audioUrl, playbackRate]);
+
+  // audioUrl이 변경되면 자동으로 재생
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !audioUrl) return;
+
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (err) {
+        console.error("자동 재생 실패:", err);
+        // 브라우저 정책으로 인해 자동 재생이 차단될 수 있음
+      }
+    };
+
+    playAudio();
   }, [audioUrl]);
 
   const togglePlay = () => {
@@ -158,7 +233,39 @@ function AudioPlayer({
     audio.currentTime = percentage * duration;
   };
 
+  const handleSpeedChange = (speed: number) => {
+    setPlaybackRate(speed);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = speed;
+    }
+  };
+
+  const handleDownload = async () => {
+    if (onDownload) {
+      onDownload();
+    } else {
+      // fallback: fetch로 다운로드
+      try {
+        const response = await fetch(audioUrl);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${title.replace(/\s+/g, "_")}.mp3`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error("다운로드 실패:", err);
+        // 최종 fallback: 새 창에서 열기
+        window.open(audioUrl, "_blank");
+      }
+    }
+  };
+
   const progress = duration ? (currentTime / duration) * 100 : 0;
+  const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
   return (
     <PlayerContainer>
@@ -174,14 +281,32 @@ function AudioPlayer({
       </ProgressBar>
 
       <Controls>
-        <PlayButton onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</PlayButton>
-        <TimeInfo>
-          {formatTime(currentTime)} / {formatTime(duration)}
-        </TimeInfo>
+        <ControlGroup>
+          <PlayButton onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</PlayButton>
+          <TimeInfo>
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </TimeInfo>
+        </ControlGroup>
+
+        <ControlGroup>
+          <SpeedButton
+            onClick={() => {
+              const currentIndex = speedOptions.indexOf(playbackRate);
+              const nextIndex = (currentIndex + 1) % speedOptions.length;
+              handleSpeedChange(speedOptions[nextIndex]);
+            }}
+            className="active"
+            title="배속 변경 (클릭)"
+          >
+            {playbackRate}x
+          </SpeedButton>
+          <DownloadButton onClick={handleDownload} title="다운로드">
+            ⬇ 다운로드
+          </DownloadButton>
+        </ControlGroup>
       </Controls>
     </PlayerContainer>
   );
 }
 
 export default AudioPlayer;
-
