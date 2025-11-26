@@ -15,10 +15,20 @@ function PodcastList() {
   );
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [playTrigger, setPlayTrigger] = useState(0);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
   useEffect(() => {
     loadPodcasts();
   }, []);
+
+  // 배너 자동 슬라이드
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prev) => (prev + 1) % 3);
+    }, 4000); // 4초마다 슬라이드
+
+    return () => clearInterval(interval);
+  }, [currentBannerIndex]); // currentBannerIndex가 변경되면 타이머 재시작
 
   const loadPodcasts = async () => {
     try {
@@ -245,6 +255,50 @@ function PodcastList() {
         <Title>Daily News Podcast</Title>
       </Header>
 
+      {/* 이미지 배너 슬라이더 */}
+      <ImageBannerContainer>
+        <BannerArrow
+          $direction="left"
+          onClick={() => {
+            setCurrentBannerIndex((prev) => (prev - 1 + 3) % 3);
+          }}
+        >
+          ‹
+        </BannerArrow>
+        <BannerSlider
+          style={{
+            transform: `translateX(-${currentBannerIndex * 100}%)`,
+          }}
+        >
+          <BannerSlide>
+            <BannerImage src="/a.png" alt="Banner 1" />
+          </BannerSlide>
+          <BannerSlide>
+            <BannerImage src="/b.png" alt="Banner 2" />
+          </BannerSlide>
+          <BannerSlide>
+            <BannerImage src="/c.png" alt="Banner 3" />
+          </BannerSlide>
+        </BannerSlider>
+        <BannerArrow
+          $direction="right"
+          onClick={() => {
+            setCurrentBannerIndex((prev) => (prev + 1) % 3);
+          }}
+        >
+          ›
+        </BannerArrow>
+        <BannerDots>
+          {[0, 1, 2].map((index) => (
+            <BannerDot
+              key={index}
+              $active={index === currentBannerIndex}
+              onClick={() => setCurrentBannerIndex(index)}
+            />
+          ))}
+        </BannerDots>
+      </ImageBannerContainer>
+
       {/* 강렬한 CTA 배너 */}
       {(() => {
         const todayPodcasts = podcasts.filter((p) => isToday(p.date));
@@ -291,11 +345,6 @@ function PodcastList() {
           </HeroBanner>
         );
       })()}
-
-      {/* AI 비디오 */}
-      <VideoContainer>
-        <Video src="/ai_video.mp4" autoPlay loop playsInline controls />
-      </VideoContainer>
 
       {error && <ErrorContainer>{error}</ErrorContainer>}
 
@@ -784,25 +833,88 @@ const HeroArrow = styled.div`
   }
 `;
 
-const VideoContainer = styled.div`
+const ImageBannerContainer = styled.div`
+  margin: 2rem 0;
   width: 100%;
-  max-width: 800px;
-  margin: 2rem auto;
-  border-radius: 20px;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
-const Video = styled.video`
+const BannerSlider = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+`;
+
+const BannerSlide = styled.div`
+  flex: 0 0 100%;
+  min-width: 0;
+  width: 100%;
+  flex-shrink: 0;
+`;
+
+const BannerImage = styled.img`
   width: 100%;
   height: auto;
   display: block;
-  max-height: 450px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   object-fit: contain;
+`;
+
+const BannerDots = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+`;
+
+const BannerDot = styled.div<{ $active: boolean }>`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: ${(props) =>
+    props.$active ? "rgba(102, 126, 234, 1)" : "rgba(102, 126, 234, 0.3)"};
+  cursor: pointer;
+  transition: all 0.3s ease;
+`;
+
+const BannerArrow = styled.button<{ $direction: "left" | "right" }>`
+  position: absolute;
+  top: 50%;
+  ${(props) => (props.$direction === "left" ? "left: 1rem;" : "right: 1rem;")}
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: rgba(0, 0, 0, 0.7);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    ${(props) =>
+      props.$direction === "left" ? "left: 0.5rem;" : "right: 0.5rem;"}
+  }
 `;
 
 const ListContainer = styled.div`
