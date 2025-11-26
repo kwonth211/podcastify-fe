@@ -198,23 +198,28 @@ function PodcastList() {
         );
       });
 
-      // 재생 횟수 업데이트 (재생 버튼 클릭 시 증가하지만, 여기서는 현재 값만 확인)
-      if (podcast.playCount === undefined) {
-        try {
-          const response = await fetch(
-            `/api/count?key=${encodeURIComponent(podcast.key)}`
+      // 클릭할 때마다 조회수 증가
+      try {
+        const response = await fetch("/api/count", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ key: podcast.key }),
+        });
+        const data = await response.json();
+        if (data.count !== undefined) {
+          setPodcasts((prev) =>
+            prev.map((p) =>
+              p.key === podcast.key ? { ...p, playCount: data.count } : p
+            )
           );
-          const data = await response.json();
-          if (data.count !== undefined) {
-            setPodcasts((prev) =>
-              prev.map((p) =>
-                p.key === podcast.key ? { ...p, playCount: data.count } : p
-              )
-            );
-          }
-        } catch (err) {
-          console.warn("재생 횟수 가져오기 실패:", err);
+          setSelectedPodcast((prev) =>
+            prev ? { ...prev, playCount: data.count } : null
+          );
         }
+      } catch (err) {
+        console.warn("조회수 증가 실패:", err);
       }
     } catch (err) {
       setError("오디오 파일을 불러오는데 실패했습니다.");
