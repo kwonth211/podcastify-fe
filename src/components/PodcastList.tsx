@@ -47,12 +47,19 @@ function PodcastList() {
       const files = await listAudioFiles();
       setPodcasts(files);
 
-      // 각 팟캐스트의 duration과 재생 횟수를 병렬로 로드
-      await Promise.all([loadDurations(files), loadPlayCounts(files)]);
+      // 목록을 먼저 표시하기 위해 로딩 상태를 해제
+      setLoading(false);
+
+      // 각 팟캐스트의 duration과 재생 횟수를 백그라운드에서 병렬로 로드
+      // 로딩 상태를 기다리지 않고 비동기로 실행
+      Promise.all([loadDurations(files), loadPlayCounts(files)]).catch(
+        (err) => {
+          console.warn("백그라운드 데이터 로드 중 오류:", err);
+        }
+      );
     } catch (err) {
       setError("팟캐스트 목록을 불러오는데 실패했습니다.");
       console.error(err);
-    } finally {
       setLoading(false);
     }
   };
