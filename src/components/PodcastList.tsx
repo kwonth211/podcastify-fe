@@ -21,6 +21,64 @@ function PodcastList() {
     loadPodcasts();
   }, []);
 
+  // URL에서 playerId 읽어서 선택 및 스크롤
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const playerId = urlParams.get("playerId");
+
+    if (playerId && podcasts.length > 0) {
+      const podcast = podcasts.find((p) => p.key === playerId);
+      if (
+        podcast &&
+        (!selectedPodcast || selectedPodcast.key !== podcast.key)
+      ) {
+        // URL 기반으로 직접 로드 (무한 루프 방지)
+        const loadFromUrl = async () => {
+          try {
+            setSelectedPodcast(podcast);
+            const audioUrl = await getAudioUrl(podcast.key);
+            setAudioUrl(audioUrl);
+
+            // 오디오 길이 가져오기
+            const audio = new Audio(audioUrl);
+            audio.addEventListener("loadedmetadata", () => {
+              const duration = audio.duration;
+              setSelectedPodcast((prev) =>
+                prev ? { ...prev, duration } : null
+              );
+              setPodcasts((prev) =>
+                prev.map((p) =>
+                  p.key === podcast.key ? { ...p, duration } : p
+                )
+              );
+            });
+            audio.load();
+
+            // 해당 엘리먼트로 스크롤 (약간의 지연 후)
+            setTimeout(() => {
+              const element = document.getElementById(`podcast-${podcast.key}`);
+              if (element) {
+                const elementRect = element.getBoundingClientRect();
+                const absoluteElementTop = elementRect.top + window.pageYOffset;
+                const middle =
+                  absoluteElementTop -
+                  window.innerHeight / 2 +
+                  elementRect.height / 2;
+                window.scrollTo({
+                  top: middle,
+                  behavior: "smooth",
+                });
+              }
+            }, 200);
+          } catch (err) {
+            console.error("URL에서 팟캐스트 로드 실패:", err);
+          }
+        };
+        loadFromUrl();
+      }
+    }
+  }, [podcasts, selectedPodcast]);
+
   // 배너 자동 슬라이드
   useEffect(() => {
     const interval = setInterval(() => {
@@ -121,12 +179,17 @@ function PodcastList() {
 
   const handlePodcastClick = async (podcast: PodcastFile) => {
     try {
+      // URL 업데이트
+      const url = new URL(window.location.href);
+      url.searchParams.set("playerId", podcast.key);
+      window.history.pushState({}, "", url.toString());
+
       setSelectedPodcast(podcast);
-      const url = await getAudioUrl(podcast.key);
-      setAudioUrl(url);
+      const audioUrl = await getAudioUrl(podcast.key);
+      setAudioUrl(audioUrl);
 
       // 오디오 길이 가져오기
-      const audio = new Audio(url);
+      const audio = new Audio(audioUrl);
       audio.addEventListener("loadedmetadata", () => {
         const duration = audio.duration;
         setSelectedPodcast((prev) => (prev ? { ...prev, duration } : null));
@@ -158,6 +221,46 @@ function PodcastList() {
       console.error(err);
     }
   };
+
+  // URL 변경 감지 (뒤로가기/앞으로가기)
+  useEffect(() => {
+    const handlePopState = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const playerId = urlParams.get("playerId");
+
+      if (playerId && podcasts.length > 0) {
+        const podcast = podcasts.find((p) => p.key === playerId);
+        if (podcast) {
+          setSelectedPodcast(podcast);
+          getAudioUrl(podcast.key).then((url) => {
+            setAudioUrl(url);
+            // 해당 엘리먼트로 스크롤
+            setTimeout(() => {
+              const element = document.getElementById(`podcast-${podcast.key}`);
+              if (element) {
+                const elementRect = element.getBoundingClientRect();
+                const absoluteElementTop = elementRect.top + window.pageYOffset;
+                const middle =
+                  absoluteElementTop -
+                  window.innerHeight / 2 +
+                  elementRect.height / 2;
+                window.scrollTo({
+                  top: middle,
+                  behavior: "smooth",
+                });
+              }
+            }, 200);
+          });
+        }
+      } else {
+        setSelectedPodcast(null);
+        setAudioUrl(null);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [podcasts]);
 
   const formatDate = (dateString: string): string => {
     const date = dayjs(dateString, "YYYY-MM-DD");
@@ -312,7 +415,7 @@ function PodcastList() {
               // 같은 팟캐스트이므로 재생 트리거만 증가
               setPlayTrigger((prev) => prev + 1);
             } else {
-              // 새로운 팟캐스트이므로 일반적으로 처리
+              // 새로운 팟캐스트이므로 URL 업데이트와 함께 처리
               handlePodcastClick(firstTodayPodcast);
             }
           }
@@ -330,7 +433,7 @@ function PodcastList() {
                 </HeroTitle>
                 <HeroSubtitle>
                   {hasToday
-                    ? "AI가 요약한 오늘의 주요 뉴스를 빠르게 확인하세요"
+                    ? "오늘의 주요 헤드라인 요약"
                     : "매일 최신 뉴스를 음성으로 제공합니다"}
                 </HeroSubtitle>
                 <HeroNotice>
@@ -377,6 +480,7 @@ function PodcastList() {
                         return (
                           <PlayerWrapper
                             key={podcast.key}
+                            id={`podcast-${podcast.key}`}
                             onClick={(e) => e.stopPropagation()}
                           >
                             <AudioPlayer
@@ -426,6 +530,7 @@ function PodcastList() {
                       return (
                         <PodcastItem
                           key={podcast.key}
+                          id={`podcast-${podcast.key}`}
                           onClick={() => handlePodcastClick(podcast)}
                           style={{ animationDelay: `${index * 0.05}s` }}
                           $isNew={isNew}
@@ -512,6 +617,7 @@ function PodcastList() {
                         return (
                           <PlayerWrapper
                             key={podcast.key}
+                            id={`podcast-${podcast.key}`}
                             onClick={(e) => e.stopPropagation()}
                           >
                             <AudioPlayer

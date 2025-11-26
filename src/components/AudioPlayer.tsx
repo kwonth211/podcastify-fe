@@ -291,9 +291,12 @@ function AudioPlayer({
       try {
         await audio.play();
         setIsPlaying(true);
-      } catch (err) {
-        console.error("자동 재생 실패:", err);
-        // 브라우저 정책으로 인해 자동 재생이 차단될 수 있음
+      } catch (err: any) {
+        // 브라우저 자동 재생 정책으로 인한 실패는 조용히 처리
+        // 사용자가 재생 버튼을 클릭할 수 있도록 UI는 그대로 유지
+        if (err.name !== "NotAllowedError") {
+          console.error("자동 재생 실패:", err);
+        }
       }
     };
 
@@ -302,10 +305,14 @@ function AudioPlayer({
 
   // triggerPlay가 변경되면 재생
   useEffect(() => {
-    if (triggerPlay !== undefined && audioRef.current) {
+    if (triggerPlay !== undefined && triggerPlay > 0 && audioRef.current) {
       const audio = audioRef.current;
       audio.play().catch((err) => {
-        console.error("재생 실패:", err);
+        // 브라우저 자동 재생 정책으로 인한 실패는 조용히 처리
+        // 사용자가 재생 버튼을 클릭할 수 있도록 UI는 그대로 유지
+        if (err.name !== "NotAllowedError") {
+          console.error("재생 실패:", err);
+        }
       });
     }
   }, [triggerPlay]);
