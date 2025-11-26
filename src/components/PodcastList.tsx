@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
+import dayjs from "dayjs";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
 import AudioPlayer from "./AudioPlayer";
 import type { PodcastFile } from "../types";
@@ -148,32 +149,30 @@ function PodcastList() {
   };
 
   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
+    const date = dayjs(dateString, "YYYY-MM-DD");
+    const weekdays = [
+      "일요일",
+      "월요일",
+      "화요일",
+      "수요일",
+      "목요일",
+      "금요일",
+      "토요일",
+    ];
+    return `${date.format("YYYY년 M월 D일")} ${weekdays[date.day()]}`;
   };
 
   const formatShortDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return dayjs(dateString, "YYYY-MM-DD").format("YYYY년 M월 D일");
   };
 
-  const formatRelativeTime = (date?: Date | string): string => {
-    if (!date) return "";
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    if (isNaN(dateObj.getTime())) return "";
+  const formatRelativeTime = (date: string): string => {
+    const targetDate = dayjs(date, "YYYY-MM-DD");
+    if (!targetDate.isValid()) return "";
 
-    const now = new Date();
-    const diff = now.getTime() - dateObj.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const today = dayjs().startOf("day");
+    const target = targetDate.startOf("day");
+    const days = today.diff(target, "day");
 
     if (days === 0) return "오늘";
     if (days === 1) return "어제";
@@ -198,13 +197,9 @@ function PodcastList() {
   };
 
   const isToday = (dateString: string): boolean => {
-    const date = new Date(dateString);
-    const today = new Date();
-    return (
-      date.getFullYear() === today.getFullYear() &&
-      date.getMonth() === today.getMonth() &&
-      date.getDate() === today.getDate()
-    );
+    const today = dayjs().format("YYYY-MM-DD");
+    const target = dayjs(dateString, "YYYY-MM-DD").format("YYYY-MM-DD");
+    return today === target;
   };
 
   if (loading) {
@@ -336,11 +331,7 @@ function PodcastList() {
                     <ItemInfo>
                       <ItemDate>{formatShortDate(podcast.date)}</ItemDate>
                       <ItemMeta>
-                        {podcast.lastModified && (
-                          <ItemTime>
-                            {formatRelativeTime(podcast.lastModified)}
-                          </ItemTime>
-                        )}
+                        <ItemTime>{formatRelativeTime(podcast.date)}</ItemTime>
                         {podcast.playCount !== undefined && (
                           <PlayCountBadge>
                             <PlayCountIcon>▶</PlayCountIcon>

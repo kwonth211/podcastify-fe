@@ -58,7 +58,7 @@ export async function listAudioFiles(): Promise<PodcastFile[]> {
     return mp3Files
       .map((item) => ({
         key: item.Key!,
-        date: extractDateFromKey(item.Key!, item.LastModified),
+        date: extractDateFromKey(item.Key!),
         size: item.Size,
         lastModified: item.LastModified,
       }))
@@ -119,10 +119,9 @@ export async function getAudioUrl(key: string): Promise<string> {
  * 파일 키에서 날짜 추출
  * 파일명 형식: {월}-{ID}_podcast_YYYYMMDD.mp3 (예: 11-19660025445_podcast_20251125.mp3)
  * @param {string} key - 파일 키
- * @param {Date | undefined} lastModified - 파일 수정 날짜 (fallback용)
  * @returns {string} 날짜 문자열 (YYYY-MM-DD)
  */
-function extractDateFromKey(key: string, lastModified?: Date): string {
+function extractDateFromKey(key: string): string {
   // 파일명에서 직접 추출 (루트에 있으므로 접두사 제거 불필요)
   const fileName = key.split("/").pop() || key;
 
@@ -142,14 +141,6 @@ function extractDateFromKey(key: string, lastModified?: Date): string {
   const yyyyMMddMatch = key.match(/(\d{4}-\d{2}-\d{2})/);
   if (yyyyMMddMatch) {
     return yyyyMMddMatch[1];
-  }
-
-  // Modified 날짜가 있으면 사용 (fallback)
-  if (lastModified) {
-    const year = lastModified.getFullYear();
-    const month = String(lastModified.getMonth() + 1).padStart(2, "0");
-    const day = String(lastModified.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
   }
 
   // 날짜를 찾을 수 없으면 빈 문자열 반환
