@@ -146,6 +146,16 @@ function PodcastList() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const isToday = (dateString: string): boolean => {
+    const date = new Date(dateString);
+    const today = new Date();
+    return (
+      date.getFullYear() === today.getFullYear() &&
+      date.getMonth() === today.getMonth() &&
+      date.getDate() === today.getDate()
+    );
+  };
+
   if (loading) {
     return (
       <Container>
@@ -213,12 +223,20 @@ function PodcastList() {
               );
             }
 
+            const isNew = isToday(podcast.date);
+
             return (
               <PodcastItem
                 key={podcast.key}
                 onClick={() => handlePodcastClick(podcast)}
                 style={{ animationDelay: `${index * 0.05}s` }}
+                $isNew={isNew}
               >
+                {isNew && (
+                  <NewBadge>
+                    <NewBadgeText>NEW</NewBadgeText>
+                  </NewBadge>
+                )}
                 <ItemContent>
                   <ItemHeader>
                     <ItemInfo>
@@ -351,7 +369,7 @@ const PlayerWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
-const PodcastItem = styled.div`
+const PodcastItem = styled.div<{ $isNew?: boolean }>`
   background: white;
   border-radius: 20px;
   padding: 0;
@@ -359,8 +377,11 @@ const PodcastItem = styled.div`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid
+    ${(props) =>
+      props.$isNew ? "rgba(239, 68, 68, 0.2)" : "rgba(0, 0, 0, 0.04)"};
   animation: fadeInUp 0.5s ease-out both;
+  position: relative;
 
   @keyframes fadeInUp {
     from {
@@ -373,16 +394,63 @@ const PodcastItem = styled.div`
     }
   }
 
+  ${(props) =>
+    props.$isNew &&
+    `
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+    border-color: rgba(239, 68, 68, 0.3);
+  `}
+
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15),
+    box-shadow: 0 8px 24px
+        ${(props) =>
+          props.$isNew
+            ? "rgba(239, 68, 68, 0.2)"
+            : "rgba(102, 126, 234, 0.15)"},
       0 2px 8px rgba(0, 0, 0, 0.08);
-    border-color: rgba(102, 126, 234, 0.2);
+    border-color: ${(props) =>
+      props.$isNew ? "rgba(239, 68, 68, 0.4)" : "rgba(102, 126, 234, 0.2)"};
   }
 
   &:active {
     transform: translateY(-2px);
   }
+`;
+
+const NewBadge = styled.div`
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 10;
+  animation: pulse 2s ease-in-out infinite;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  }
+`;
+
+const NewBadgeText = styled.span`
+  display: inline-block;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4),
+    0 4px 12px rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 `;
 
 const ItemContent = styled.div`
