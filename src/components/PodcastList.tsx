@@ -27,57 +27,9 @@ function PodcastList() {
     const playerId = urlParams.get("playerId");
 
     if (playerId && podcasts.length > 0) {
-      const podcast = podcasts.find((p) => p.key === playerId);
-      if (
-        podcast &&
-        (!selectedPodcast || selectedPodcast.key !== podcast.key)
-      ) {
-        // URL 기반으로 직접 로드 (무한 루프 방지)
-        const loadFromUrl = async () => {
-          try {
-            setSelectedPodcast(podcast);
-            const audioUrl = await getAudioUrl(podcast.key);
-            setAudioUrl(audioUrl);
-
-            // 오디오 길이 가져오기
-            const audio = new Audio(audioUrl);
-            audio.addEventListener("loadedmetadata", () => {
-              const duration = audio.duration;
-              setSelectedPodcast((prev) =>
-                prev ? { ...prev, duration } : null
-              );
-              setPodcasts((prev) =>
-                prev.map((p) =>
-                  p.key === podcast.key ? { ...p, duration } : p
-                )
-              );
-            });
-            audio.load();
-
-            // 해당 엘리먼트로 스크롤 (약간의 지연 후)
-            setTimeout(() => {
-              const element = document.getElementById(`podcast-${podcast.key}`);
-              if (element) {
-                const elementRect = element.getBoundingClientRect();
-                const absoluteElementTop = elementRect.top + window.pageYOffset;
-                const middle =
-                  absoluteElementTop -
-                  window.innerHeight / 2 +
-                  elementRect.height / 2;
-                window.scrollTo({
-                  top: middle,
-                  behavior: "smooth",
-                });
-              }
-            }, 200);
-          } catch (err) {
-            console.error("URL에서 팟캐스트 로드 실패:", err);
-          }
-        };
-        loadFromUrl();
-      }
+      selectPodcastByKey(playerId);
     }
-  }, [podcasts, selectedPodcast]);
+  }, [podcasts]); // selectedPodcast 의존성 제거 (무한 루프 방지)
 
   // 배너 자동 슬라이드
   useEffect(() => {
@@ -154,27 +106,122 @@ function PodcastList() {
     }
   };
 
+  // 조회수 관련 공통 함수들
+  const updatePlayCountState = (key: string, count: number) => {
+    setPodcasts((prev) =>
+      prev.map((p) => (p.key === key ? { ...p, playCount: count } : p))
+    );
+    setSelectedPodcast((prev) =>
+      prev && prev.key === key ? { ...prev, playCount: count } : prev
+    );
+  };
+
+  const fetchPlayCount = async (key: string): Promise<number | null> => {
+    try {
+      const response = await fetch(`/api/count?key=${encodeURIComponent(key)}`);
+      const data = await response.json();
+      if (data.count !== undefined) {
+        updatePlayCountState(key, data.count);
+        return data.count;
+      }
+    } catch (err) {
+      console.warn(`조회수 가져오기 실패 (${key}):`, err);
+    }
+    return null;
+  };
+
+  const incrementPlayCount = async (key: string): Promise<number | null> => {
+    try {
+      const response = await fetch("/api/count", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ key }),
+      });
+      const data = await response.json();
+      if (data.count !== undefined) {
+        updatePlayCountState(key, data.count);
+        return data.count;
+      }
+    } catch (err) {
+      console.warn(`조회수 증가 실패 (${key}):`, err);
+    }
+    return null;
+  };
+
   const loadPlayCounts = async (files: PodcastFile[]) => {
     // 각 팟캐스트의 재생 횟수 로드
-    await Promise.all(
-      files.map(async (file) => {
-        try {
-          const response = await fetch(
-            `/api/count?key=${encodeURIComponent(file.key)}`
-          );
-          const data = await response.json();
-          if (data.count !== undefined) {
-            setPodcasts((prev) =>
-              prev.map((p) =>
-                p.key === file.key ? { ...p, playCount: data.count } : p
-              )
-            );
-          }
-        } catch (err) {
-          console.warn(`Failed to load play count for ${file.key}:`, err);
-        }
-      })
-    );
+    await Promise.all(files.map((file) => fetchPlayCount(file.key)));
+  };
+
+  // duration이 없으면 가져오기
+  const ensureDuration = async (podcast: PodcastFile, audioUrl: string) => {
+    if (podcast.duration) return; // 이미 있으면 스킵
+
+    try {
+      const audio = new Audio(audioUrl);
+      await new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error("Timeout")), 5000);
+        audio.addEventListener(
+          "loadedmetadata",
+          () => {
+            clearTimeout(timeout);
+            const duration = audio.duration;
+            if (duration && !isNaN(duration)) {
+              setPodcasts((prev) =>
+                prev.map((p) =>
+                  p.key === podcast.key ? { ...p, duration } : p
+                )
+              );
+              setSelectedPodcast((prev) =>
+                prev && prev.key === podcast.key ? { ...prev, duration } : prev
+              );
+            }
+            resolve();
+          },
+          { once: true }
+        );
+        audio.addEventListener("error", () => {
+          clearTimeout(timeout);
+          reject(new Error("Failed to load audio"));
+        });
+        audio.load();
+      });
+    } catch (err) {
+      console.warn(`Duration 로드 실패 (${podcast.key}):`, err);
+    }
+  };
+
+  // key로 팟캐스트 선택 (URL 변경 시 사용)
+  const selectPodcastByKey = async (key: string) => {
+    const podcast = podcasts.find((p) => p.key === key);
+    if (!podcast) return;
+
+    // 이미 선택된 것과 같으면 스킵
+    if (selectedPodcast?.key === key) return;
+
+    setSelectedPodcast(podcast);
+    const audioUrl = await getAudioUrl(podcast.key);
+    setAudioUrl(audioUrl);
+
+    // duration이 없으면 가져오기
+    await ensureDuration(podcast, audioUrl);
+
+    // 스크롤
+    setTimeout(() => {
+      const element = document.getElementById(`podcast-${key}`);
+      if (element) {
+        const elementRect = element.getBoundingClientRect();
+        const absoluteElementTop = elementRect.top + window.pageYOffset;
+        const middle =
+          absoluteElementTop - window.innerHeight / 2 + elementRect.height / 2;
+        window.scrollTo({
+          top: middle,
+          behavior: "smooth",
+        });
+      }
+    }, 200);
   };
 
   const handlePodcastClick = async (podcast: PodcastFile) => {
@@ -188,39 +235,11 @@ function PodcastList() {
       const audioUrl = await getAudioUrl(podcast.key);
       setAudioUrl(audioUrl);
 
-      // 오디오 길이 가져오기
-      const audio = new Audio(audioUrl);
-      audio.addEventListener("loadedmetadata", () => {
-        const duration = audio.duration;
-        setSelectedPodcast((prev) => (prev ? { ...prev, duration } : null));
-        setPodcasts((prev) =>
-          prev.map((p) => (p.key === podcast.key ? { ...p, duration } : p))
-        );
-      });
+      // duration이 없으면 가져오기
+      await ensureDuration(podcast, audioUrl);
 
       // 클릭할 때마다 조회수 증가
-      try {
-        const response = await fetch("/api/count", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ key: podcast.key }),
-        });
-        const data = await response.json();
-        if (data.count !== undefined) {
-          setPodcasts((prev) =>
-            prev.map((p) =>
-              p.key === podcast.key ? { ...p, playCount: data.count } : p
-            )
-          );
-          setSelectedPodcast((prev) =>
-            prev ? { ...prev, playCount: data.count } : null
-          );
-        }
-      } catch (err) {
-        console.warn("조회수 증가 실패:", err);
-      }
+      await incrementPlayCount(podcast.key);
     } catch (err) {
       setError("오디오 파일을 불러오는데 실패했습니다.");
       console.error(err);
@@ -234,29 +253,7 @@ function PodcastList() {
       const playerId = urlParams.get("playerId");
 
       if (playerId && podcasts.length > 0) {
-        const podcast = podcasts.find((p) => p.key === playerId);
-        if (podcast) {
-          setSelectedPodcast(podcast);
-          getAudioUrl(podcast.key).then((url) => {
-            setAudioUrl(url);
-            // 해당 엘리먼트로 스크롤
-            setTimeout(() => {
-              const element = document.getElementById(`podcast-${podcast.key}`);
-              if (element) {
-                const elementRect = element.getBoundingClientRect();
-                const absoluteElementTop = elementRect.top + window.pageYOffset;
-                const middle =
-                  absoluteElementTop -
-                  window.innerHeight / 2 +
-                  elementRect.height / 2;
-                window.scrollTo({
-                  top: middle,
-                  behavior: "smooth",
-                });
-              }
-            }, 200);
-          });
-        }
+        selectPodcastByKey(playerId);
       } else {
         setSelectedPodcast(null);
         setAudioUrl(null);
