@@ -16,6 +16,15 @@ const PlayerHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
 `;
 
 const Title = styled.h2`
@@ -30,6 +39,38 @@ const DateLabel = styled.span`
   background: rgba(255, 255, 255, 0.2);
   padding: 0.5rem 1rem;
   border-radius: 20px;
+`;
+
+const PlayCountBadge = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.35rem 0.7rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const PlayCountIcon = styled.span`
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  opacity: 0.9;
+`;
+
+const PlayCountNumber = styled.span`
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-size: 0.75rem;
 `;
 
 const AudioElement = styled.audio`
@@ -152,6 +193,9 @@ function AudioPlayer({
   title = "Daily News Podcast",
   duration: propDuration,
   onDownload,
+  podcastKey,
+  playCount,
+  onPlayCountUpdate,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -205,7 +249,7 @@ function AudioPlayer({
     playAudio();
   }, [audioUrl]);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -213,6 +257,24 @@ function AudioPlayer({
       audio.pause();
     } else {
       audio.play();
+      // 재생 버튼을 눌렀을 때 카운트 증가
+      if (podcastKey) {
+        try {
+          const response = await fetch("/api/count", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ key: podcastKey }),
+          });
+          const data = await response.json();
+          if (data.count !== undefined) {
+            onPlayCountUpdate?.(data.count);
+          }
+        } catch (err) {
+          console.error("카운트 증가 실패:", err);
+        }
+      }
     }
     setIsPlaying(!isPlaying);
   };
@@ -222,6 +284,13 @@ function AudioPlayer({
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const formatCount = (count: number | null): string => {
+    if (count === null) return "—";
+    if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+    if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
+    return count.toLocaleString();
   };
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -272,7 +341,15 @@ function AudioPlayer({
     <PlayerContainer>
       <PlayerHeader>
         <Title>{title}</Title>
-        <DateLabel>{date}</DateLabel>
+        <HeaderRight>
+          {playCount !== undefined && playCount !== null && (
+            <PlayCountBadge>
+              <PlayCountIcon>▶️</PlayCountIcon>
+              <PlayCountNumber>{formatCount(playCount)}</PlayCountNumber>
+            </PlayCountBadge>
+          )}
+          <DateLabel>{date}</DateLabel>
+        </HeaderRight>
       </PlayerHeader>
 
       <AudioElement ref={audioRef} src={audioUrl} preload="metadata" />

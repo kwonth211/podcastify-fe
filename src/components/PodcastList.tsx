@@ -24,8 +24,8 @@ function PodcastList() {
       const files = await listAudioFiles();
       setPodcasts(files);
 
-      // 각 팟캐스트의 duration을 병렬로 로드
-      loadDurations(files);
+      // 각 팟캐스트의 duration과 재생 횟수를 병렬로 로드
+      await Promise.all([loadDurations(files), loadPlayCounts(files)]);
     } catch (err) {
       setError("팟캐스트 목록을 불러오는데 실패했습니다.");
       console.error(err);
@@ -83,6 +83,29 @@ function PodcastList() {
     }
   };
 
+  const loadPlayCounts = async (files: PodcastFile[]) => {
+    // 각 팟캐스트의 재생 횟수 로드
+    await Promise.all(
+      files.map(async (file) => {
+        try {
+          const response = await fetch(
+            `/api/count?key=${encodeURIComponent(file.key)}`
+          );
+          const data = await response.json();
+          if (data.count !== undefined) {
+            setPodcasts((prev) =>
+              prev.map((p) =>
+                p.key === file.key ? { ...p, playCount: data.count } : p
+              )
+            );
+          }
+        } catch (err) {
+          console.warn(`Failed to load play count for ${file.key}:`, err);
+        }
+      })
+    );
+  };
+
   const handlePodcastClick = async (podcast: PodcastFile) => {
     try {
       setSelectedPodcast(podcast);
@@ -98,6 +121,25 @@ function PodcastList() {
           prev.map((p) => (p.key === podcast.key ? { ...p, duration } : p))
         );
       });
+
+      // 재생 횟수 업데이트 (재생 버튼 클릭 시 증가하지만, 여기서는 현재 값만 확인)
+      if (podcast.playCount === undefined) {
+        try {
+          const response = await fetch(
+            `/api/count?key=${encodeURIComponent(podcast.key)}`
+          );
+          const data = await response.json();
+          if (data.count !== undefined) {
+            setPodcasts((prev) =>
+              prev.map((p) =>
+                p.key === podcast.key ? { ...p, playCount: data.count } : p
+              )
+            );
+          }
+        } catch (err) {
+          console.warn("재생 횟수 가져오기 실패:", err);
+        }
+      }
     } catch (err) {
       setError("오디오 파일을 불러오는데 실패했습니다.");
       console.error(err);
@@ -145,6 +187,13 @@ function PodcastList() {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const formatCount = (count: number | undefined): string => {
+    if (count === undefined || count === null) return "—";
+    if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+    if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
+    return count.toLocaleString();
   };
 
   const isToday = (dateString: string): boolean => {
@@ -231,6 +280,17 @@ function PodcastList() {
                     date={formatDate(selectedPodcast.date)}
                     title={`${formatDate(selectedPodcast.date)} 뉴스`}
                     duration={selectedPodcast.duration}
+                    podcastKey={selectedPodcast.key}
+                    playCount={selectedPodcast.playCount}
+                    onPlayCountUpdate={(count: number) => {
+                      setPodcasts((prev) =>
+                        prev.map((p) =>
+                          p.key === selectedPodcast.key
+                            ? { ...p, playCount: count }
+                            : p
+                        )
+                      );
+                    }}
                     onDownload={async () => {
                       try {
                         const response = await fetch(audioUrl);
@@ -274,11 +334,21 @@ function PodcastList() {
                   <ItemHeader>
                     <ItemInfo>
                       <ItemDate>{formatShortDate(podcast.date)}</ItemDate>
-                      {podcast.lastModified && (
-                        <ItemTime>
-                          {formatRelativeTime(podcast.lastModified)}
-                        </ItemTime>
-                      )}
+                      <ItemMeta>
+                        {podcast.lastModified && (
+                          <ItemTime>
+                            {formatRelativeTime(podcast.lastModified)}
+                          </ItemTime>
+                        )}
+                        {podcast.playCount !== undefined && (
+                          <PlayCountBadge>
+                            <PlayCountIcon>▶</PlayCountIcon>
+                            <PlayCountText>
+                              조회수: {formatCount(podcast.playCount)}
+                            </PlayCountText>
+                          </PlayCountBadge>
+                        )}
+                      </ItemMeta>
                     </ItemInfo>
                     <PlayIndicator>
                       <PlayIcon>▶</PlayIcon>
@@ -546,6 +616,38 @@ const ItemTime = styled.div`
   font-weight: 500;
 `;
 
+const ItemMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+`;
+
+const PlayCountBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(102, 126, 234, 0.15);
+`;
+
+const PlayCountIcon = styled.span`
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+`;
+
+const PlayCountText = styled.span`
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+`;
+
 const PlayIndicator = styled.div`
   width: 48px;
   height: 48px;
@@ -577,13 +679,13 @@ const ItemDetails = styled.div`
   gap: 1rem;
 `;
 
-const DetailCard = styled.div`
+const DetailCard = styled.div<{ $compact?: boolean }>`
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  padding: 1rem;
+  gap: ${(props) => (props.$compact ? "0.5rem" : "0.875rem")};
+  padding: ${(props) => (props.$compact ? "0.6rem 0.75rem" : "1rem")};
   background: #f9fafb;
-  border-radius: 12px;
+  border-radius: ${(props) => (props.$compact ? "8px" : "12px")};
   border: 1px solid #e5e7eb;
   transition: all 0.2s;
 
@@ -593,17 +695,19 @@ const DetailCard = styled.div`
   }
 `;
 
-const DetailIcon = styled.div`
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
+const DetailIcon = styled.div<{ $small?: boolean }>`
+  font-size: ${(props) => (props.$small ? "0.9rem" : "1.5rem")};
+  width: ${(props) => (props.$small ? "28px" : "40px")};
+  height: ${(props) => (props.$small ? "28px" : "40px")};
   display: flex;
   align-items: center;
   justify-content: center;
   background: white;
-  border-radius: 10px;
+  border-radius: ${(props) => (props.$small ? "6px" : "10px")};
   flex-shrink: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  color: ${(props) => (props.$small ? "#667eea" : "inherit")};
+  font-weight: ${(props) => (props.$small ? "600" : "normal")};
 `;
 
 const DetailContent = styled.div`
@@ -613,16 +717,16 @@ const DetailContent = styled.div`
   min-width: 0;
 `;
 
-const DetailLabel = styled.div`
-  font-size: 0.75rem;
+const DetailLabel = styled.div<{ $small?: boolean }>`
+  font-size: ${(props) => (props.$small ? "0.65rem" : "0.75rem")};
   color: #6b7280;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 `;
 
-const DetailValue = styled.div`
-  font-size: 0.9375rem;
+const DetailValue = styled.div<{ $small?: boolean }>`
+  font-size: ${(props) => (props.$small ? "0.8rem" : "0.9375rem")};
   color: #111827;
   font-weight: 700;
   letter-spacing: -0.01em;

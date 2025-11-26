@@ -1,0 +1,8 @@
+name = "podcastfy-fe"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "DAILYNEWSPOD_KV"
+id = "62b24f96eaf242eda9c2fa75c1c7b067"
+preview_id = "62b24f96eaf242eda9c2fa75c1c7b067"
+

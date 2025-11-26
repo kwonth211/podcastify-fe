@@ -4,6 +4,7 @@ export interface PodcastFile {
   size?: number;
   lastModified?: Date;
   duration?: number; // 오디오 길이 (초)
+  playCount?: number; // 재생 횟수
 }
 
 export interface AudioPlayerProps {
@@ -12,4 +13,7 @@ export interface AudioPlayerProps {
   title?: string;
   duration?: number;
   onDownload?: () => void;
+  podcastKey?: string; // 팟캐스트 키 (재생 횟수 추적용)
+  playCount?: number; // 재생 횟수
+  onPlayCountUpdate?: (count: number) => void; // 재생 횟수 업데이트 콜백
 }
