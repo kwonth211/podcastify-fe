@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
 import AudioPlayer from "./AudioPlayer";
@@ -169,10 +170,42 @@ function PodcastList() {
 
   return (
     <Container>
+      <Helmet>
+        <title>Daily News Podcast - AI로 만드는 데일리 뉴스 팟캐스트</title>
+        <meta
+          name="description"
+          content="AI 기술로 제작된 데일리 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+        />
+        <meta property="og:url" content="https://dailynewspod.com/" />
+        <meta
+          property="og:title"
+          content="Daily News Podcast - AI로 만드는 데일리 뉴스 팟캐스트"
+        />
+        <meta
+          property="og:description"
+          content="AI 기술로 제작된 데일리 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+        />
+        <meta property="twitter:url" content="https://dailynewspod.com/" />
+        <meta
+          property="twitter:title"
+          content="Daily News Podcast - AI로 만드는 데일리 뉴스 팟캐스트"
+        />
+        <meta
+          property="twitter:description"
+          content="AI 기술로 제작된 데일리 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+        />
+      </Helmet>
       <Header>
         <Title>Daily News Podcast</Title>
-        <Subtitle>데일리 뉴스를 팟캐스트로 들어보세요</Subtitle>
+        <Subtitle>AI로 만드는 데일리 뉴스를 팟캐스트로 들어보세요</Subtitle>
       </Header>
+
+      <NoticeContainer>
+        <NoticeIcon>ℹ️</NoticeIcon>
+        <NoticeText>
+          AI는 아직 한국어 지원이 안정적이지 않을 수 있습니다.
+        </NoticeText>
+      </NoticeContainer>
 
       {error && <ErrorContainer>{error}</ErrorContainer>}
 
@@ -351,6 +384,35 @@ const ErrorContainer = styled.div`
   font-weight: 500;
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
   border: 1px solid rgba(220, 38, 38, 0.1);
+`;
+
+const NoticeContainer = styled.div`
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  color: #6b7280;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-weight: 400;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const NoticeIcon = styled.span`
+  font-size: 1.25rem;
+  flex-shrink: 0;
+`;
+
+const NoticeText = styled.p`
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 `;
 
 const ListContainer = styled.div`

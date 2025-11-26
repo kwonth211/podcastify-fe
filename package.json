@@ -14,6 +14,7 @@
     "@aws-sdk/s3-request-presigner": "^3.939.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-helmet-async": "^2.0.5",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 import { ThemeProvider } from "styled-components";
+import { HelmetProvider } from "react-helmet-async";
 import GlobalStyle from "./styles/GlobalStyle";
 import PodcastList from "./components/PodcastList";
 
@@ -14,12 +15,13 @@ const theme = {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <PodcastList />
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <PodcastList />
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 
 export default App;
-
