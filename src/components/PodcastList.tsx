@@ -555,14 +555,13 @@ function PodcastList() {
                                   <ItemTime>
                                     {formatRelativeTime(podcast.date)}
                                   </ItemTime>
-                                  {podcast.playCount !== undefined && (
-                                    <PlayCountBadge>
-                                      <PlayCountIcon>▶</PlayCountIcon>
-                                      <PlayCountText>
-                                        조회수: {formatCount(podcast.playCount)}
-                                      </PlayCountText>
-                                    </PlayCountBadge>
-                                  )}
+                                  <PlayCountBadge>
+                                    <PlayCountIcon>▶</PlayCountIcon>
+                                    <PlayCountText>
+                                      조회수:{" "}
+                                      {formatCount(podcast.playCount || 0)}
+                                    </PlayCountText>
+                                  </PlayCountBadge>
                                   {podcast.duration &&
                                     podcast.duration <= 180 && (
                                       <QuickBadge>
@@ -684,14 +683,13 @@ function PodcastList() {
                                   <ItemTime>
                                     {formatRelativeTime(podcast.date)}
                                   </ItemTime>
-                                  {podcast.playCount !== undefined && (
-                                    <PlayCountBadge>
-                                      <PlayCountIcon>▶</PlayCountIcon>
-                                      <PlayCountText>
-                                        조회수: {formatCount(podcast.playCount)}
-                                      </PlayCountText>
-                                    </PlayCountBadge>
-                                  )}
+                                  <PlayCountBadge>
+                                    <PlayCountIcon>▶</PlayCountIcon>
+                                    <PlayCountText>
+                                      조회수:{" "}
+                                      {formatCount(podcast.playCount || 0)}
+                                    </PlayCountText>
+                                  </PlayCountBadge>
                                   {podcast.duration &&
                                     podcast.duration <= 180 && (
                                       <QuickBadge>
@@ -743,11 +741,19 @@ const Container = styled.div`
   padding: 3rem 2rem;
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
 `;
 
 const Header = styled.header`
   text-align: center;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const Title = styled.h1`
@@ -875,7 +881,7 @@ const HeroIcon = styled.div`
   }
 
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
   }
 `;
 
@@ -949,6 +955,10 @@ const ImageBannerContainer = styled.div`
   width: 100%;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    margin: 1.5rem 0;
+  }
 `;
 
 const BannerSlider = styled.div`
@@ -970,6 +980,12 @@ const BannerImage = styled.img`
   border-radius: 20px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   object-fit: contain;
+
+  @media (max-width: 768px) {
+    border-radius: 16px;
+    min-height: 200px;
+    object-fit: cover;
+  }
 `;
 
 const BannerDots = styled.div`
@@ -1062,6 +1078,10 @@ const PodcastItem = styled.div<{ $isNew?: boolean }>`
     }
   }
 
+  @media (max-width: 768px) {
+    border-radius: 16px;
+  }
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15),
@@ -1111,6 +1131,10 @@ const NewBadgeText = styled.span`
 
 const ItemContent = styled.div`
   padding: 1.75rem;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
 `;
 
 const ItemHeader = styled.div`
@@ -1119,6 +1143,11 @@ const ItemHeader = styled.div`
   align-items: flex-start;
   margin-bottom: 1.5rem;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+  }
 `;
 
 const ItemInfo = styled.div`
@@ -1132,6 +1161,11 @@ const ItemDate = styled.h3`
   color: #111827;
   line-height: 1.3;
   letter-spacing: -0.02em;
+
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+    margin-bottom: 0.375rem;
+  }
 `;
 
 const ItemTime = styled.div`
@@ -1188,6 +1222,12 @@ const PlayIndicator = styled.div`
     transform: scale(1.08);
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45);
   }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
 `;
 
 const PlayIcon = styled.span`
@@ -1201,6 +1241,10 @@ const ItemDetails = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+  }
 `;
 
 const DetailCard = styled.div<{ $compact?: boolean }>`

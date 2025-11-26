@@ -15,6 +15,11 @@ const PlayerContainer = styled.div`
   margin-bottom: 0;
   border: 1px solid rgba(6, 182, 212, 0.2);
   backdrop-filter: blur(10px);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
 `;
 
 const PlayerHeader = styled.div`
@@ -24,6 +29,11 @@ const PlayerHeader = styled.div`
   margin-bottom: 1.5rem;
   gap: 1rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+  }
 `;
 
 const HeaderRight = styled.div`
@@ -31,12 +41,20 @@ const HeaderRight = styled.div`
   gap: 0.75rem;
   align-items: center;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
 `;
 
 const Title = styled.h2`
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+  }
 `;
 
 const DateLabel = styled.span`
@@ -98,6 +116,11 @@ const Controls = styled.div`
   gap: 1rem;
   margin-top: 1rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
 `;
 
 const ControlGroup = styled.div`
@@ -392,12 +415,10 @@ function AudioPlayer({
       <PlayerHeader>
         <Title>{title}</Title>
         <HeaderRight>
-          {playCount !== undefined && playCount !== null && (
-            <PlayCountBadge>
-              <PlayCountIcon>▶️</PlayCountIcon>
-              <PlayCountNumber>{formatCount(playCount)}</PlayCountNumber>
-            </PlayCountBadge>
-          )}
+          <PlayCountBadge>
+            <PlayCountIcon>▶️</PlayCountIcon>
+            <PlayCountNumber>{formatCount(playCount || 0)}</PlayCountNumber>
+          </PlayCountBadge>
           <DateLabel>{date}</DateLabel>
         </HeaderRight>
       </PlayerHeader>
