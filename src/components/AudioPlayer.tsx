@@ -198,6 +198,7 @@ function AudioPlayer({
   onPlayCountUpdate,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const hasCountedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -207,10 +208,48 @@ function AudioPlayer({
     const audio = audioRef.current;
     if (!audio) return;
 
+    // audioUrl이 변경되면 카운팅 플래그 리셋
+    hasCountedRef.current = false;
+
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
     const handleEnded = () => setIsPlaying(false);
-    const handlePlay = () => setIsPlaying(true);
+    const handlePlay = () => {
+      setIsPlaying(true);
+
+      // 재생 시 한 번만 카운팅 (unique)
+      if (!podcastKey || hasCountedRef.current) return;
+
+      // 로컬스토리지에서 이미 재생한 팟캐스트인지 확인
+      const playedKey = `played_${podcastKey}`;
+      const hasPlayed = localStorage.getItem(playedKey);
+
+      if (hasPlayed) return;
+
+      hasCountedRef.current = true;
+      localStorage.setItem(playedKey, "true");
+
+      // 카운트 증가
+      fetch("/api/count", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ key: podcastKey }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.count !== undefined) {
+            onPlayCountUpdate?.(data.count);
+          }
+        })
+        .catch((err) => {
+          console.error("카운트 증가 실패:", err);
+          // 실패 시 로컬스토리지에서 제거하여 재시도 가능하게
+          localStorage.removeItem(playedKey);
+          hasCountedRef.current = false;
+        });
+    };
     const handlePause = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate", updateTime);
@@ -229,7 +268,7 @@ function AudioPlayer({
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
     };
-  }, [audioUrl, playbackRate]);
+  }, [audioUrl, playbackRate, podcastKey, onPlayCountUpdate]);
 
   // audioUrl이 변경되면 자동으로 재생
   useEffect(() => {
@@ -249,7 +288,7 @@ function AudioPlayer({
     playAudio();
   }, [audioUrl]);
 
-  const togglePlay = async () => {
+  const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -257,24 +296,6 @@ function AudioPlayer({
       audio.pause();
     } else {
       audio.play();
-      // 재생 버튼을 눌렀을 때 카운트 증가
-      if (podcastKey) {
-        try {
-          const response = await fetch("/api/count", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ key: podcastKey }),
-          });
-          const data = await response.json();
-          if (data.count !== undefined) {
-            onPlayCountUpdate?.(data.count);
-          }
-        } catch (err) {
-          console.error("카운트 증가 실패:", err);
-        }
-      }
     }
     setIsPlaying(!isPlaying);
   };
