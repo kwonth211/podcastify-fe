@@ -344,6 +344,7 @@ function PodcastList() {
           name="description"
           content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
         />
+        <meta property="og:type" content="website" />
         <meta property="og:url" content="https://dailynewspod.com/" />
         <meta
           property="og:title"
@@ -353,6 +354,12 @@ function PodcastList() {
           property="og:description"
           content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
         />
+        <meta property="og:image" content="https://dailynewspod.com/a.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:site_name" content="Daily News Podcast" />
+        <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://dailynewspod.com/" />
         <meta
           property="twitter:title"
@@ -361,6 +368,10 @@ function PodcastList() {
         <meta
           property="twitter:description"
           content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+        />
+        <meta
+          property="twitter:image"
+          content="https://dailynewspod.com/a.png"
         />
       </Helmet>
       <Header>
