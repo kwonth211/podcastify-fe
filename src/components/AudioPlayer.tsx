@@ -150,6 +150,7 @@ function AudioPlayer({
   audioUrl,
   date,
   title = "Daily News Podcast",
+  duration: propDuration,
   onDownload,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -284,7 +285,7 @@ function AudioPlayer({
         <ControlGroup>
           <PlayButton onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</PlayButton>
           <TimeInfo>
-            {formatTime(currentTime)} / {formatTime(duration)}
+            {formatTime(currentTime)} / {formatTime(propDuration || duration)}
           </TimeInfo>
         </ControlGroup>
 
