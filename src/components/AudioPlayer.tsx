@@ -3,12 +3,18 @@ import styled from "styled-components";
 import type { AudioPlayerProps } from "../types";
 
 const PlayerContainer = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.15) 0%,
+    rgba(8, 145, 178, 0.2) 100%
+  );
   border-radius: 20px;
   padding: 2rem;
-  color: white;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  color: #0f172a;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   margin-bottom: 0;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  backdrop-filter: blur(10px);
 `;
 
 const PlayerHeader = styled.div`
@@ -35,10 +41,12 @@ const Title = styled.h2`
 
 const DateLabel = styled.span`
   font-size: 0.9rem;
-  opacity: 0.9;
-  background: rgba(255, 255, 255, 0.2);
+  opacity: 0.8;
+  background: rgba(6, 182, 212, 0.15);
   padding: 0.5rem 1rem;
   border-radius: 20px;
+  color: #0f172a;
+  border: 1px solid rgba(6, 182, 212, 0.2);
 `;
 
 const PlayCountBadge = styled.div`
@@ -46,17 +54,18 @@ const PlayCountBadge = styled.div`
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  opacity: 0.85;
-  background: rgba(255, 255, 255, 0.15);
+  opacity: 0.9;
+  background: rgba(6, 182, 212, 0.1);
   padding: 0.35rem 0.7rem;
   border-radius: 12px;
   backdrop-filter: blur(8px);
   transition: all 0.2s ease;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  color: #0f172a;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(6, 182, 212, 0.15);
   }
 `;
 
@@ -98,9 +107,9 @@ const ControlGroup = styled.div`
 `;
 
 const SpeedButton = styled.button`
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(6, 182, 212, 0.1);
+  color: #0f172a;
+  border: 1px solid rgba(6, 182, 212, 0.2);
   border-radius: 8px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -108,20 +117,21 @@ const SpeedButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.3);
   }
 
   &.active {
-    background: white;
-    color: #667eea;
-    border-color: white;
+    background: rgba(6, 182, 212, 0.25);
+    color: #0891b2;
+    border-color: rgba(6, 182, 212, 0.4);
   }
 `;
 
 const DownloadButton = styled.button`
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(6, 182, 212, 0.1);
+  color: #0f172a;
+  border: 1px solid rgba(6, 182, 212, 0.2);
   border-radius: 8px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -132,14 +142,15 @@ const DownloadButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.3);
   }
 `;
 
 const PlayButton = styled.button`
-  background: white;
-  color: #667eea;
-  border: none;
+  background: rgba(6, 182, 212, 0.2);
+  color: #0891b2;
+  border: 1px solid rgba(6, 182, 212, 0.3);
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -196,6 +207,7 @@ function AudioPlayer({
   podcastKey,
   playCount,
   onPlayCountUpdate,
+  triggerPlay,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const hasCountedRef = useRef(false);
@@ -287,6 +299,16 @@ function AudioPlayer({
 
     playAudio();
   }, [audioUrl]);
+
+  // triggerPlay가 변경되면 재생
+  useEffect(() => {
+    if (triggerPlay !== undefined && audioRef.current) {
+      const audio = audioRef.current;
+      audio.play().catch((err) => {
+        console.error("재생 실패:", err);
+      });
+    }
+  }, [triggerPlay]);
 
   const togglePlay = () => {
     const audio = audioRef.current;

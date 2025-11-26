@@ -14,6 +14,7 @@ function PodcastList() {
     null
   );
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [playTrigger, setPlayTrigger] = useState(0);
 
   useEffect(() => {
     loadPodcasts();
@@ -216,41 +217,85 @@ function PodcastList() {
   return (
     <Container>
       <Helmet>
-        <title>Daily News Podcast - AI로 만드는 데일리 뉴스 팟캐스트</title>
+        <title>Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트</title>
         <meta
           name="description"
-          content="AI 기술로 제작된 데일리 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+          content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
         />
         <meta property="og:url" content="https://dailynewspod.com/" />
         <meta
           property="og:title"
-          content="Daily News Podcast - AI로 만드는 데일리 뉴스 팟캐스트"
+          content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트"
         />
         <meta
           property="og:description"
-          content="AI 기술로 제작된 데일리 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+          content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
         />
         <meta property="twitter:url" content="https://dailynewspod.com/" />
         <meta
           property="twitter:title"
-          content="Daily News Podcast - AI로 만드는 데일리 뉴스 팟캐스트"
+          content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트"
         />
         <meta
           property="twitter:description"
-          content="AI 기술로 제작된 데일리 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+          content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
         />
       </Helmet>
       <Header>
         <Title>Daily News Podcast</Title>
-        <Subtitle>AI로 만드는 데일리 뉴스를 팟캐스트로 들어보세요</Subtitle>
       </Header>
 
-      <NoticeContainer>
-        <NoticeIcon>ℹ️</NoticeIcon>
-        <NoticeText>
-          AI는 아직 한국어 지원이 안정적이지 않을 수 있습니다.
-        </NoticeText>
-      </NoticeContainer>
+      {/* 강렬한 CTA 배너 */}
+      {(() => {
+        const todayPodcasts = podcasts.filter((p) => isToday(p.date));
+        const hasToday = todayPodcasts.length > 0;
+        const firstTodayPodcast = todayPodcasts[0];
+
+        const handleBannerClick = async () => {
+          if (hasToday && firstTodayPodcast) {
+            // 이미 선택된 팟캐스트면 URL을 변경하지 않고 재생만 트리거
+            if (selectedPodcast?.key === firstTodayPodcast.key && audioUrl) {
+              // 같은 팟캐스트이므로 재생 트리거만 증가
+              setPlayTrigger((prev) => prev + 1);
+            } else {
+              // 새로운 팟캐스트이므로 일반적으로 처리
+              handlePodcastClick(firstTodayPodcast);
+            }
+          }
+        };
+
+        return (
+          <HeroBanner onClick={handleBannerClick}>
+            <HeroContent>
+              <HeroIcon>{hasToday ? "🎯" : "🎙️"}</HeroIcon>
+              <HeroTextContainer>
+                <HeroTitle>
+                  {hasToday
+                    ? "지금 바로 오늘의 뉴스를 들어보세요"
+                    : "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요"}
+                </HeroTitle>
+                <HeroSubtitle>
+                  {hasToday
+                    ? "AI가 요약한 오늘의 주요 뉴스를 빠르게 확인하세요"
+                    : "매일 최신 뉴스를 음성으로 제공합니다"}
+                </HeroSubtitle>
+                <HeroNotice>
+                  <HeroNoticeIcon>ℹ️</HeroNoticeIcon>
+                  <HeroNoticeText>
+                    AI는 아직 한국어 지원이 안정적이지 않을 수 있습니다.
+                  </HeroNoticeText>
+                </HeroNotice>
+              </HeroTextContainer>
+              <HeroArrow>→</HeroArrow>
+            </HeroContent>
+          </HeroBanner>
+        );
+      })()}
+
+      {/* AI 비디오 */}
+      <VideoContainer>
+        <Video src="/ai_video.mp4" autoPlay loop playsInline controls />
+      </VideoContainer>
 
       {error && <ErrorContainer>{error}</ErrorContainer>}
 
@@ -260,111 +305,271 @@ function PodcastList() {
           <EmptyText>등록된 팟캐스트가 없습니다.</EmptyText>
         </EmptyState>
       ) : (
-        <ListContainer>
-          {podcasts.map((podcast, index) => {
-            const isSelected = selectedPodcast?.key === podcast.key;
-            const showPlayer = isSelected && audioUrl;
+        <>
+          {/* 오늘의 뉴스 섹션 */}
+          {(() => {
+            const todayPodcasts = podcasts.filter((p) => isToday(p.date));
 
-            if (showPlayer) {
+            if (todayPodcasts.length > 0) {
               return (
-                <PlayerWrapper
-                  key={podcast.key}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <AudioPlayer
-                    audioUrl={audioUrl}
-                    date={formatDate(selectedPodcast.date)}
-                    title={`${formatDate(selectedPodcast.date)} 뉴스`}
-                    duration={selectedPodcast.duration}
-                    podcastKey={selectedPodcast.key}
-                    playCount={selectedPodcast.playCount}
-                    onPlayCountUpdate={(count: number) => {
-                      setPodcasts((prev) =>
-                        prev.map((p) =>
-                          p.key === selectedPodcast.key
-                            ? { ...p, playCount: count }
-                            : p
-                        )
-                      );
-                    }}
-                    onDownload={async () => {
-                      try {
-                        const response = await fetch(audioUrl);
-                        const blob = await response.blob();
-                        const url = window.URL.createObjectURL(blob);
-                        const link = document.createElement("a");
-                        link.href = url;
-                        link.download = `podcast_${selectedPodcast.date.replace(
-                          /-/g,
-                          ""
-                        )}.mp3`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        window.URL.revokeObjectURL(url);
-                      } catch (err) {
-                        console.error("다운로드 실패:", err);
-                        window.open(audioUrl, "_blank");
+                <TodaySection>
+                  <TodaySectionHeader>
+                    <TodaySectionTitle>
+                      <TodayIcon>📰</TodayIcon>
+                      오늘의 뉴스
+                    </TodaySectionTitle>
+                  </TodaySectionHeader>
+                  <TodayListContainer>
+                    {todayPodcasts.map((podcast, index) => {
+                      const isSelected = selectedPodcast?.key === podcast.key;
+                      const showPlayer = isSelected && audioUrl;
+
+                      if (showPlayer) {
+                        return (
+                          <PlayerWrapper
+                            key={podcast.key}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <AudioPlayer
+                              audioUrl={audioUrl}
+                              date={formatDate(selectedPodcast.date)}
+                              title={`${formatDate(selectedPodcast.date)}`}
+                              duration={selectedPodcast.duration}
+                              podcastKey={selectedPodcast.key}
+                              playCount={selectedPodcast.playCount}
+                              triggerPlay={playTrigger}
+                              onPlayCountUpdate={(count: number) => {
+                                setPodcasts((prev) =>
+                                  prev.map((p) =>
+                                    p.key === selectedPodcast.key
+                                      ? { ...p, playCount: count }
+                                      : p
+                                  )
+                                );
+                              }}
+                              onDownload={async () => {
+                                try {
+                                  const response = await fetch(audioUrl);
+                                  const blob = await response.blob();
+                                  const url = window.URL.createObjectURL(blob);
+                                  const link = document.createElement("a");
+                                  link.href = url;
+                                  link.download = `podcast_${selectedPodcast.date.replace(
+                                    /-/g,
+                                    ""
+                                  )}.mp3`;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+                                  window.URL.revokeObjectURL(url);
+                                } catch (err) {
+                                  console.error("다운로드 실패:", err);
+                                  window.open(audioUrl, "_blank");
+                                }
+                              }}
+                            />
+                          </PlayerWrapper>
+                        );
                       }
-                    }}
-                  />
-                </PlayerWrapper>
+
+                      const isNew = isToday(podcast.date);
+
+                      return (
+                        <PodcastItem
+                          key={podcast.key}
+                          onClick={() => handlePodcastClick(podcast)}
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                          $isNew={isNew}
+                        >
+                          {isNew && (
+                            <NewBadge>
+                              <NewBadgeText>NEW</NewBadgeText>
+                            </NewBadge>
+                          )}
+                          <ItemContent>
+                            <ItemHeader>
+                              <ItemInfo>
+                                <ItemDate>
+                                  {formatShortDate(podcast.date)}
+                                </ItemDate>
+                                <ItemMeta>
+                                  <ItemTime>
+                                    {formatRelativeTime(podcast.date)}
+                                  </ItemTime>
+                                  {podcast.playCount !== undefined && (
+                                    <PlayCountBadge>
+                                      <PlayCountIcon>▶</PlayCountIcon>
+                                      <PlayCountText>
+                                        조회수: {formatCount(podcast.playCount)}
+                                      </PlayCountText>
+                                    </PlayCountBadge>
+                                  )}
+                                  {podcast.duration &&
+                                    podcast.duration <= 180 && (
+                                      <QuickBadge>
+                                        <BadgeIcon>⏱️</BadgeIcon>
+                                        <BadgeText>3분요약</BadgeText>
+                                      </QuickBadge>
+                                    )}
+                                </ItemMeta>
+                              </ItemInfo>
+                              <PlayIndicator>
+                                <PlayIcon>▶</PlayIcon>
+                              </PlayIndicator>
+                            </ItemHeader>
+
+                            {podcast.duration && (
+                              <ItemDetails>
+                                <DetailCard>
+                                  <DetailIcon>⏱️</DetailIcon>
+                                  <DetailContent>
+                                    <DetailLabel>재생 시간</DetailLabel>
+                                    <DetailValue>
+                                      {formatDuration(podcast.duration)}
+                                    </DetailValue>
+                                  </DetailContent>
+                                </DetailCard>
+                              </ItemDetails>
+                            )}
+                          </ItemContent>
+                        </PodcastItem>
+                      );
+                    })}
+                  </TodayListContainer>
+                </TodaySection>
               );
             }
+            return null;
+          })()}
 
-            const isNew = isToday(podcast.date);
+          {/* 과거 뉴스 섹션 */}
+          {(() => {
+            const pastPodcasts = podcasts.filter((p) => !isToday(p.date));
 
-            return (
-              <PodcastItem
-                key={podcast.key}
-                onClick={() => handlePodcastClick(podcast)}
-                style={{ animationDelay: `${index * 0.05}s` }}
-                $isNew={isNew}
-              >
-                {isNew && (
-                  <NewBadge>
-                    <NewBadgeText>NEW</NewBadgeText>
-                  </NewBadge>
-                )}
-                <ItemContent>
-                  <ItemHeader>
-                    <ItemInfo>
-                      <ItemDate>{formatShortDate(podcast.date)}</ItemDate>
-                      <ItemMeta>
-                        <ItemTime>{formatRelativeTime(podcast.date)}</ItemTime>
-                        {podcast.playCount !== undefined && (
-                          <PlayCountBadge>
-                            <PlayCountIcon>▶</PlayCountIcon>
-                            <PlayCountText>
-                              조회수: {formatCount(podcast.playCount)}
-                            </PlayCountText>
-                          </PlayCountBadge>
-                        )}
-                      </ItemMeta>
-                    </ItemInfo>
-                    <PlayIndicator>
-                      <PlayIcon>▶</PlayIcon>
-                    </PlayIndicator>
-                  </ItemHeader>
-
-                  {podcast.duration && (
-                    <ItemDetails>
-                      <DetailCard>
-                        <DetailIcon>⏱️</DetailIcon>
-                        <DetailContent>
-                          <DetailLabel>재생 시간</DetailLabel>
-                          <DetailValue>
-                            {formatDuration(podcast.duration)}
-                          </DetailValue>
-                        </DetailContent>
-                      </DetailCard>
-                    </ItemDetails>
+            if (pastPodcasts.length > 0) {
+              return (
+                <PastSection>
+                  {podcasts.some((p) => isToday(p.date)) && (
+                    <PastSectionHeader>
+                      <PastSectionTitle>과거 뉴스</PastSectionTitle>
+                    </PastSectionHeader>
                   )}
-                </ItemContent>
-              </PodcastItem>
-            );
-          })}
-        </ListContainer>
+                  <ListContainer>
+                    {pastPodcasts.map((podcast, index) => {
+                      const isSelected = selectedPodcast?.key === podcast.key;
+                      const showPlayer = isSelected && audioUrl;
+
+                      if (showPlayer) {
+                        return (
+                          <PlayerWrapper
+                            key={podcast.key}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <AudioPlayer
+                              audioUrl={audioUrl}
+                              date={formatDate(selectedPodcast.date)}
+                              title={`${formatDate(selectedPodcast.date)}`}
+                              duration={selectedPodcast.duration}
+                              podcastKey={selectedPodcast.key}
+                              playCount={selectedPodcast.playCount}
+                              triggerPlay={playTrigger}
+                              onPlayCountUpdate={(count: number) => {
+                                setPodcasts((prev) =>
+                                  prev.map((p) =>
+                                    p.key === selectedPodcast.key
+                                      ? { ...p, playCount: count }
+                                      : p
+                                  )
+                                );
+                              }}
+                              onDownload={async () => {
+                                try {
+                                  const response = await fetch(audioUrl);
+                                  const blob = await response.blob();
+                                  const url = window.URL.createObjectURL(blob);
+                                  const link = document.createElement("a");
+                                  link.href = url;
+                                  link.download = `podcast_${selectedPodcast.date.replace(
+                                    /-/g,
+                                    ""
+                                  )}.mp3`;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+                                  window.URL.revokeObjectURL(url);
+                                } catch (err) {
+                                  console.error("다운로드 실패:", err);
+                                  window.open(audioUrl, "_blank");
+                                }
+                              }}
+                            />
+                          </PlayerWrapper>
+                        );
+                      }
+
+                      return (
+                        <PodcastItem
+                          key={podcast.key}
+                          onClick={() => handlePodcastClick(podcast)}
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                          $isNew={false}
+                        >
+                          <ItemContent>
+                            <ItemHeader>
+                              <ItemInfo>
+                                <ItemDate>
+                                  {formatShortDate(podcast.date)}
+                                </ItemDate>
+                                <ItemMeta>
+                                  <ItemTime>
+                                    {formatRelativeTime(podcast.date)}
+                                  </ItemTime>
+                                  {podcast.playCount !== undefined && (
+                                    <PlayCountBadge>
+                                      <PlayCountIcon>▶</PlayCountIcon>
+                                      <PlayCountText>
+                                        조회수: {formatCount(podcast.playCount)}
+                                      </PlayCountText>
+                                    </PlayCountBadge>
+                                  )}
+                                  {podcast.duration &&
+                                    podcast.duration <= 180 && (
+                                      <QuickBadge>
+                                        <BadgeIcon>⏱️</BadgeIcon>
+                                        <BadgeText>3분요약</BadgeText>
+                                      </QuickBadge>
+                                    )}
+                                </ItemMeta>
+                              </ItemInfo>
+                              <PlayIndicator>
+                                <PlayIcon>▶</PlayIcon>
+                              </PlayIndicator>
+                            </ItemHeader>
+
+                            {podcast.duration && (
+                              <ItemDetails>
+                                <DetailCard>
+                                  <DetailIcon>⏱️</DetailIcon>
+                                  <DetailContent>
+                                    <DetailLabel>재생 시간</DetailLabel>
+                                    <DetailValue>
+                                      {formatDuration(podcast.duration)}
+                                    </DetailValue>
+                                  </DetailContent>
+                                </DetailCard>
+                              </ItemDetails>
+                            )}
+                          </ItemContent>
+                        </PodcastItem>
+                      );
+                    })}
+                  </ListContainer>
+                </PastSection>
+              );
+            }
+            return null;
+          })()}
+        </>
       )}
     </Container>
   );
@@ -382,8 +587,7 @@ const Container = styled.div`
 
 const Header = styled.header`
   text-align: center;
-  margin-bottom: 4rem;
-  padding-bottom: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const Title = styled.h1`
@@ -396,14 +600,6 @@ const Title = styled.h1`
   background-clip: text;
   margin-bottom: 1rem;
   line-height: 1.2;
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.1rem;
-  color: #6b7280;
-  margin: 0;
-  font-weight: 400;
-  letter-spacing: 0.01em;
 `;
 
 const LoadingContainer = styled.div`
@@ -448,44 +644,171 @@ const ErrorContainer = styled.div`
   border: 1px solid rgba(220, 38, 38, 0.1);
 `;
 
-const NoticeContainer = styled.div`
-  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-  color: #6b7280;
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
+const HeroBanner = styled.div`
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
   margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3),
+    0 4px 16px rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4),
+      0 6px 20px rgba(102, 126, 234, 0.3);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1.75rem;
+  }
+`;
+
+const HeroContent = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  font-weight: 400;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
 `;
 
-const NoticeIcon = styled.span`
-  font-size: 1.25rem;
-  flex-shrink: 0;
+const HeroIcon = styled.div`
+  font-size: 3rem;
+  line-height: 1;
+  animation: pulse 2s ease-in-out infinite;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
 `;
 
-const NoticeText = styled.p`
+const HeroTextContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const HeroTitle = styled.h2`
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+`;
+
+const HeroSubtitle = styled.p`
+  margin: 0;
+  font-size: clamp(0.9375rem, 2vw, 1.125rem);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
   line-height: 1.5;
+`;
+
+const HeroNotice = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0.85;
+`;
+
+const HeroNoticeIcon = styled.span`
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  opacity: 0.9;
+`;
+
+const HeroNoticeText = styled.p`
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  line-height: 1.4;
+`;
+
+const HeroArrow = styled.div`
+  font-size: 2rem;
+  color: white;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  ${HeroBanner}:hover & {
+    transform: translateX(8px);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const VideoContainer = styled.div`
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Video = styled.video`
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 450px;
+  object-fit: contain;
 `;
 
 const ListContainer = styled.div`
   display: grid;
   gap: 1.5rem;
   grid-template-columns: 1fr;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2rem;
-  }
 `;
 
 const PlayerWrapper = styled.div`
@@ -501,9 +824,7 @@ const PodcastItem = styled.div<{ $isNew?: boolean }>`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   overflow: hidden;
-  border: 1px solid
-    ${(props) =>
-      props.$isNew ? "rgba(239, 68, 68, 0.2)" : "rgba(0, 0, 0, 0.04)"};
+  border: 1px solid rgba(0, 0, 0, 0.04);
   animation: fadeInUp 0.5s ease-out both;
   position: relative;
 
@@ -518,23 +839,11 @@ const PodcastItem = styled.div<{ $isNew?: boolean }>`
     }
   }
 
-  ${(props) =>
-    props.$isNew &&
-    `
-    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
-    border-color: rgba(239, 68, 68, 0.3);
-  `}
-
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px
-        ${(props) =>
-          props.$isNew
-            ? "rgba(239, 68, 68, 0.2)"
-            : "rgba(102, 126, 234, 0.15)"},
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15),
       0 2px 8px rgba(0, 0, 0, 0.08);
-    border-color: ${(props) =>
-      props.$isNew ? "rgba(239, 68, 68, 0.4)" : "rgba(102, 126, 234, 0.2)"};
+    border-color: rgba(102, 126, 234, 0.2);
   }
 
   &:active {
@@ -742,5 +1051,78 @@ const EmptyText = styled.p`
   color: #6b7280;
   font-size: 1.125rem;
   font-weight: 500;
+  margin: 0;
+`;
+
+const TodaySection = styled.section`
+  margin-bottom: 4rem;
+`;
+
+const TodaySectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 2.5rem;
+`;
+
+const TodaySectionTitle = styled.h2`
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111827;
+  margin: 0 0 0.75rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+`;
+
+const TodayIcon = styled.span`
+  font-size: 1.2em;
+`;
+
+const TodayListContainer = styled.div`
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+`;
+
+const QuickBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  padding: 0.375rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+`;
+
+const BadgeIcon = styled.span`
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+`;
+
+const BadgeText = styled.span`
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+`;
+
+const PastSection = styled.section`
+  margin-top: 3rem;
+`;
+
+const PastSectionHeader = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const PastSectionTitle = styled.h2`
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #374151;
   margin: 0;
 `;
