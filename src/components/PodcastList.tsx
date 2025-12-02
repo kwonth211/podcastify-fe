@@ -4,6 +4,10 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
 import AudioPlayer from "./AudioPlayer";
+import Footer from "./Footer";
+import PrivacyPolicy from "./PrivacyPolicy";
+import Terms from "./Terms";
+import About from "./About";
 import type { PodcastFile } from "../types";
 
 function PodcastList() {
@@ -16,6 +20,11 @@ function PodcastList() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [playTrigger, setPlayTrigger] = useState(0);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+
+  // 모달 상태 관리
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
     loadPodcasts();
@@ -744,6 +753,18 @@ function PodcastList() {
           })()}
         </>
       )}
+
+      {/* Footer */}
+      <Footer
+        onPrivacyClick={() => setShowPrivacy(true)}
+        onTermsClick={() => setShowTerms(true)}
+        onAboutClick={() => setShowAbout(true)}
+      />
+
+      {/* 모달들 */}
+      {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
+      {showTerms && <Terms onClose={() => setShowTerms(false)} />}
+      {showAbout && <About onClose={() => setShowAbout(false)} />}
     </Container>
   );
 }
