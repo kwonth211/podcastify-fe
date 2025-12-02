@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import type { AudioPlayerProps } from "../types";
+import Timeline from "./Timeline";
 
 const PlayerContainer = styled.div`
   background: linear-gradient(
@@ -239,6 +240,24 @@ function AudioPlayer({
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
 
+  // 타임라인 항목 클릭 시 해당 시간으로 이동
+  const handleTimelineClick = useCallback(
+    (time: number) => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      audio.currentTime = time;
+      if (!isPlaying) {
+        audio.play().catch((err) => {
+          if (err.name !== "NotAllowedError") {
+            console.error("재생 실패:", err);
+          }
+        });
+      }
+    },
+    [isPlaying]
+  );
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -454,6 +473,12 @@ function AudioPlayer({
           </DownloadButton>
         </ControlGroup>
       </Controls>
+
+      <Timeline
+        podcastKey={podcastKey}
+        currentTime={currentTime}
+        onTimeClick={handleTimelineClick}
+      />
     </PlayerContainer>
   );
 }
