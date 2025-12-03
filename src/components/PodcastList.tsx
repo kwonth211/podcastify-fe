@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import dayjs from "dayjs";
@@ -20,6 +20,14 @@ function PodcastList() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [playTrigger, setPlayTrigger] = useState(0);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+
+  // 배너 스와이프 관련
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+  const isDragging = useRef<boolean>(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const bannerContainerRef = useRef<HTMLDivElement>(null);
 
   // 모달 상태 관리
   const [showPrivacy, setShowPrivacy] = useState(false);
@@ -48,6 +56,83 @@ function PodcastList() {
 
     return () => clearInterval(interval);
   }, [currentBannerIndex]); // currentBannerIndex가 변경되면 타이머 재시작
+
+  // 배너 컨테이너 너비 가져오기
+  const getContainerWidth = () => {
+    return bannerContainerRef.current?.offsetWidth || window.innerWidth;
+  };
+
+  // 드래그 종료 처리 공통 함수
+  const handleDragEnd = () => {
+    const diffX = touchStartX.current - touchEndX.current;
+    const containerWidth = getContainerWidth();
+    const threshold = containerWidth * 0.2; // 20% 이상 드래그하면 넘김
+
+    setIsTransitioning(true);
+    setDragOffset(0);
+
+    if (Math.abs(diffX) > threshold) {
+      if (diffX > 0) {
+        // 왼쪽으로 스와이프 -> 다음 배너
+        setCurrentBannerIndex((prev) => (prev + 1) % 3);
+      } else {
+        // 오른쪽으로 스와이프 -> 이전 배너
+        setCurrentBannerIndex((prev) => (prev - 1 + 3) % 3);
+      }
+    }
+  };
+
+  // 배너 스와이프 핸들러 (모바일 터치)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsTransitioning(false);
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+    const diffX = touchStartX.current - touchEndX.current;
+    const containerWidth = getContainerWidth();
+    // 드래그 거리를 퍼센트로 변환 (약간의 저항감 추가)
+    const offsetPercent = (diffX / containerWidth) * 100 * 0.8;
+    setDragOffset(offsetPercent);
+  };
+
+  const handleTouchEnd = () => {
+    handleDragEnd();
+  };
+
+  // 배너 드래그 핸들러 (데스크탑 마우스)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    setIsTransitioning(false);
+    touchStartX.current = e.clientX;
+    touchEndX.current = e.clientX;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging.current) {
+      touchEndX.current = e.clientX;
+      const diffX = touchStartX.current - touchEndX.current;
+      const containerWidth = getContainerWidth();
+      const offsetPercent = (diffX / containerWidth) * 100 * 0.8;
+      setDragOffset(offsetPercent);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (isDragging.current) {
+      isDragging.current = false;
+      handleDragEnd();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging.current) {
+      isDragging.current = false;
+      handleDragEnd();
+    }
+  };
 
   const loadPodcasts = async () => {
     try {
@@ -388,7 +473,16 @@ function PodcastList() {
       </Header>
 
       {/* 이미지 배너 슬라이더 */}
-      <ImageBannerContainer>
+      <ImageBannerContainer
+        ref={bannerContainerRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+      >
         <BannerArrow
           $direction="left"
           onClick={() => {
@@ -399,7 +493,10 @@ function PodcastList() {
         </BannerArrow>
         <BannerSlider
           style={{
-            transform: `translateX(-${currentBannerIndex * 100}%)`,
+            transform: `translateX(calc(-${
+              currentBannerIndex * 100
+            }% - ${dragOffset}%))`,
+            transition: isTransitioning ? "transform 0.3s ease-out" : "none",
           }}
         >
           <BannerSlide>
@@ -991,6 +1088,13 @@ const ImageBannerContainer = styled.div`
   width: 100%;
   position: relative;
   overflow: hidden;
+  touch-action: pan-y pinch-zoom; /* 수평 스와이프만 캡처, 수직 스크롤은 허용 */
+  cursor: grab;
+  user-select: none; /* 드래그 시 텍스트/이미지 선택 방지 */
+
+  &:active {
+    cursor: grabbing;
+  }
 
   @media (max-width: 768px) {
     margin: 1.5rem 0;
@@ -999,7 +1103,7 @@ const ImageBannerContainer = styled.div`
 
 const BannerSlider = styled.div`
   display: flex;
-  transition: transform 0.5s ease-in-out;
+  will-change: transform;
 `;
 
 const BannerSlide = styled.div`
@@ -1016,6 +1120,8 @@ const BannerImage = styled.img`
   border-radius: 20px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   object-fit: contain;
+  pointer-events: none; /* 이미지 드래그 방지 */
+  -webkit-user-drag: none; /* Safari 이미지 드래그 방지 */
 
   @media (max-width: 768px) {
     border-radius: 16px;
