@@ -2,6 +2,7 @@ import { ThemeProvider } from "styled-components";
 import { HelmetProvider } from "react-helmet-async";
 import GlobalStyle from "./styles/GlobalStyle";
 import PodcastList from "./components/PodcastList";
+import InstallPrompt from "./components/InstallPrompt";
 
 const theme = {
   colors: {
@@ -19,6 +20,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <PodcastList />
+        <InstallPrompt />
       </ThemeProvider>
     </HelmetProvider>
   );
