@@ -34,6 +34,9 @@ function PodcastList() {
   const [showTerms, setShowTerms] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
 
+  // 과거 뉴스 섹션 펼침/접힘 상태
+  const [isPastExpanded, setIsPastExpanded] = useState(false);
+
   useEffect(() => {
     loadPodcasts();
   }, []);
@@ -306,6 +309,11 @@ function PodcastList() {
     const audioUrl = await getAudioUrl(podcast.key);
     setAudioUrl(audioUrl);
 
+    // 과거 뉴스인 경우 자동으로 섹션 펼치기
+    if (!isToday(podcast.date)) {
+      setIsPastExpanded(true);
+    }
+
     // duration이 없으면 가져오기
     await ensureDuration(podcast, audioUrl);
 
@@ -335,6 +343,11 @@ function PodcastList() {
       setSelectedPodcast(podcast);
       const audioUrl = await getAudioUrl(podcast.key);
       setAudioUrl(audioUrl);
+
+      // 과거 뉴스 클릭 시 자동으로 섹션 펼치기
+      if (!isToday(podcast.date)) {
+        setIsPastExpanded(true);
+      }
 
       // duration이 없으면 가져오기
       await ensureDuration(podcast, audioUrl);
@@ -728,121 +741,112 @@ function PodcastList() {
             if (pastPodcasts.length > 0) {
               return (
                 <PastSection>
-                  {podcasts.some((p) => isToday(p.date)) && (
-                    <PastSectionHeader>
+                  <PastSectionHeader
+                    onClick={() => setIsPastExpanded(!isPastExpanded)}
+                    $clickable
+                  >
+                    <PastSectionTitleWrapper>
+                      <PastSectionIcon>📚</PastSectionIcon>
                       <PastSectionTitle>과거 뉴스</PastSectionTitle>
-                    </PastSectionHeader>
-                  )}
-                  <ListContainer>
-                    {pastPodcasts.map((podcast, index) => {
-                      const isSelected = selectedPodcast?.key === podcast.key;
-                      const showPlayer = isSelected && audioUrl;
+                      <PastSectionCount>
+                        {pastPodcasts.length}개
+                      </PastSectionCount>
+                    </PastSectionTitleWrapper>
+                    <PastSectionToggle $expanded={isPastExpanded}>
+                      <ToggleIcon>{isPastExpanded ? "▼" : "▶"}</ToggleIcon>
+                      <ToggleText>
+                        {isPastExpanded ? "접기" : "펼치기"}
+                      </ToggleText>
+                    </PastSectionToggle>
+                  </PastSectionHeader>
+                  <PastListWrapper $expanded={isPastExpanded}>
+                    <PastListContainer>
+                      {pastPodcasts.map((podcast, index) => {
+                        const isSelected = selectedPodcast?.key === podcast.key;
+                        const showPlayer = isSelected && audioUrl;
 
-                      if (showPlayer) {
+                        if (showPlayer) {
+                          return (
+                            <PlayerWrapper
+                              key={podcast.key}
+                              id={`podcast-${podcast.key}`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <AudioPlayer
+                                audioUrl={audioUrl}
+                                date={formatDate(selectedPodcast.date)}
+                                title={`${formatDate(selectedPodcast.date)}`}
+                                duration={selectedPodcast.duration}
+                                podcastKey={selectedPodcast.key}
+                                playCount={selectedPodcast.playCount}
+                                triggerPlay={playTrigger}
+                                onPlayCountUpdate={(count: number) => {
+                                  setPodcasts((prev) =>
+                                    prev.map((p) =>
+                                      p.key === selectedPodcast.key
+                                        ? { ...p, playCount: count }
+                                        : p
+                                    )
+                                  );
+                                }}
+                                onDownload={async () => {
+                                  try {
+                                    const response = await fetch(audioUrl);
+                                    const blob = await response.blob();
+                                    const url =
+                                      window.URL.createObjectURL(blob);
+                                    const link = document.createElement("a");
+                                    link.href = url;
+                                    link.download = `podcast_${selectedPodcast.date.replace(
+                                      /-/g,
+                                      ""
+                                    )}.mp3`;
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                    window.URL.revokeObjectURL(url);
+                                  } catch (err) {
+                                    console.error("다운로드 실패:", err);
+                                    window.open(audioUrl, "_blank");
+                                  }
+                                }}
+                              />
+                            </PlayerWrapper>
+                          );
+                        }
+
                         return (
-                          <PlayerWrapper
+                          <PastPodcastItem
                             key={podcast.key}
-                            id={`podcast-${podcast.key}`}
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={() => handlePodcastClick(podcast)}
+                            style={{ animationDelay: `${index * 0.03}s` }}
                           >
-                            <AudioPlayer
-                              audioUrl={audioUrl}
-                              date={formatDate(selectedPodcast.date)}
-                              title={`${formatDate(selectedPodcast.date)}`}
-                              duration={selectedPodcast.duration}
-                              podcastKey={selectedPodcast.key}
-                              playCount={selectedPodcast.playCount}
-                              triggerPlay={playTrigger}
-                              onPlayCountUpdate={(count: number) => {
-                                setPodcasts((prev) =>
-                                  prev.map((p) =>
-                                    p.key === selectedPodcast.key
-                                      ? { ...p, playCount: count }
-                                      : p
-                                  )
-                                );
-                              }}
-                              onDownload={async () => {
-                                try {
-                                  const response = await fetch(audioUrl);
-                                  const blob = await response.blob();
-                                  const url = window.URL.createObjectURL(blob);
-                                  const link = document.createElement("a");
-                                  link.href = url;
-                                  link.download = `podcast_${selectedPodcast.date.replace(
-                                    /-/g,
-                                    ""
-                                  )}.mp3`;
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  document.body.removeChild(link);
-                                  window.URL.revokeObjectURL(url);
-                                } catch (err) {
-                                  console.error("다운로드 실패:", err);
-                                  window.open(audioUrl, "_blank");
-                                }
-                              }}
-                            />
-                          </PlayerWrapper>
-                        );
-                      }
-
-                      return (
-                        <PodcastItem
-                          key={podcast.key}
-                          onClick={() => handlePodcastClick(podcast)}
-                          style={{ animationDelay: `${index * 0.05}s` }}
-                          $isNew={false}
-                        >
-                          <ItemContent>
-                            <ItemHeader>
-                              <ItemInfo>
-                                <ItemDate>
+                            <PastItemContent>
+                              <PastItemInfo>
+                                <PastItemDate>
                                   {formatShortDate(podcast.date)}
-                                </ItemDate>
-                                <ItemMeta>
-                                  <ItemTime>
+                                </PastItemDate>
+                                <PastItemMeta>
+                                  <PastItemTime>
                                     {formatRelativeTime(podcast.date)}
-                                  </ItemTime>
-                                  <PlayCountBadge>
-                                    <PlayCountIcon>▶</PlayCountIcon>
-                                    <PlayCountText>
-                                      조회수:{" "}
-                                      {formatCount(podcast.playCount || 0)}
-                                    </PlayCountText>
-                                  </PlayCountBadge>
-                                  {podcast.duration &&
-                                    podcast.duration <= 180 && (
-                                      <QuickBadge>
-                                        <BadgeIcon>⏱️</BadgeIcon>
-                                        <BadgeText>3분요약</BadgeText>
-                                      </QuickBadge>
-                                    )}
-                                </ItemMeta>
-                              </ItemInfo>
-                              <PlayIndicator>
-                                <PlayIcon>▶</PlayIcon>
-                              </PlayIndicator>
-                            </ItemHeader>
-
-                            {podcast.duration && (
-                              <ItemDetails>
-                                <DetailCard>
-                                  <DetailIcon>⏱️</DetailIcon>
-                                  <DetailContent>
-                                    <DetailLabel>재생 시간</DetailLabel>
-                                    <DetailValue>
+                                  </PastItemTime>
+                                  {podcast.duration && (
+                                    <PastItemDuration>
                                       {formatDuration(podcast.duration)}
-                                    </DetailValue>
-                                  </DetailContent>
-                                </DetailCard>
-                              </ItemDetails>
-                            )}
-                          </ItemContent>
-                        </PodcastItem>
-                      );
-                    })}
-                  </ListContainer>
+                                    </PastItemDuration>
+                                  )}
+                                  <PastItemPlayCount>
+                                    ▶ {formatCount(podcast.playCount || 0)}
+                                  </PastItemPlayCount>
+                                </PastItemMeta>
+                              </PastItemInfo>
+                              <PastPlayIndicator>▶</PastPlayIndicator>
+                            </PastItemContent>
+                          </PastPodcastItem>
+                        );
+                      })}
+                    </PastListContainer>
+                  </PastListWrapper>
                 </PastSection>
               );
             }
@@ -1186,12 +1190,6 @@ const BannerArrow = styled.button<{ $direction: "left" | "right" }>`
   }
 `;
 
-const ListContainer = styled.div`
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr;
-`;
-
 const PlayerWrapper = styled.div`
   grid-column: 1 / -1;
   margin-bottom: 1rem;
@@ -1524,14 +1522,222 @@ const PastSection = styled.section`
   margin-top: 3rem;
 `;
 
-const PastSectionHeader = styled.div`
-  margin-bottom: 2rem;
+const PastSectionHeader = styled.div<{ $clickable?: boolean }>`
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")};
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-color: #cbd5e1;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.875rem 1rem;
+  }
+`;
+
+const PastSectionTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+const PastSectionIcon = styled.span`
+  font-size: 1.25rem;
 `;
 
 const PastSectionTitle = styled.h2`
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #374151;
   margin: 0;
+`;
+
+const PastSectionCount = styled.span`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+`;
+
+const PastSectionToggle = styled.div<{ $expanded: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+`;
+
+const ToggleIcon = styled.span`
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+`;
+
+const ToggleText = styled.span`
+  @media (max-width: 480px) {
+    display: none;
+  }
+`;
+
+const PastListWrapper = styled.div<{ $expanded: boolean }>`
+  max-height: ${(props) => (props.$expanded ? "500px" : "0")};
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
+const PastListContainer = styled.div`
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  /* 스크롤바 스타일링 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+
+  @media (max-width: 768px) {
+    max-height: 400px;
+    padding-right: 0.25rem;
+  }
+`;
+
+const PastPodcastItem = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  animation: fadeIn 0.3s ease-out both;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.12);
+    border-color: rgba(102, 126, 234, 0.3);
+    background: linear-gradient(to right, white, #fafbff);
+  }
+
+  &:active {
+    transform: translateX(2px);
+  }
+`;
+
+const PastItemContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+  }
+`;
+
+const PastItemInfo = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+const PastItemDate = styled.div`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.9375rem;
+  }
+`;
+
+const PastItemMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+`;
+
+const PastItemTime = styled.span`
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+`;
+
+const PastItemDuration = styled.span`
+  font-size: 0.75rem;
+  color: #667eea;
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.08);
+  padding: 0.125rem 0.5rem;
+  border-radius: 6px;
+`;
+
+const PastItemPlayCount = styled.span`
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+`;
+
+const PastPlayIndicator = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: white;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  transition: all 0.2s ease;
+
+  ${PastPodcastItem}:hover & {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
 `;
