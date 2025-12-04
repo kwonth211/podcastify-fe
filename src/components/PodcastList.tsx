@@ -37,6 +37,11 @@ function PodcastList() {
   // 과거 뉴스 섹션 펼침/접힘 상태
   const [isPastExpanded, setIsPastExpanded] = useState(false);
 
+  // 타임라인 프리뷰 데이터
+  const [timelinePreviews, setTimelinePreviews] = useState<
+    Record<string, { time: number; label: string }[]>
+  >({});
+
   useEffect(() => {
     loadPodcasts();
   }, []);
@@ -147,18 +152,71 @@ function PodcastList() {
       // 목록을 먼저 표시하기 위해 로딩 상태를 해제
       setLoading(false);
 
-      // 각 팟캐스트의 duration과 재생 횟수를 백그라운드에서 병렬로 로드
-      // 로딩 상태를 기다리지 않고 비동기로 실행
-      Promise.all([loadDurations(files), loadPlayCounts(files)]).catch(
-        (err) => {
-          console.warn("백그라운드 데이터 로드 중 오류:", err);
-        }
-      );
+      // 각 팟캐스트의 duration, 재생 횟수, 타임라인을 백그라운드에서 병렬로 로드
+      Promise.all([
+        loadDurations(files),
+        loadPlayCounts(files),
+        loadTimelinePreviews(files),
+      ]).catch((err) => {
+        console.warn("백그라운드 데이터 로드 중 오류:", err);
+      });
     } catch (err) {
       setError("팟캐스트 목록을 불러오는데 실패했습니다.");
       console.error(err);
       setLoading(false);
     }
+  };
+
+  // 타임라인 프리뷰 로드
+  const loadTimelinePreviews = async (files: PodcastFile[]) => {
+    const publicUrl = import.meta.env.VITE_R2_PUBLIC_URL;
+    if (!publicUrl) return;
+
+    // 타임라인 텍스트 파싱
+    const parseTimeline = (text: string): { time: number; label: string }[] => {
+      const lines = text.split("\n");
+      const items: { time: number; label: string }[] = [];
+
+      for (const line of lines) {
+        const match = line.match(/^\[(\d{1,2}):(\d{2})\]\s*(.+)$/);
+        if (match) {
+          const minutes = parseInt(match[1], 10);
+          const seconds = parseInt(match[2], 10);
+          const label = match[3].trim();
+          items.push({
+            time: minutes * 60 + seconds,
+            label,
+          });
+        }
+      }
+      return items;
+    };
+
+    await Promise.all(
+      files.map(async (file) => {
+        try {
+          const timelineKey = file.key
+            .replace("_podcast_", "_timeline_")
+            .replace(".mp3", ".txt");
+          const timelineUrl = `${publicUrl}/${timelineKey}`;
+
+          const response = await fetch(timelineUrl);
+          if (!response.ok) return;
+
+          const text = await response.text();
+          const items = parseTimeline(text);
+
+          if (items.length > 0) {
+            setTimelinePreviews((prev) => ({
+              ...prev,
+              [file.key]: items, // 전체 타임라인 저장
+            }));
+          }
+        } catch {
+          // 타임라인 없는 경우 무시
+        }
+      })
+    );
   };
 
   const loadDurations = async (files: PodcastFile[]) => {
@@ -419,6 +477,14 @@ function PodcastList() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const formatTimelineTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
   const formatCount = (count: number | undefined): string => {
     if (count === undefined || count === null) return "—";
     if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
@@ -482,7 +548,9 @@ function PodcastList() {
         />
       </Helmet>
       <Header>
-        <Title>Daily News Podcast</Title>
+        <Title onClick={() => (window.location.href = "/")}>
+          Daily News Podcast
+        </Title>
       </Header>
 
       {/* 이미지 배너 슬라이더 */}
@@ -723,6 +791,36 @@ function PodcastList() {
                                 </DetailCard>
                               </ItemDetails>
                             )}
+
+                            {/* 타임라인 프리뷰 */}
+                            {timelinePreviews[podcast.key] &&
+                              timelinePreviews[podcast.key].length > 0 && (
+                                <TimelinePreview>
+                                  <TimelinePreviewHeader>
+                                    <TimelinePreviewTitle>
+                                      타임라인
+                                    </TimelinePreviewTitle>
+                                    <TimelinePreviewCount>
+                                      {timelinePreviews[podcast.key].length}개
+                                      항목
+                                    </TimelinePreviewCount>
+                                  </TimelinePreviewHeader>
+                                  <TimelinePreviewList>
+                                    {timelinePreviews[podcast.key].map(
+                                      (item, idx) => (
+                                        <TimelinePreviewItem key={idx}>
+                                          <TimelinePreviewTime>
+                                            {formatTimelineTime(item.time)}
+                                          </TimelinePreviewTime>
+                                          <TimelinePreviewLabel>
+                                            {item.label}
+                                          </TimelinePreviewLabel>
+                                        </TimelinePreviewItem>
+                                      )
+                                    )}
+                                  </TimelinePreviewList>
+                                </TimelinePreview>
+                              )}
                           </ItemContent>
                         </PodcastItem>
                       );
@@ -815,6 +913,10 @@ function PodcastList() {
                           );
                         }
 
+                        const hasTimeline =
+                          timelinePreviews[podcast.key] &&
+                          timelinePreviews[podcast.key].length > 0;
+
                         return (
                           <PastPodcastItem
                             key={podcast.key}
@@ -838,6 +940,11 @@ function PodcastList() {
                                   <PastItemPlayCount>
                                     ▶ {formatCount(podcast.playCount || 0)}
                                   </PastItemPlayCount>
+                                  {hasTimeline && (
+                                    <PastTimelineBadge>
+                                      타임라인
+                                    </PastTimelineBadge>
+                                  )}
                                 </PastItemMeta>
                               </PastItemInfo>
                               <PastPlayIndicator>▶</PastPlayIndicator>
@@ -894,6 +1001,7 @@ const Header = styled.header`
 `;
 
 const Title = styled.h1`
+  display: inline-block;
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -903,6 +1011,12 @@ const Title = styled.h1`
   background-clip: text;
   margin-bottom: 1rem;
   line-height: 1.2;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const LoadingContainer = styled.div`
@@ -1388,56 +1502,143 @@ const ItemDetails = styled.div`
 `;
 
 const DetailCard = styled.div<{ $compact?: boolean }>`
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: ${(props) => (props.$compact ? "0.5rem" : "0.875rem")};
-  padding: ${(props) => (props.$compact ? "0.6rem 0.75rem" : "1rem")};
-  background: #f9fafb;
-  border-radius: ${(props) => (props.$compact ? "8px" : "12px")};
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s;
+  gap: ${(props) => (props.$compact ? "0.5rem" : "0.625rem")};
+  padding: ${(props) =>
+    props.$compact ? "0.5rem 0.75rem" : "0.5rem 0.875rem"};
+  background: #f8fafc;
+  border-radius: ${(props) => (props.$compact ? "8px" : "8px")};
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
 
   ${PodcastItem}:hover & {
-    background: #f3f4f6;
-    border-color: #d1d5db;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
   }
 `;
 
 const DetailIcon = styled.div<{ $small?: boolean }>`
-  font-size: ${(props) => (props.$small ? "0.9rem" : "1.5rem")};
-  width: ${(props) => (props.$small ? "28px" : "40px")};
-  height: ${(props) => (props.$small ? "28px" : "40px")};
+  font-size: ${(props) => (props.$small ? "0.75rem" : "0.875rem")};
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  border-radius: ${(props) => (props.$small ? "6px" : "10px")};
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  color: ${(props) => (props.$small ? "#667eea" : "inherit")};
-  font-weight: ${(props) => (props.$small ? "600" : "normal")};
+  color: #64748b;
 `;
 
 const DetailContent = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: baseline;
+  gap: 0.375rem;
   min-width: 0;
 `;
 
 const DetailLabel = styled.div<{ $small?: boolean }>`
-  font-size: ${(props) => (props.$small ? "0.65rem" : "0.75rem")};
-  color: #6b7280;
+  font-size: ${(props) => (props.$small ? "0.6875rem" : "0.75rem")};
+  color: #94a3b8;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 `;
 
 const DetailValue = styled.div<{ $small?: boolean }>`
-  font-size: ${(props) => (props.$small ? "0.8rem" : "0.9375rem")};
-  color: #111827;
+  font-size: ${(props) => (props.$small ? "0.875rem" : "0.9375rem")};
+  color: #334155;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+`;
+
+// 타임라인 프리뷰 스타일
+const TimelinePreview = styled.div`
+  margin-top: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+`;
+
+const TimelinePreviewHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+`;
+
+const TimelinePreviewTitle = styled.span`
+  font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  color: #0891b2;
+  letter-spacing: 0.02em;
+`;
+
+const TimelinePreviewCount = styled.span`
+  font-size: 0.6875rem;
+  color: #6b7280;
+  font-weight: 500;
+`;
+
+const TimelinePreviewList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(6, 182, 212, 0.1);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(6, 182, 212, 0.3);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(6, 182, 212, 0.5);
+  }
+`;
+
+const TimelinePreviewItem = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  transition: all 0.15s ease;
+
+  ${PodcastItem}:hover & {
+    border-color: rgba(6, 182, 212, 0.3);
+  }
+`;
+
+const TimelinePreviewTime = styled.span`
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0891b2;
+  background: rgba(6, 182, 212, 0.12);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  min-width: 42px;
+  text-align: center;
+`;
+
+const TimelinePreviewLabel = styled.span`
+  font-size: 0.8125rem;
+  color: #374151;
+  line-height: 1.4;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const EmptyState = styled.div`
@@ -1720,6 +1921,16 @@ const PastItemPlayCount = styled.span`
   font-size: 0.75rem;
   color: #9ca3af;
   font-weight: 500;
+`;
+
+const PastTimelineBadge = styled.span`
+  font-size: 0.6875rem;
+  color: #0891b2;
+  font-weight: 600;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 0.125rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
 `;
 
 const PastPlayIndicator = styled.div`
