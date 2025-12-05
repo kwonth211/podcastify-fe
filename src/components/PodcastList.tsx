@@ -20,6 +20,9 @@ function PodcastList() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [playTrigger, setPlayTrigger] = useState(0);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [initialSeekTime, setInitialSeekTime] = useState<number | undefined>(
+    undefined
+  );
 
   // 배너 스와이프 관련
   const touchStartX = useRef<number>(0);
@@ -37,6 +40,9 @@ function PodcastList() {
   // 과거 뉴스 섹션 펼침/접힘 상태
   const [isPastExpanded, setIsPastExpanded] = useState(false);
 
+  // 오늘 첫 방문 여부
+  const [isFirstVisitToday, setIsFirstVisitToday] = useState(false);
+
   // 타임라인 프리뷰 데이터
   const [timelinePreviews, setTimelinePreviews] = useState<
     Record<string, { time: number; label: string }[]>
@@ -44,6 +50,22 @@ function PodcastList() {
 
   useEffect(() => {
     loadPodcasts();
+  }, []);
+
+  // 오늘 첫 방문 체크
+  useEffect(() => {
+    const today = dayjs().format("YYYY-MM-DD");
+    const visitedKey = `visited_${today}`;
+    const hasVisitedToday = localStorage.getItem(visitedKey);
+
+    if (!hasVisitedToday) {
+      setIsFirstVisitToday(true);
+      // 5초 후에 방문 기록 저장 (애니메이션 시청 후)
+      const timer = setTimeout(() => {
+        localStorage.setItem(visitedKey, "true");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   // URL에서 playerId 읽어서 선택 및 스크롤
@@ -399,6 +421,7 @@ function PodcastList() {
       window.history.pushState({}, "", url.toString());
 
       setSelectedPodcast(podcast);
+      setInitialSeekTime(undefined); // 일반 클릭시 처음부터 재생
       const audioUrl = await getAudioUrl(podcast.key);
       setAudioUrl(audioUrl);
 
@@ -409,6 +432,47 @@ function PodcastList() {
 
       // duration이 없으면 가져오기
       await ensureDuration(podcast, audioUrl);
+
+      // 클릭할 때마다 조회수 증가
+      await incrementPlayCount(podcast.key);
+    } catch (err) {
+      setError("오디오 파일을 불러오는데 실패했습니다.");
+      console.error(err);
+    }
+  };
+
+  // 타임라인 항목 클릭 핸들러
+  const handleTimelineItemClick = async (
+    e: React.MouseEvent,
+    podcast: PodcastFile,
+    seekTime: number
+  ) => {
+    e.stopPropagation(); // 부모의 팟캐스트 클릭 이벤트 방지
+
+    try {
+      // 이미 선택된 팟캐스트인 경우 시간만 변경
+      if (selectedPodcast?.key === podcast.key && audioUrl) {
+        setInitialSeekTime(seekTime);
+        return;
+      }
+
+      // 새로운 팟캐스트 선택
+      const url = new URL(window.location.href);
+      url.searchParams.set("playerId", podcast.key);
+      window.history.pushState({}, "", url.toString());
+
+      setSelectedPodcast(podcast);
+      const newAudioUrl = await getAudioUrl(podcast.key);
+      setAudioUrl(newAudioUrl);
+      setInitialSeekTime(seekTime);
+
+      // 과거 뉴스 클릭 시 자동으로 섹션 펼치기
+      if (!isToday(podcast.date)) {
+        setIsPastExpanded(true);
+      }
+
+      // duration이 없으면 가져오기
+      await ensureDuration(podcast, newAudioUrl);
 
       // 클릭할 때마다 조회수 증가
       await incrementPlayCount(podcast.key);
@@ -616,6 +680,13 @@ function PodcastList() {
         const firstTodayPodcast = todayPodcasts[0];
 
         const handleBannerClick = async () => {
+          // 첫 방문 상태 해제 및 방문 기록 저장
+          if (isFirstVisitToday) {
+            setIsFirstVisitToday(false);
+            const today = dayjs().format("YYYY-MM-DD");
+            localStorage.setItem(`visited_${today}`, "true");
+          }
+
           if (hasToday && firstTodayPodcast) {
             // 이미 선택된 팟캐스트면 URL을 변경하지 않고 재생만 트리거
             if (selectedPodcast?.key === firstTodayPodcast.key && audioUrl) {
@@ -629,7 +700,10 @@ function PodcastList() {
         };
 
         return (
-          <HeroBanner onClick={handleBannerClick}>
+          <HeroBanner
+            onClick={handleBannerClick}
+            $isFirstVisit={isFirstVisitToday && hasToday}
+          >
             <HeroContent>
               <HeroIcon>{hasToday ? "🎯" : "🎙️"}</HeroIcon>
               <HeroTextContainer>
@@ -644,9 +718,10 @@ function PodcastList() {
                     : "매일 최신 뉴스를 음성으로 제공합니다"}
                 </HeroSubtitle>
                 <HeroNotice>
-                  <HeroNoticeIcon>ℹ️</HeroNoticeIcon>
+                  <HeroNoticeIcon>🤖</HeroNoticeIcon>
                   <HeroNoticeText>
-                    AI는 아직 한국어 지원이 안정적이지 않을 수 있습니다.
+                    Gemini 3.0 모델 사용 · 한국어 지원이 아직 불안정할 수
+                    있습니다
                   </HeroNoticeText>
                 </HeroNotice>
               </HeroTextContainer>
@@ -698,6 +773,7 @@ function PodcastList() {
                               podcastKey={selectedPodcast.key}
                               playCount={selectedPodcast.playCount}
                               triggerPlay={playTrigger}
+                              initialSeekTime={initialSeekTime}
                               onPlayCountUpdate={(count: number) => {
                                 setPodcasts((prev) =>
                                   prev.map((p) =>
@@ -808,7 +884,16 @@ function PodcastList() {
                                   <TimelinePreviewList>
                                     {timelinePreviews[podcast.key].map(
                                       (item, idx) => (
-                                        <TimelinePreviewItem key={idx}>
+                                        <TimelinePreviewItem
+                                          key={idx}
+                                          onClick={(e) =>
+                                            handleTimelineItemClick(
+                                              e,
+                                              podcast,
+                                              item.time
+                                            )
+                                          }
+                                        >
                                           <TimelinePreviewTime>
                                             {formatTimelineTime(item.time)}
                                           </TimelinePreviewTime>
@@ -878,6 +963,7 @@ function PodcastList() {
                                 podcastKey={selectedPodcast.key}
                                 playCount={selectedPodcast.playCount}
                                 triggerPlay={playTrigger}
+                                initialSeekTime={initialSeekTime}
                                 onPlayCountUpdate={(count: number) => {
                                   setPodcasts((prev) =>
                                     prev.map((p) =>
@@ -1061,18 +1147,46 @@ const ErrorContainer = styled.div`
   border: 1px solid rgba(220, 38, 38, 0.1);
 `;
 
-const HeroBanner = styled.div`
+const HeroBanner = styled.div<{ $isFirstVisit?: boolean }>`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   border-radius: 20px;
   padding: 2rem 2.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3),
-    0 4px 16px rgba(102, 126, 234, 0.2);
+  box-shadow: ${(props) =>
+    props.$isFirstVisit
+      ? "0 8px 32px rgba(102, 126, 234, 0.5), 0 4px 16px rgba(102, 126, 234, 0.4), 0 0 0 4px rgba(102, 126, 234, 0.3)"
+      : "0 8px 32px rgba(102, 126, 234, 0.3), 0 4px 16px rgba(102, 126, 234, 0.2)"};
   border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  ${(props) =>
+    props.$isFirstVisit &&
+    `
+    animation: heroPulse 2s ease-in-out infinite, heroGlow 1.5s ease-in-out infinite alternate;
+  `}
+
+  @keyframes heroPulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
+
+  @keyframes heroGlow {
+    0% {
+      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.5),
+        0 4px 16px rgba(102, 126, 234, 0.4), 0 0 0 4px rgba(102, 126, 234, 0.3);
+    }
+    100% {
+      box-shadow: 0 12px 48px rgba(102, 126, 234, 0.7),
+        0 6px 24px rgba(102, 126, 234, 0.5), 0 0 0 8px rgba(240, 147, 251, 0.4);
+    }
+  }
 
   &::before {
     content: "";
@@ -1089,10 +1203,43 @@ const HeroBanner = styled.div`
     pointer-events: none;
   }
 
+  &::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    pointer-events: none;
+    ${(props) =>
+      props.$isFirstVisit &&
+      `
+      animation: heroShine 3s ease-in-out infinite;
+    `}
+  }
+
+  @keyframes heroShine {
+    0% {
+      transform: translateX(-100%);
+    }
+    50%,
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4),
       0 6px 20px rgba(102, 126, 234, 0.3);
+    animation: none;
   }
 
   &:active {
@@ -1612,6 +1759,17 @@ const TimelinePreviewItem = styled.div`
   border-radius: 8px;
   border: 1px solid rgba(6, 182, 212, 0.15);
   transition: all 0.15s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: rgba(6, 182, 212, 0.4);
+    transform: translateX(4px);
+  }
+
+  &:active {
+    transform: translateX(2px);
+  }
 
   ${PodcastItem}:hover & {
     border-color: rgba(6, 182, 212, 0.3);

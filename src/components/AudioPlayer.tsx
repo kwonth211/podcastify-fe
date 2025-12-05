@@ -232,6 +232,7 @@ function AudioPlayer({
   playCount,
   onPlayCountUpdate,
   triggerPlay,
+  initialSeekTime,
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const hasCountedRef = useRef(false);
@@ -358,6 +359,23 @@ function AudioPlayer({
       });
     }
   }, [triggerPlay]);
+
+  // initialSeekTime이 변경되면 해당 시간으로 이동 후 재생
+  useEffect(() => {
+    if (
+      initialSeekTime !== undefined &&
+      initialSeekTime > 0 &&
+      audioRef.current
+    ) {
+      const audio = audioRef.current;
+      audio.currentTime = initialSeekTime;
+      audio.play().catch((err) => {
+        if (err.name !== "NotAllowedError") {
+          console.error("재생 실패:", err);
+        }
+      });
+    }
+  }, [initialSeekTime]);
 
   const togglePlay = () => {
     const audio = audioRef.current;

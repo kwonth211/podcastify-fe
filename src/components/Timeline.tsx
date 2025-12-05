@@ -225,3 +225,4 @@ function Timeline({ podcastKey, currentTime, onTimeClick }: TimelineProps) {
 }
 
 export default Timeline;
+
