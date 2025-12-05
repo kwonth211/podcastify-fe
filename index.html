@@ -74,6 +74,20 @@
     <meta name="twitter:image" content="https://dailynewspod.com/a.png" />
     <meta name="twitter:image:alt" content="Daily News Podcast 로고" />
 
+    <!-- OneSignal Push Notifications -->
+    <script
+      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+      defer
+    ></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function (OneSignal) {
+        await OneSignal.init({
+          appId: "7d84373c-c82b-45e6-bb6f-edb1fe4735e5",
+        });
+      });
+    </script>
+
     <!-- Google AdSense -->
     <script
       async
