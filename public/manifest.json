@@ -1,27 +1,44 @@
 {
+  "id": "/",
   "name": "Daily News Podcast - AI 뉴스 팟캐스트",
   "short_name": "데일리뉴스팟",
   "description": "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 간결하게 제공합니다.",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#1a1a2e",
   "theme_color": "#667eea",
   "orientation": "portrait",
   "scope": "/",
   "lang": "ko",
-  "categories": ["news", "entertainment"],
+  "dir": "ltr",
+  "categories": ["news", "entertainment", "education"],
+  "iarc_rating_id": "",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/favicon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/a.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/a.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -30,7 +47,14 @@
       "sizes": "1200x630",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Daily News Podcast 메인 화면"
+      "label": "Daily News Podcast 데스크톱 메인 화면"
+    },
+    {
+      "src": "/b.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Daily News Podcast 모바일 메인 화면"
     }
   ],
   "shortcuts": [
@@ -41,6 +65,12 @@
       "url": "/",
       "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "handle_links": "preferred",
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
-
