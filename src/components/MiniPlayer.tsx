@@ -10,6 +10,7 @@ interface MiniPlayerProps {
   onPlayCountUpdate?: (count: number) => void;
   initialSeekTime?: number;
   onTimeUpdate?: (time: number) => void;
+  onSeekComplete?: () => void;
 }
 
 function MiniPlayer({
@@ -20,6 +21,7 @@ function MiniPlayer({
   onPlayCountUpdate,
   initialSeekTime,
   onTimeUpdate,
+  onSeekComplete,
 }: MiniPlayerProps) {
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -52,8 +54,26 @@ function MiniPlayer({
         onTimeUpdate?.(audio.currentTime);
       }
     };
-    const updateDuration = () => setDuration(audio.duration);
+
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+
+      // 초기 시작 시간이 있으면 해당 위치로 이동
+      if (initialSeekTime !== undefined && initialSeekTime > 0) {
+        audio.currentTime = initialSeekTime;
+        onSeekComplete?.();
+      }
+
+      // 자동 재생
+      audio.play().catch((err) => {
+        if (err.name !== "NotAllowedError") {
+          console.error("자동 재생 실패:", err);
+        }
+      });
+    };
+
     const handleEnded = () => setIsPlaying(false);
+
     const handlePlay = () => {
       setIsPlaying(true);
 
@@ -83,52 +103,44 @@ function MiniPlayer({
           hasCountedRef.current = false;
         });
     };
+
     const handlePause = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("ended", handleEnded);
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
     };
-  }, [audioUrl, podcastKey, onPlayCountUpdate, isDragging, onTimeUpdate]);
+  }, [
+    audioUrl,
+    podcastKey,
+    onPlayCountUpdate,
+    isDragging,
+    onTimeUpdate,
+    initialSeekTime,
+    onSeekComplete,
+  ]);
 
-  // 자동 재생
+  // initialSeekTime 변경 시 해당 시간으로 이동 (이미 로드된 오디오에서)
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !audioUrl) return;
+    if (!audio || initialSeekTime === undefined) return;
 
-    const playAudio = async () => {
-      try {
-        await audio.play();
-      } catch (err: any) {
-        if (err.name !== "NotAllowedError") {
-          console.error("자동 재생 실패:", err);
-        }
-      }
-    };
-
-    playAudio();
-  }, [audioUrl]);
-
-  // 초기 시작 시간 설정
-  useEffect(() => {
-    if (
-      initialSeekTime !== undefined &&
-      initialSeekTime > 0 &&
-      audioRef.current
-    ) {
-      audioRef.current.currentTime = initialSeekTime;
-      audioRef.current.play().catch(() => {});
+    // 오디오가 이미 로드된 상태에서만 실행
+    if (audio.readyState >= 2 && audio.duration > 0) {
+      audio.currentTime = initialSeekTime;
+      audio.play().catch(() => {});
+      onSeekComplete?.();
     }
-  }, [initialSeekTime]);
+  }, [initialSeekTime, onSeekComplete]);
 
   // 드래그 이벤트 핸들러
   const getProgressFromEvent = useCallback(
@@ -340,7 +352,7 @@ function MiniPlayer({
         </ControlsSection>
       </Content>
 
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+      <audio ref={audioRef} key={audioUrl} src={audioUrl} preload="metadata" />
     </Container>
   );
 }
