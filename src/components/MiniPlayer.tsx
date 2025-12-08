@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 interface MiniPlayerProps {
@@ -8,6 +9,7 @@ interface MiniPlayerProps {
   onClose: () => void;
   onPlayCountUpdate?: (count: number) => void;
   initialSeekTime?: number;
+  onTimeUpdate?: (time: number) => void;
 }
 
 function MiniPlayer({
@@ -17,7 +19,9 @@ function MiniPlayer({
   onClose,
   onPlayCountUpdate,
   initialSeekTime,
+  onTimeUpdate,
 }: MiniPlayerProps) {
+  const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const hasCountedRef = useRef(false);
@@ -45,6 +49,7 @@ function MiniPlayer({
     const updateTime = () => {
       if (!isDragging) {
         setCurrentTime(audio.currentTime);
+        onTimeUpdate?.(audio.currentTime);
       }
     };
     const updateDuration = () => setDuration(audio.duration);
@@ -93,7 +98,7 @@ function MiniPlayer({
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
     };
-  }, [audioUrl, podcastKey, onPlayCountUpdate, isDragging]);
+  }, [audioUrl, podcastKey, onPlayCountUpdate, isDragging, onTimeUpdate]);
 
   // 자동 재생
   useEffect(() => {
@@ -238,6 +243,13 @@ function MiniPlayer({
     }, 200);
   }, [onClose]);
 
+  const handleTranscript = useCallback(() => {
+    if (podcastKey) {
+      const timeParam = currentTime > 0 ? `?t=${Math.floor(currentTime)}` : "";
+      navigate(`/transcript/${encodeURIComponent(podcastKey)}${timeParam}`);
+    }
+  }, [podcastKey, currentTime, navigate]);
+
   const formatTime = (seconds: number): string => {
     if (!seconds || isNaN(seconds)) return "0:00";
     const mins = Math.floor(seconds / 60);
@@ -315,6 +327,10 @@ function MiniPlayer({
               <SkipNumber>15</SkipNumber>
             </SkipIconWrapper>
           </SkipButton>
+
+          <TranscriptButton onClick={handleTranscript} aria-label="대본 보기">
+            📄
+          </TranscriptButton>
 
           <CloseButton onClick={handleClose} aria-label="닫기">
             <CloseSvg viewBox="0 0 24 24">
@@ -474,9 +490,6 @@ const Title = styled.p`
   font-size: 0.9375rem;
   font-weight: 600;
   color: #1f2937;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1.3;
 
   @media (min-width: 768px) {
@@ -598,6 +611,35 @@ const PauseIcon = styled.svg`
   width: 20px;
   height: 20px;
   fill: white;
+`;
+
+const TranscriptButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #4b5563;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.15s ease;
+  padding: 0;
+  font-size: 1.1rem;
+
+  &:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  @media (max-width: 360px) {
+    display: none;
+  }
 `;
 
 const CloseButton = styled.button`

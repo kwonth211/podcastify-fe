@@ -3,14 +3,16 @@ import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
-import MiniPlayer from "./MiniPlayer";
+import { usePlayer } from "../contexts/PlayerContext";
 import Footer from "./Footer";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Terms from "./Terms";
 import About from "./About";
+import Timeline from "./Timeline";
 import type { PodcastFile } from "../types";
 
 function PodcastList() {
+  const { playPodcast, stopPodcast, playerState } = usePlayer();
   const [podcasts, setPodcasts] = useState<PodcastFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -390,8 +392,11 @@ function PodcastList() {
     if (selectedPodcast?.key === key) return;
 
     setSelectedPodcast(podcast);
-    const audioUrl = await getAudioUrl(podcast.key);
-    setAudioUrl(audioUrl);
+    const newAudioUrl = await getAudioUrl(podcast.key);
+    setAudioUrl(newAudioUrl);
+
+    // 전역 플레이어에 재생 요청
+    playPodcast(podcast.key, newAudioUrl, formatMiniDate(podcast.date));
 
     // 과거 뉴스인 경우 자동으로 섹션 펼치기
     if (!isToday(podcast.date)) {
@@ -399,7 +404,7 @@ function PodcastList() {
     }
 
     // duration이 없으면 가져오기
-    await ensureDuration(podcast, audioUrl);
+    await ensureDuration(podcast, newAudioUrl);
 
     // 스크롤
     setTimeout(() => {
@@ -426,8 +431,11 @@ function PodcastList() {
 
       setSelectedPodcast(podcast);
       setInitialSeekTime(undefined); // 일반 클릭시 처음부터 재생
-      const audioUrl = await getAudioUrl(podcast.key);
-      setAudioUrl(audioUrl);
+      const newAudioUrl = await getAudioUrl(podcast.key);
+      setAudioUrl(newAudioUrl);
+
+      // 전역 플레이어에 재생 요청
+      playPodcast(podcast.key, newAudioUrl, formatMiniDate(podcast.date));
 
       // 과거 뉴스 클릭 시 자동으로 섹션 펼치기
       if (!isToday(podcast.date)) {
@@ -435,7 +443,7 @@ function PodcastList() {
       }
 
       // duration이 없으면 가져오기
-      await ensureDuration(podcast, audioUrl);
+      await ensureDuration(podcast, newAudioUrl);
 
       // 클릭할 때마다 조회수 증가
       await incrementPlayCount(podcast.key);
@@ -457,6 +465,13 @@ function PodcastList() {
       // 이미 선택된 팟캐스트인 경우 시간만 변경
       if (selectedPodcast?.key === podcast.key && audioUrl) {
         setInitialSeekTime(seekTime);
+        // 전역 플레이어에 시간 업데이트
+        playPodcast(
+          podcast.key,
+          audioUrl,
+          formatMiniDate(podcast.date),
+          seekTime
+        );
         return;
       }
 
@@ -469,6 +484,14 @@ function PodcastList() {
       const newAudioUrl = await getAudioUrl(podcast.key);
       setAudioUrl(newAudioUrl);
       setInitialSeekTime(seekTime);
+
+      // 전역 플레이어에 재생 요청
+      playPodcast(
+        podcast.key,
+        newAudioUrl,
+        formatMiniDate(podcast.date),
+        seekTime
+      );
 
       // 과거 뉴스 클릭 시 자동으로 섹션 펼치기
       if (!isToday(podcast.date)) {
@@ -508,6 +531,11 @@ function PodcastList() {
     return dayjs(dateString, "YYYY-MM-DD").format("YYYY년 M월 D일");
   };
 
+  // MiniPlayer용 짧은 날짜 형식
+  const formatMiniDate = (dateString: string): string => {
+    return dayjs(dateString, "YYYY-MM-DD").format("M월D일");
+  };
+
   const formatRelativeTime = (date: string): string => {
     const targetDate = dayjs(date, "YYYY-MM-DD");
     if (!targetDate.isValid()) return "";
@@ -529,14 +557,6 @@ function PodcastList() {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
-  const formatTimelineTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
   };
 
   const formatCount = (count: number | undefined): string => {
@@ -833,43 +853,33 @@ function PodcastList() {
                               </ItemDetails>
                             )}
 
-                            {/* 타임라인 프리뷰 */}
+                            {/* 타임라인 - 공통 컴포넌트 사용 */}
                             {timelinePreviews[podcast.key] &&
                               timelinePreviews[podcast.key].length > 0 && (
-                                <TimelinePreview>
-                                  <TimelinePreviewHeader>
-                                    <TimelinePreviewTitle>
-                                      타임라인
-                                    </TimelinePreviewTitle>
-                                    <TimelinePreviewCount>
-                                      {timelinePreviews[podcast.key].length}개
-                                      항목
-                                    </TimelinePreviewCount>
-                                  </TimelinePreviewHeader>
-                                  <TimelinePreviewList>
-                                    {timelinePreviews[podcast.key].map(
-                                      (item, idx) => (
-                                        <TimelinePreviewItem
-                                          key={idx}
-                                          onClick={(e) =>
-                                            handleTimelineItemClick(
-                                              e,
-                                              podcast,
-                                              item.time
-                                            )
-                                          }
-                                        >
-                                          <TimelinePreviewTime>
-                                            {formatTimelineTime(item.time)}
-                                          </TimelinePreviewTime>
-                                          <TimelinePreviewLabel>
-                                            {item.label}
-                                          </TimelinePreviewLabel>
-                                        </TimelinePreviewItem>
-                                      )
-                                    )}
-                                  </TimelinePreviewList>
-                                </TimelinePreview>
+                                <Timeline
+                                  items={timelinePreviews[podcast.key]}
+                                  currentTime={
+                                    playerState.podcastKey === podcast.key
+                                      ? playerState.currentTime
+                                      : 0
+                                  }
+                                  onTimeClick={(time) =>
+                                    handleTimelineItemClick(
+                                      {
+                                        stopPropagation: () => {},
+                                      } as React.MouseEvent,
+                                      podcast,
+                                      time
+                                    )
+                                  }
+                                  variant="compact"
+                                  maxHeight="280px"
+                                  maxItems={3}
+                                  isExpanded={isSelected}
+                                  showActiveIndicator={
+                                    playerState.podcastKey === podcast.key
+                                  }
+                                />
                               )}
                           </ItemContent>
                         </PodcastItem>
@@ -939,7 +949,7 @@ function PodcastList() {
                                   <PastItemPlayCount>
                                     ▶ {formatCount(podcast.playCount || 0)}
                                   </PastItemPlayCount>
-                                  {hasTimeline && (
+                                  {hasTimeline && !isSelected && (
                                     <PastTimelineBadge>
                                       타임라인
                                     </PastTimelineBadge>
@@ -948,6 +958,30 @@ function PodcastList() {
                               </PastItemInfo>
                               <PastPlayIndicator>▶</PastPlayIndicator>
                             </PastItemContent>
+
+                            {/* 선택된 경우 타임라인 펼침 - 공통 컴포넌트 사용 */}
+                            {isSelected && hasTimeline && (
+                              <Timeline
+                                items={timelinePreviews[podcast.key]}
+                                currentTime={
+                                  playerState.podcastKey === podcast.key
+                                    ? playerState.currentTime
+                                    : 0
+                                }
+                                onTimeClick={(time) =>
+                                  handleTimelineItemClick(
+                                    {
+                                      stopPropagation: () => {},
+                                    } as React.MouseEvent,
+                                    podcast,
+                                    time
+                                  )
+                                }
+                                variant="compact"
+                                maxHeight="280px"
+                                isExpanded={true}
+                              />
+                            )}
                           </PastPodcastItem>
                         );
                       })}
@@ -972,31 +1006,6 @@ function PodcastList() {
       {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
       {showTerms && <Terms onClose={() => setShowTerms(false)} />}
       {showAbout && <About onClose={() => setShowAbout(false)} />}
-
-      {/* 하단 고정 미니 플레이어 */}
-      {selectedPodcast && audioUrl && (
-        <MiniPlayer
-          audioUrl={audioUrl}
-          title={formatShortDate(selectedPodcast.date)}
-          podcastKey={selectedPodcast.key}
-          initialSeekTime={initialSeekTime}
-          onClose={() => {
-            setSelectedPodcast(null);
-            setAudioUrl(null);
-            // URL에서 playerId 제거
-            const url = new URL(window.location.href);
-            url.searchParams.delete("playerId");
-            window.history.pushState({}, "", url.toString());
-          }}
-          onPlayCountUpdate={(count: number) => {
-            setPodcasts((prev) =>
-              prev.map((p) =>
-                p.key === selectedPodcast.key ? { ...p, playCount: count } : p
-              )
-            );
-          }}
-        />
-      )}
     </Container>
   );
 }
@@ -1653,111 +1662,6 @@ const DetailValue = styled.div<{ $small?: boolean }>`
   color: #334155;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-`;
-
-// 타임라인 프리뷰 스타일
-const TimelinePreview = styled.div`
-  margin-top: 1rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(6, 182, 212, 0.2);
-`;
-
-const TimelinePreviewHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-`;
-
-const TimelinePreviewTitle = styled.span`
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #0891b2;
-  letter-spacing: 0.02em;
-`;
-
-const TimelinePreviewCount = styled.span`
-  font-size: 0.6875rem;
-  color: #6b7280;
-  font-weight: 500;
-`;
-
-const TimelinePreviewList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  max-height: 180px;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: rgba(6, 182, 212, 0.1);
-    border-radius: 2px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(6, 182, 212, 0.3);
-    border-radius: 2px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba(6, 182, 212, 0.5);
-  }
-`;
-
-const TimelinePreviewItem = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
-  padding: 0.5rem 0.625rem;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid rgba(6, 182, 212, 0.15);
-  transition: all 0.15s ease;
-  cursor: pointer;
-
-  &:hover {
-    background: rgba(6, 182, 212, 0.1);
-    border-color: rgba(6, 182, 212, 0.4);
-    transform: translateX(4px);
-  }
-
-  &:active {
-    transform: translateX(2px);
-  }
-
-  ${PodcastItem}:hover & {
-    border-color: rgba(6, 182, 212, 0.3);
-  }
-`;
-
-const TimelinePreviewTime = styled.span`
-  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Mono", monospace;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #0891b2;
-  background: rgba(6, 182, 212, 0.12);
-  padding: 0.125rem 0.375rem;
-  border-radius: 4px;
-  white-space: nowrap;
-  min-width: 42px;
-  text-align: center;
-`;
-
-const TimelinePreviewLabel = styled.span`
-  font-size: 0.8125rem;
-  color: #374151;
-  line-height: 1.4;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
 const EmptyState = styled.div`
