@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
-import AudioPlayer from "./AudioPlayer";
+import MiniPlayer from "./MiniPlayer";
 import Footer from "./Footer";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Terms from "./Terms";
@@ -18,7 +18,6 @@ function PodcastList() {
     null
   );
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [playTrigger, setPlayTrigger] = useState(0);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [initialSeekTime, setInitialSeekTime] = useState<number | undefined>(
     undefined
@@ -505,20 +504,6 @@ function PodcastList() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [podcasts]);
 
-  const formatDate = (dateString: string): string => {
-    const date = dayjs(dateString, "YYYY-MM-DD");
-    const weekdays = [
-      "일요일",
-      "월요일",
-      "화요일",
-      "수요일",
-      "목요일",
-      "금요일",
-      "토요일",
-    ];
-    return `${date.format("YYYY년 M월 D일")} ${weekdays[date.day()]}`;
-  };
-
   const formatShortDate = (dateString: string): string => {
     return dayjs(dateString, "YYYY-MM-DD").format("YYYY년 M월 D일");
   };
@@ -721,14 +706,12 @@ function PodcastList() {
           }
 
           if (hasToday && firstTodayPodcast) {
-            // 이미 선택된 팟캐스트면 URL을 변경하지 않고 재생만 트리거
+            // 이미 선택된 팟캐스트면 아무것도 하지 않음 (미니 플레이어에서 재생 중)
             if (selectedPodcast?.key === firstTodayPodcast.key && audioUrl) {
-              // 같은 팟캐스트이므로 재생 트리거만 증가
-              setPlayTrigger((prev) => prev + 1);
-            } else {
-              // 새로운 팟캐스트이므로 URL 업데이트와 함께 처리
-              handlePodcastClick(firstTodayPodcast);
+              return;
             }
+            // 새로운 팟캐스트이므로 URL 업데이트와 함께 처리
+            handlePodcastClick(firstTodayPodcast);
           }
         };
 
@@ -789,58 +772,6 @@ function PodcastList() {
                   <TodayListContainer>
                     {todayPodcasts.map((podcast, index) => {
                       const isSelected = selectedPodcast?.key === podcast.key;
-                      const showPlayer = isSelected && audioUrl;
-
-                      if (showPlayer) {
-                        return (
-                          <PlayerWrapper
-                            key={podcast.key}
-                            id={`podcast-${podcast.key}`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <AudioPlayer
-                              audioUrl={audioUrl}
-                              date={formatDate(selectedPodcast.date)}
-                              title={`${formatDate(selectedPodcast.date)}`}
-                              duration={selectedPodcast.duration}
-                              podcastKey={selectedPodcast.key}
-                              playCount={selectedPodcast.playCount}
-                              triggerPlay={playTrigger}
-                              initialSeekTime={initialSeekTime}
-                              onPlayCountUpdate={(count: number) => {
-                                setPodcasts((prev) =>
-                                  prev.map((p) =>
-                                    p.key === selectedPodcast.key
-                                      ? { ...p, playCount: count }
-                                      : p
-                                  )
-                                );
-                              }}
-                              onDownload={async () => {
-                                try {
-                                  const response = await fetch(audioUrl);
-                                  const blob = await response.blob();
-                                  const url = window.URL.createObjectURL(blob);
-                                  const link = document.createElement("a");
-                                  link.href = url;
-                                  link.download = `podcast_${selectedPodcast.date.replace(
-                                    /-/g,
-                                    ""
-                                  )}.mp3`;
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  document.body.removeChild(link);
-                                  window.URL.revokeObjectURL(url);
-                                } catch (err) {
-                                  console.error("다운로드 실패:", err);
-                                  window.open(audioUrl, "_blank");
-                                }
-                              }}
-                            />
-                          </PlayerWrapper>
-                        );
-                      }
-
                       const isNew = isToday(podcast.date);
 
                       return (
@@ -850,6 +781,7 @@ function PodcastList() {
                           onClick={() => handlePodcastClick(podcast)}
                           style={{ animationDelay: `${index * 0.05}s` }}
                           $isNew={isNew}
+                          $isSelected={isSelected}
                         >
                           {isNew && (
                             <NewBadge>
@@ -979,59 +911,6 @@ function PodcastList() {
                     <PastListContainer>
                       {pastPodcasts.map((podcast, index) => {
                         const isSelected = selectedPodcast?.key === podcast.key;
-                        const showPlayer = isSelected && audioUrl;
-
-                        if (showPlayer) {
-                          return (
-                            <PlayerWrapper
-                              key={podcast.key}
-                              id={`podcast-${podcast.key}`}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <AudioPlayer
-                                audioUrl={audioUrl}
-                                date={formatDate(selectedPodcast.date)}
-                                title={`${formatDate(selectedPodcast.date)}`}
-                                duration={selectedPodcast.duration}
-                                podcastKey={selectedPodcast.key}
-                                playCount={selectedPodcast.playCount}
-                                triggerPlay={playTrigger}
-                                initialSeekTime={initialSeekTime}
-                                onPlayCountUpdate={(count: number) => {
-                                  setPodcasts((prev) =>
-                                    prev.map((p) =>
-                                      p.key === selectedPodcast.key
-                                        ? { ...p, playCount: count }
-                                        : p
-                                    )
-                                  );
-                                }}
-                                onDownload={async () => {
-                                  try {
-                                    const response = await fetch(audioUrl);
-                                    const blob = await response.blob();
-                                    const url =
-                                      window.URL.createObjectURL(blob);
-                                    const link = document.createElement("a");
-                                    link.href = url;
-                                    link.download = `podcast_${selectedPodcast.date.replace(
-                                      /-/g,
-                                      ""
-                                    )}.mp3`;
-                                    document.body.appendChild(link);
-                                    link.click();
-                                    document.body.removeChild(link);
-                                    window.URL.revokeObjectURL(url);
-                                  } catch (err) {
-                                    console.error("다운로드 실패:", err);
-                                    window.open(audioUrl, "_blank");
-                                  }
-                                }}
-                              />
-                            </PlayerWrapper>
-                          );
-                        }
-
                         const hasTimeline =
                           timelinePreviews[podcast.key] &&
                           timelinePreviews[podcast.key].length > 0;
@@ -1041,6 +920,7 @@ function PodcastList() {
                             key={podcast.key}
                             onClick={() => handlePodcastClick(podcast)}
                             style={{ animationDelay: `${index * 0.03}s` }}
+                            $isSelected={isSelected}
                           >
                             <PastItemContent>
                               <PastItemInfo>
@@ -1092,6 +972,31 @@ function PodcastList() {
       {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
       {showTerms && <Terms onClose={() => setShowTerms(false)} />}
       {showAbout && <About onClose={() => setShowAbout(false)} />}
+
+      {/* 하단 고정 미니 플레이어 */}
+      {selectedPodcast && audioUrl && (
+        <MiniPlayer
+          audioUrl={audioUrl}
+          title={formatShortDate(selectedPodcast.date)}
+          podcastKey={selectedPodcast.key}
+          initialSeekTime={initialSeekTime}
+          onClose={() => {
+            setSelectedPodcast(null);
+            setAudioUrl(null);
+            // URL에서 playerId 제거
+            const url = new URL(window.location.href);
+            url.searchParams.delete("playerId");
+            window.history.pushState({}, "", url.toString());
+          }}
+          onPlayCountUpdate={(count: number) => {
+            setPodcasts((prev) =>
+              prev.map((p) =>
+                p.key === selectedPodcast.key ? { ...p, playCount: count } : p
+              )
+            );
+          }}
+        />
+      )}
     </Container>
   );
 }
@@ -1504,20 +1409,23 @@ const BannerArrow = styled.button<{ $direction: "left" | "right" }>`
   }
 `;
 
-const PlayerWrapper = styled.div`
-  grid-column: 1 / -1;
-  margin-bottom: 1rem;
-`;
-
-const PodcastItem = styled.div<{ $isNew?: boolean }>`
-  background: white;
+const PodcastItem = styled.div<{ $isNew?: boolean; $isSelected?: boolean }>`
+  background: ${(props) =>
+    props.$isSelected
+      ? "linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%)"
+      : "white"};
   border-radius: 20px;
   padding: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: ${(props) =>
+    props.$isSelected
+      ? "0 4px 16px rgba(102, 126, 234, 0.2), 0 2px 8px rgba(0, 0, 0, 0.06)"
+      : "0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05)"};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid
+    ${(props) =>
+      props.$isSelected ? "rgba(102, 126, 234, 0.3)" : "rgba(0, 0, 0, 0.04)"};
   animation: fadeInUp 0.5s ease-out both;
   position: relative;
 
@@ -2044,14 +1952,21 @@ const PastListContainer = styled.div`
   }
 `;
 
-const PastPodcastItem = styled.div`
-  background: white;
+const PastPodcastItem = styled.div<{ $isSelected?: boolean }>`
+  background: ${(props) =>
+    props.$isSelected
+      ? "linear-gradient(to right, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.06))"
+      : "white"};
   border-radius: 12px;
   padding: 0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: ${(props) =>
+    props.$isSelected
+      ? "0 2px 8px rgba(102, 126, 234, 0.15)"
+      : "0 1px 2px rgba(0, 0, 0, 0.04)"};
   transition: all 0.2s ease;
   cursor: pointer;
-  border: 1px solid #e5e7eb;
+  border: 1px solid
+    ${(props) => (props.$isSelected ? "rgba(102, 126, 234, 0.3)" : "#e5e7eb")};
   animation: fadeIn 0.3s ease-out both;
 
   @keyframes fadeIn {
