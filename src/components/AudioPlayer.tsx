@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import type { AudioPlayerProps } from "../types";
 import Timeline from "./Timeline";
@@ -171,6 +172,25 @@ const DownloadButton = styled.button`
   }
 `;
 
+const TranscriptButton = styled.button`
+  background: rgba(102, 126, 234, 0.1);
+  color: #0f172a;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.3);
+  }
+`;
+
 const PlayButton = styled.button`
   background: rgba(6, 182, 212, 0.2);
   color: #0891b2;
@@ -234,6 +254,7 @@ function AudioPlayer({
   triggerPlay,
   initialSeekTime,
 }: AudioPlayerProps) {
+  const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement>(null);
   const hasCountedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -444,6 +465,14 @@ function AudioPlayer({
     }
   };
 
+  const handleTranscript = () => {
+    if (podcastKey) {
+      // 현재 재생 시간을 URL 파라미터로 전달
+      const timeParam = currentTime > 0 ? `?t=${Math.floor(currentTime)}` : "";
+      navigate(`/transcript/${encodeURIComponent(podcastKey)}${timeParam}`);
+    }
+  };
+
   const progress = duration ? (currentTime / duration) * 100 : 0;
   const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -486,6 +515,9 @@ function AudioPlayer({
           >
             {playbackRate}x
           </SpeedButton>
+          <TranscriptButton onClick={handleTranscript} title="대본 보기">
+            📄 대본
+          </TranscriptButton>
           <DownloadButton onClick={handleDownload} title="다운로드">
             ⬇ 다운로드
           </DownloadButton>

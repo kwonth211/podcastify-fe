@@ -1,7 +1,11 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { HelmetProvider } from "react-helmet-async";
 import GlobalStyle from "./styles/GlobalStyle";
+import { PlayerProvider } from "./contexts/PlayerContext";
 import PodcastList from "./components/PodcastList";
+import TranscriptPage from "./components/TranscriptPage";
+import GlobalMiniPlayer from "./components/GlobalMiniPlayer";
 import InstallPrompt from "./components/InstallPrompt";
 
 const theme = {
@@ -18,9 +22,24 @@ function App() {
   return (
     <HelmetProvider>
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <PodcastList />
-        <InstallPrompt />
+        <PlayerProvider>
+          <BrowserRouter>
+            <GlobalStyle />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <PodcastList />
+                    <InstallPrompt />
+                  </>
+                }
+              />
+              <Route path="/transcript/:key" element={<TranscriptPage />} />
+            </Routes>
+            <GlobalMiniPlayer />
+          </BrowserRouter>
+        </PlayerProvider>
       </ThemeProvider>
     </HelmetProvider>
   );
