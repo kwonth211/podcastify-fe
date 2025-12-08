@@ -12,6 +12,7 @@ interface PlayerState {
   title: string;
   isPlaying: boolean;
   currentTime: number;
+  seekTime: number | null; // 타임라인 클릭 시 이동할 시간
 }
 
 interface PlayerContextType {
@@ -25,6 +26,7 @@ interface PlayerContextType {
   stopPodcast: () => void;
   updateCurrentTime: (time: number) => void;
   setIsPlaying: (playing: boolean) => void;
+  clearSeekTime: () => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | null>(null);
@@ -36,17 +38,19 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     title: "",
     isPlaying: false,
     currentTime: 0,
+    seekTime: null,
   });
 
   const playPodcast = useCallback(
     (key: string, url: string, title: string, seekTime?: number) => {
-      setPlayerState({
+      setPlayerState((prev) => ({
         podcastKey: key,
         audioUrl: url,
         title,
         isPlaying: true,
-        currentTime: seekTime || 0,
-      });
+        currentTime: prev.podcastKey === key ? prev.currentTime : 0,
+        seekTime: seekTime ?? null,
+      }));
     },
     []
   );
@@ -58,6 +62,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       title: "",
       isPlaying: false,
       currentTime: 0,
+      seekTime: null,
     });
   }, []);
 
@@ -69,6 +74,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setPlayerState((prev) => ({ ...prev, isPlaying: playing }));
   }, []);
 
+  const clearSeekTime = useCallback(() => {
+    setPlayerState((prev) => ({ ...prev, seekTime: null }));
+  }, []);
+
   return (
     <PlayerContext.Provider
       value={{
@@ -77,6 +86,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         stopPodcast,
         updateCurrentTime,
         setIsPlaying,
+        clearSeekTime,
       }}
     >
       {children}
