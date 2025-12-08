@@ -17,13 +17,13 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/favicon.png",
+      "src": "/icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/favicon.png",
+      "src": "/icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
@@ -63,7 +63,7 @@
       "short_name": "오늘 뉴스",
       "description": "오늘의 뉴스 팟캐스트 바로 듣기",
       "url": "/",
-      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/icon.png", "sizes": "192x192" }]
     }
   ],
   "launch_handler": {
