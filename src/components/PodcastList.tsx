@@ -48,6 +48,11 @@ function PodcastList() {
     Record<string, { time: number; label: string }[]>
   >({});
 
+  // 배너 이미지 로드 상태
+  const [loadedBanners, setLoadedBanners] = useState<Record<number, boolean>>(
+    {}
+  );
+
   useEffect(() => {
     loadPodcasts();
   }, []);
@@ -645,13 +650,41 @@ function PodcastList() {
           }}
         >
           <BannerSlide>
-            <BannerImage src="/a.png" alt="Banner 1" />
+            <BannerImage
+              src="/a.png"
+              alt="Banner 1"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              $loaded={loadedBanners[0]}
+              onLoad={() =>
+                setLoadedBanners((prev) => ({ ...prev, [0]: true }))
+              }
+            />
           </BannerSlide>
           <BannerSlide>
-            <BannerImage src="/b.png" alt="Banner 2" />
+            <BannerImage
+              src="/b.png"
+              alt="Banner 2"
+              loading="lazy"
+              decoding="async"
+              $loaded={loadedBanners[1]}
+              onLoad={() =>
+                setLoadedBanners((prev) => ({ ...prev, [1]: true }))
+              }
+            />
           </BannerSlide>
           <BannerSlide>
-            <BannerImage src="/c.png" alt="Banner 3" />
+            <BannerImage
+              src="/c.png"
+              alt="Banner 3"
+              loading="lazy"
+              decoding="async"
+              $loaded={loadedBanners[2]}
+              onLoad={() =>
+                setLoadedBanners((prev) => ({ ...prev, [2]: true }))
+              }
+            />
           </BannerSlide>
         </BannerSlider>
         <BannerArrow
@@ -1376,22 +1409,42 @@ const BannerSlide = styled.div`
   min-width: 0;
   width: 100%;
   flex-shrink: 0;
-`;
-
-const BannerImage = styled.img`
-  width: 100%;
-  height: auto;
-  display: block;
+  background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
   border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  object-fit: contain;
-  pointer-events: none; /* 이미지 드래그 방지 */
-  -webkit-user-drag: none; /* Safari 이미지 드래그 방지 */
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
 
   @media (max-width: 768px) {
     border-radius: 16px;
-    min-height: 200px;
-    object-fit: cover;
+    aspect-ratio: 16 / 10;
+  }
+`;
+
+const BannerImage = styled.img<{ $loaded?: boolean }>`
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  pointer-events: none; /* 이미지 드래그 방지 */
+  -webkit-user-drag: none; /* Safari 이미지 드래그 방지 */
+  opacity: ${(props) => (props.$loaded ? 1 : 0)};
+  transition: opacity 0.3s ease-out;
+
+  @media (max-width: 768px) {
+    border-radius: 16px;
   }
 `;
 
