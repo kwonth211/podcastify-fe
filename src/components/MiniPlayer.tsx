@@ -26,7 +26,6 @@ function MiniPlayer({
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const hasCountedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -41,12 +40,34 @@ function MiniPlayer({
     });
   }, []);
 
+  // 새 팟캐스트 로드 시 재생 카운트 (한 번만)
+  useEffect(() => {
+    if (!podcastKey) return;
+
+    const playedKey = `played_${podcastKey}`;
+    if (localStorage.getItem(playedKey)) return;
+
+    localStorage.setItem(playedKey, "true");
+    fetch("/api/count", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: podcastKey }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.count !== undefined) {
+          onPlayCountUpdate?.(data.count);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem(playedKey);
+      });
+  }, [podcastKey, onPlayCountUpdate]);
+
   // 오디오 이벤트 핸들러
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    hasCountedRef.current = false;
 
     const updateTime = () => {
       if (!isDragging) {
@@ -73,37 +94,7 @@ function MiniPlayer({
     };
 
     const handleEnded = () => setIsPlaying(false);
-
-    const handlePlay = () => {
-      setIsPlaying(true);
-
-      if (!podcastKey || hasCountedRef.current) return;
-
-      const playedKey = `played_${podcastKey}`;
-      const hasPlayed = localStorage.getItem(playedKey);
-
-      if (hasPlayed) return;
-
-      hasCountedRef.current = true;
-      localStorage.setItem(playedKey, "true");
-
-      fetch("/api/count", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: podcastKey }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.count !== undefined) {
-            onPlayCountUpdate?.(data.count);
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem(playedKey);
-          hasCountedRef.current = false;
-        });
-    };
-
+    const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate", updateTime);
@@ -119,15 +110,7 @@ function MiniPlayer({
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
     };
-  }, [
-    audioUrl,
-    podcastKey,
-    onPlayCountUpdate,
-    isDragging,
-    onTimeUpdate,
-    initialSeekTime,
-    onSeekComplete,
-  ]);
+  }, [audioUrl, isDragging, onTimeUpdate, initialSeekTime, onSeekComplete]);
 
   // initialSeekTime 변경 시 해당 시간으로 이동 (이미 로드된 오디오에서)
   useEffect(() => {
