@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import process from "process";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
@@ -159,21 +160,17 @@ async function generateSitemap() {
   // Sitemap XML 생성
   const sitemapXML = generateSitemapXML(STATIC_PAGES, podcasts);
 
-  // 파일 저장 경로
-  const publicDir = path.resolve(__dirname, "../public");
+  // dist 폴더에 저장 (빌드 후 실행되므로 dist만 있으면 됨)
   const distDir = path.resolve(__dirname, "../dist");
 
-  // public 폴더에 저장
-  const publicPath = path.join(publicDir, "sitemap.xml");
-  fs.writeFileSync(publicPath, sitemapXML);
-  console.log(`✅ Saved: ${publicPath}`);
-
-  // dist 폴더가 있으면 거기에도 저장
-  if (fs.existsSync(distDir)) {
-    const distPath = path.join(distDir, "sitemap.xml");
-    fs.writeFileSync(distPath, sitemapXML);
-    console.log(`✅ Saved: ${distPath}`);
+  if (!fs.existsSync(distDir)) {
+    console.error("❌ dist folder not found. Run 'npm run build' first.");
+    process.exit(1);
   }
+
+  const distPath = path.join(distDir, "sitemap.xml");
+  fs.writeFileSync(distPath, sitemapXML);
+  console.log(`✅ Saved: ${distPath}`);
 
   console.log(`\n📊 Total URLs: ${STATIC_PAGES.length + podcasts.length}`);
   console.log(`   - Static pages: ${STATIC_PAGES.length}`);
