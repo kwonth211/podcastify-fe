@@ -321,7 +321,15 @@ function PodcastList() {
   };
 
   const incrementPlayCount = async (key: string): Promise<number | null> => {
+    // 이미 재생한 팟캐스트는 카운트하지 않음
+    const playedKey = `played_${key}`;
+
+    if (localStorage.getItem(playedKey)) {
+      return null;
+    }
+
     try {
+      localStorage.setItem(playedKey, "true");
       const response = await fetch("/api/count", {
         method: "POST",
         headers: {
@@ -336,6 +344,7 @@ function PodcastList() {
       }
     } catch (err) {
       console.warn(`조회수 증가 실패 (${key}):`, err);
+      localStorage.removeItem(playedKey);
     }
     return null;
   };

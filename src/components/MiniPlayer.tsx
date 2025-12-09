@@ -7,7 +7,6 @@ interface MiniPlayerProps {
   title: string;
   podcastKey?: string;
   onClose: () => void;
-  onPlayCountUpdate?: (count: number) => void;
   initialSeekTime?: number;
   onTimeUpdate?: (time: number) => void;
   onSeekComplete?: () => void;
@@ -18,7 +17,6 @@ function MiniPlayer({
   title,
   podcastKey,
   onClose,
-  onPlayCountUpdate,
   initialSeekTime,
   onTimeUpdate,
   onSeekComplete,
@@ -39,30 +37,6 @@ function MiniPlayer({
       setIsVisible(true);
     });
   }, []);
-
-  // 새 팟캐스트 로드 시 재생 카운트 (한 번만)
-  useEffect(() => {
-    if (!podcastKey) return;
-
-    const playedKey = `played_${podcastKey}`;
-    if (localStorage.getItem(playedKey)) return;
-
-    localStorage.setItem(playedKey, "true");
-    fetch("/api/count", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: podcastKey }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.count !== undefined) {
-          onPlayCountUpdate?.(data.count);
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem(playedKey);
-      });
-  }, [podcastKey, onPlayCountUpdate]);
 
   // 오디오 이벤트 핸들러
   useEffect(() => {
