@@ -1,0 +1,93 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "close": "닫기",
+    "save": "저장",
+    "cancel": "취소",
+    "confirm": "확인",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "play": "재생",
+    "pause": "일시정지",
+    "today": "오늘",
+    "yesterday": "어제",
+    "daysAgo": "{{count}}일 전",
+    "weeksAgo": "{{count}}주 전",
+    "monthsAgo": "{{count}}개월 전",
+    "yearsAgo": "{{count}}년 전"
+  },
+  "header": {
+    "title": "Daily News Podcast"
+  },
+  "hero": {
+    "titleToday": "지금 바로 오늘의 뉴스를 들어보세요",
+    "titleDefault": "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요",
+    "subtitleToday": "오늘의 주요 헤드라인 요약",
+    "subtitleDefault": "매일 최신 뉴스를 음성으로 제공합니다",
+    "notice": "Gemini 3.0 모델 사용 · 한국어 지원이 아직 불안정할 수 있습니다"
+  },
+  "podcast": {
+    "todayNews": "오늘의 뉴스",
+    "pastNews": "과거 뉴스",
+    "count": "{{count}}개",
+    "expand": "펼치기",
+    "collapse": "접기",
+    "new": "NEW",
+    "playCount": "조회수",
+    "playTime": "재생 시간",
+    "quickSummary": "3분요약",
+    "transcript": "대본 보기",
+    "timeline": "타임라인",
+    "noPodcasts": "등록된 팟캐스트가 없습니다.",
+    "loadError": "팟캐스트 목록을 불러오는데 실패했습니다.",
+    "audioLoadError": "오디오 파일을 불러오는데 실패했습니다."
+  },
+  "player": {
+    "playbackSpeed": "재생 속도",
+    "skipBack": "10초 뒤로",
+    "skipForward": "10초 앞으로",
+    "volume": "볼륨"
+  },
+  "transcript": {
+    "title": "대본",
+    "backToList": "목록으로",
+    "loading": "대본을 불러오는 중...",
+    "error": "대본을 불러오는데 실패했습니다.",
+    "noTranscript": "대본이 없습니다."
+  },
+  "footer": {
+    "about": "서비스 소개",
+    "contact": "문의하기",
+    "privacy": "개인정보처리방침",
+    "terms": "이용약관",
+    "copyright": "© {{year}} Daily News Podcast. All rights reserved.",
+    "disclaimer": "본 서비스는 AI 기술을 활용하여 뉴스를 요약하고 음성으로 제공합니다. 제공되는 콘텐츠는 참고용이며, 정확한 정보는 원본 뉴스 출처를 확인해 주세요."
+  },
+  "install": {
+    "title": "홈 화면에 추가하기",
+    "description": "앱처럼 빠르게 접속하고 오프라인에서도 이용하세요!",
+    "install": "설치하기",
+    "howTo": "방법 보기",
+    "later": "나중에",
+    "iosGuideTitle": "iOS에서 홈 화면 추가하기",
+    "iosStep1": "Safari 하단의 공유 버튼을 탭하세요",
+    "iosStep2": "메뉴에서 \"홈 화면에 추가\"를 선택하세요",
+    "iosStep3": "오른쪽 상단의 \"추가\"를 탭하면 완료!",
+    "addToHomeScreen": "홈 화면에 추가"
+  },
+  "seo": {
+    "title": "Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트",
+    "description": "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+  },
+  "language": {
+    "ko": "한국어",
+    "en": "English"
+  },
+  "date": {
+    "format": "YYYY년 M월 D일",
+    "shortFormat": "M월D일"
+  }
+}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { useTranslation } from "react-i18next";
 import * as analytics from "../utils/analytics";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -8,6 +9,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const InstallPrompt = () => {
+  const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -112,16 +114,16 @@ const InstallPrompt = () => {
         <PromptContent>
           <IconWrapper>📱</IconWrapper>
           <TextContent>
-            <Title>홈 화면에 추가하기</Title>
-            <Description>
-              앱처럼 빠르게 접속하고 오프라인에서도 이용하세요!
-            </Description>
+            <Title>{t("install.title")}</Title>
+            <Description>{t("install.description")}</Description>
           </TextContent>
           <ButtonGroup>
             <InstallButton onClick={handleInstall}>
-              {isIOS ? "방법 보기" : "설치하기"}
+              {isIOS ? t("install.howTo") : t("install.install")}
             </InstallButton>
-            <DismissButton onClick={handleDismiss}>나중에</DismissButton>
+            <DismissButton onClick={handleDismiss}>
+              {t("install.later")}
+            </DismissButton>
           </ButtonGroup>
         </PromptContent>
       </PromptContainer>
@@ -129,33 +131,31 @@ const InstallPrompt = () => {
       {showIOSGuide && (
         <IOSGuideOverlay onClick={handleDismiss}>
           <IOSGuideModal onClick={(e) => e.stopPropagation()}>
-            <GuideTitle>iOS에서 홈 화면 추가하기</GuideTitle>
+            <GuideTitle>{t("install.iosGuideTitle")}</GuideTitle>
             <GuideSteps>
               <Step>
                 <StepNumber>1</StepNumber>
                 <StepText>
-                  Safari 하단의 <ShareIcon>⬆️</ShareIcon> 공유 버튼을 탭하세요
+                  {t("install.iosStep1")} <ShareIcon>⬆️</ShareIcon>
                 </StepText>
               </Step>
               <Step>
                 <StepNumber>2</StepNumber>
-                <StepText>
-                  메뉴에서 <strong>"홈 화면에 추가"</strong>를 선택하세요
-                </StepText>
+                <StepText>{t("install.iosStep2")}</StepText>
               </Step>
               <Step>
                 <StepNumber>3</StepNumber>
-                <StepText>
-                  오른쪽 상단의 <strong>"추가"</strong>를 탭하면 완료!
-                </StepText>
+                <StepText>{t("install.iosStep3")}</StepText>
               </Step>
             </GuideSteps>
             <GuideImage>
               <MockSafari>
-                <MockAddButton>➕ 홈 화면에 추가</MockAddButton>
+                <MockAddButton>➕ {t("install.addToHomeScreen")}</MockAddButton>
               </MockSafari>
             </GuideImage>
-            <CloseButton onClick={handleDismiss}>확인</CloseButton>
+            <CloseButton onClick={handleDismiss}>
+              {t("common.confirm")}
+            </CloseButton>
           </IOSGuideModal>
         </IOSGuideOverlay>
       )}

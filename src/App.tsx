@@ -19,6 +19,9 @@ import {
   useOutboundLinkTracking,
 } from "./hooks/useAnalytics";
 
+// i18n 초기화
+import "./i18n";
+
 const theme = {
   colors: {
     primary: "#667eea",

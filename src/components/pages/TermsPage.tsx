@@ -42,7 +42,7 @@ function TermsPage() {
       <Main>
         <PageHeader>
           <PageTitle>이용약관</PageTitle>
-          <LastUpdated>최종 수정일: 2024년 12월 1일</LastUpdated>
+          <LastUpdated>최종 수정일: 2025년 12월 9일</LastUpdated>
         </PageHeader>
 
         <ContentSection>
@@ -185,7 +185,7 @@ function TermsPage() {
           <Section>
             <SectionTitle>부칙</SectionTitle>
             <SectionContent>
-              <Paragraph>본 약관은 2024년 12월 1일부터 시행됩니다.</Paragraph>
+              <Paragraph>본 약관은 2025년 12월 9일부터 시행됩니다.</Paragraph>
             </SectionContent>
           </Section>
         </ContentSection>

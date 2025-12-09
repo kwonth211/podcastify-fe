@@ -1,0 +1,93 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "play": "Play",
+    "pause": "Pause",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "monthsAgo": "{{count}} months ago",
+    "yearsAgo": "{{count}} years ago"
+  },
+  "header": {
+    "title": "Daily News Podcast"
+  },
+  "hero": {
+    "titleToday": "Listen to today's news now",
+    "titleDefault": "Listen to AI-summarized news as a podcast",
+    "subtitleToday": "Today's top headlines summary",
+    "subtitleDefault": "Daily news delivered in audio format",
+    "notice": "Using Gemini 3.0 model · Korean support may still be unstable"
+  },
+  "podcast": {
+    "todayNews": "Today's News",
+    "pastNews": "Past News",
+    "count": "{{count}} episodes",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "new": "NEW",
+    "playCount": "Views",
+    "playTime": "Duration",
+    "quickSummary": "3 min",
+    "transcript": "View Transcript",
+    "timeline": "Timeline",
+    "noPodcasts": "No podcasts available.",
+    "loadError": "Failed to load podcast list.",
+    "audioLoadError": "Failed to load audio file."
+  },
+  "player": {
+    "playbackSpeed": "Playback Speed",
+    "skipBack": "Skip 10s back",
+    "skipForward": "Skip 10s forward",
+    "volume": "Volume"
+  },
+  "transcript": {
+    "title": "Transcript",
+    "backToList": "Back to List",
+    "loading": "Loading transcript...",
+    "error": "Failed to load transcript.",
+    "noTranscript": "No transcript available."
+  },
+  "footer": {
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© {{year}} Daily News Podcast. All rights reserved.",
+    "disclaimer": "This service uses AI technology to summarize and provide news in audio format. The content is for reference only. Please verify accurate information from original news sources."
+  },
+  "install": {
+    "title": "Add to Home Screen",
+    "description": "Access quickly like an app and use offline!",
+    "install": "Install",
+    "howTo": "How to",
+    "later": "Later",
+    "iosGuideTitle": "Add to Home Screen on iOS",
+    "iosStep1": "Tap the share button at the bottom of Safari",
+    "iosStep2": "Select \"Add to Home Screen\" from the menu",
+    "iosStep3": "Tap \"Add\" in the top right corner and you're done!",
+    "addToHomeScreen": "Add to Home Screen"
+  },
+  "seo": {
+    "title": "Daily News Podcast - AI-Summarized News Podcast",
+    "description": "Listen to AI-summarized news as a podcast. Daily news delivered in audio format."
+  },
+  "language": {
+    "ko": "한국어",
+    "en": "English"
+  },
+  "date": {
+    "format": "MMMM D, YYYY",
+    "shortFormat": "MMM D"
+  }
+}

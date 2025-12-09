@@ -45,7 +45,7 @@ function PrivacyPage() {
       <Main>
         <PageHeader>
           <PageTitle>개인정보처리방침</PageTitle>
-          <LastUpdated>최종 수정일: 2024년 12월 1일</LastUpdated>
+          <LastUpdated>최종 수정일: 2025년 12월 9일</LastUpdated>
         </PageHeader>
 
         <ContentSection>

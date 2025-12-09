@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 function Footer() {
+  const { t, i18n } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "ko" ? "en" : "ko";
+    i18n.changeLanguage(newLang);
+  };
+
   return (
     <FooterContainer>
       <FooterContent>
@@ -10,14 +19,21 @@ function Footer() {
           <LogoText>Daily News Podcast</LogoText>
         </FooterLogo>
 
+        <LanguageSwitch onClick={toggleLanguage}>
+          <LanguageIcon>🌐</LanguageIcon>
+          <LanguageText>
+            {i18n.language === "ko" ? "English" : "한국어"}
+          </LanguageText>
+        </LanguageSwitch>
+
         <FooterLinks>
-          <FooterLink to="/about">서비스 소개</FooterLink>
+          <FooterLink to="/about">{t("footer.about")}</FooterLink>
           <FooterDivider>|</FooterDivider>
-          <FooterLink to="/contact">문의하기</FooterLink>
+          <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
           <FooterDivider>|</FooterDivider>
-          <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+          <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
           <FooterDivider>|</FooterDivider>
-          <FooterLink to="/terms">이용약관</FooterLink>
+          <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
         </FooterLinks>
 
         <FooterInfo>
@@ -30,15 +46,10 @@ function Footer() {
         </FooterInfo>
 
         <FooterCopyright>
-          © {new Date().getFullYear()} Daily News Podcast. All rights reserved.
+          {t("footer.copyright", { year: currentYear })}
         </FooterCopyright>
 
-        <FooterDisclaimer>
-          본 서비스는 AI 기술을 활용하여 뉴스를 요약하고 음성으로 제공합니다.
-          <br />
-          제공되는 콘텐츠는 참고용이며, 정확한 정보는 원본 뉴스 출처를 확인해
-          주세요.
-        </FooterDisclaimer>
+        <FooterDisclaimer>{t("footer.disclaimer")}</FooterDisclaimer>
       </FooterContent>
     </FooterContainer>
   );
@@ -83,6 +94,39 @@ const LogoText = styled.span`
   font-size: 1.25rem;
   font-weight: 700;
   color: #334155;
+`;
+
+const LanguageSwitch = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const LanguageIcon = styled.span`
+  font-size: 1rem;
+`;
+
+const LanguageText = styled.span`
+  font-size: 0.875rem;
 `;
 
 const FooterLinks = styled.div`

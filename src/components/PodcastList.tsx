@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
 import { usePlayer } from "../contexts/PlayerContext";
 import Footer from "./Footer";
@@ -11,6 +12,7 @@ import type { PodcastFile } from "../types";
 import * as analytics from "../utils/analytics";
 
 function PodcastList() {
+  const { t, i18n } = useTranslation();
   const { playPodcast, playerState } = usePlayer();
   const [podcasts, setPodcasts] = useState<PodcastFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -181,7 +183,7 @@ function PodcastList() {
         console.warn("백그라운드 데이터 로드 중 오류:", err);
       });
     } catch (err) {
-      setError("팟캐스트 목록을 불러오는데 실패했습니다.");
+      setError(t("podcast.loadError"));
       console.error(err);
       setLoading(false);
     }
@@ -423,7 +425,7 @@ function PodcastList() {
       // duration이 없으면 가져오기
       await ensureDuration(podcast, newAudioUrl);
     } catch (err) {
-      setError("오디오 파일을 불러오는데 실패했습니다.");
+      setError(t("podcast.audioLoadError"));
       console.error(err);
       // GA 이벤트: 에러 트래킹
       analytics.trackError("audio_load", String(err), "PodcastList");
@@ -481,7 +483,7 @@ function PodcastList() {
       // duration이 없으면 가져오기
       await ensureDuration(podcast, newAudioUrl);
     } catch (err) {
-      setError("오디오 파일을 불러오는데 실패했습니다.");
+      setError(t("podcast.audioLoadError"));
       console.error(err);
     }
   };
@@ -505,12 +507,14 @@ function PodcastList() {
   }, [podcasts]);
 
   const formatShortDate = (dateString: string): string => {
-    return dayjs(dateString, "YYYY-MM-DD").format("YYYY년 M월 D일");
+    const format = i18n.language === "ko" ? "YYYY년 M월 D일" : "MMMM D, YYYY";
+    return dayjs(dateString, "YYYY-MM-DD").format(format);
   };
 
   // MiniPlayer용 짧은 날짜 형식
   const formatMiniDate = (dateString: string): string => {
-    return dayjs(dateString, "YYYY-MM-DD").format("M월D일");
+    const format = i18n.language === "ko" ? "M월D일" : "MMM D";
+    return dayjs(dateString, "YYYY-MM-DD").format(format);
   };
 
   const formatRelativeTime = (date: string): string => {
@@ -521,12 +525,13 @@ function PodcastList() {
     const target = targetDate.startOf("day");
     const days = today.diff(target, "day");
 
-    if (days === 0) return "오늘";
-    if (days === 1) return "어제";
-    if (days < 7) return `${days}일 전`;
-    if (days < 30) return `${Math.floor(days / 7)}주 전`;
-    if (days < 365) return `${Math.floor(days / 30)}개월 전`;
-    return `${Math.floor(days / 365)}년 전`;
+    if (days === 0) return t("common.today");
+    if (days === 1) return t("common.yesterday");
+    if (days < 7) return t("common.daysAgo", { count: days });
+    if (days < 30) return t("common.weeksAgo", { count: Math.floor(days / 7) });
+    if (days < 365)
+      return t("common.monthsAgo", { count: Math.floor(days / 30) });
+    return t("common.yearsAgo", { count: Math.floor(days / 365) });
   };
 
   const formatDuration = (seconds?: number): string => {
@@ -554,7 +559,7 @@ function PodcastList() {
       <Container>
         <LoadingContainer>
           <LoadingSpinner />
-          <LoadingText>로딩 중...</LoadingText>
+          <LoadingText>{t("common.loading")}</LoadingText>
         </LoadingContainer>
       </Container>
     );
@@ -563,36 +568,25 @@ function PodcastList() {
   return (
     <Container>
       <Helmet>
-        <title>Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트</title>
-        <meta
-          name="description"
-          content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
-        />
+        <html lang={i18n.language} />
+        <title>{t("seo.title")}</title>
+        <meta name="description" content={t("seo.description")} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://dailynewspod.com/" />
-        <meta
-          property="og:title"
-          content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트"
-        />
-        <meta
-          property="og:description"
-          content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
-        />
+        <meta property="og:title" content={t("seo.title")} />
+        <meta property="og:description" content={t("seo.description")} />
         <meta property="og:image" content="https://dailynewspod.com/a.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="ko_KR" />
+        <meta
+          property="og:locale"
+          content={i18n.language === "ko" ? "ko_KR" : "en_US"}
+        />
         <meta property="og:site_name" content="Daily News Podcast" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://dailynewspod.com/" />
-        <meta
-          property="twitter:title"
-          content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트"
-        />
-        <meta
-          property="twitter:description"
-          content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
-        />
+        <meta property="twitter:title" content={t("seo.title")} />
+        <meta property="twitter:description" content={t("seo.description")} />
         <meta
           property="twitter:image"
           content="https://dailynewspod.com/a.png"
@@ -724,21 +718,16 @@ function PodcastList() {
               <HeroIcon>{hasToday ? "🎯" : "🎙️"}</HeroIcon>
               <HeroTextContainer>
                 <HeroTitle>
-                  {hasToday
-                    ? "지금 바로 오늘의 뉴스를 들어보세요"
-                    : "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요"}
+                  {hasToday ? t("hero.titleToday") : t("hero.titleDefault")}
                 </HeroTitle>
                 <HeroSubtitle>
                   {hasToday
-                    ? "오늘의 주요 헤드라인 요약"
-                    : "매일 최신 뉴스를 음성으로 제공합니다"}
+                    ? t("hero.subtitleToday")
+                    : t("hero.subtitleDefault")}
                 </HeroSubtitle>
                 <HeroNotice>
                   <HeroNoticeIcon>🤖</HeroNoticeIcon>
-                  <HeroNoticeText>
-                    Gemini 3.0 모델 사용 · 한국어 지원이 아직 불안정할 수
-                    있습니다
-                  </HeroNoticeText>
+                  <HeroNoticeText>{t("hero.notice")}</HeroNoticeText>
                 </HeroNotice>
               </HeroTextContainer>
               <HeroArrow>→</HeroArrow>
@@ -752,7 +741,7 @@ function PodcastList() {
       {podcasts.length === 0 ? (
         <EmptyState>
           <EmptyIcon>🎙️</EmptyIcon>
-          <EmptyText>등록된 팟캐스트가 없습니다.</EmptyText>
+          <EmptyText>{t("podcast.noPodcasts")}</EmptyText>
         </EmptyState>
       ) : (
         <>
@@ -766,7 +755,7 @@ function PodcastList() {
                   <TodaySectionHeader>
                     <TodaySectionTitle>
                       <TodayIcon>📰</TodayIcon>
-                      오늘의 뉴스
+                      {t("podcast.todayNews")}
                     </TodaySectionTitle>
                   </TodaySectionHeader>
                   <TodayListContainer>
@@ -785,7 +774,7 @@ function PodcastList() {
                         >
                           {isNew && (
                             <NewBadge>
-                              <NewBadgeText>NEW</NewBadgeText>
+                              <NewBadgeText>{t("podcast.new")}</NewBadgeText>
                             </NewBadge>
                           )}
                           <ItemContent>
@@ -801,7 +790,7 @@ function PodcastList() {
                                   <PlayCountBadge>
                                     <PlayCountIcon>▶</PlayCountIcon>
                                     <PlayCountText>
-                                      조회수:{" "}
+                                      {t("podcast.playCount")}:{" "}
                                       {formatCount(podcast.playCount || 0)}
                                     </PlayCountText>
                                   </PlayCountBadge>
@@ -809,7 +798,9 @@ function PodcastList() {
                                     podcast.duration <= 180 && (
                                       <QuickBadge>
                                         <BadgeIcon>⏱️</BadgeIcon>
-                                        <BadgeText>3분요약</BadgeText>
+                                        <BadgeText>
+                                          {t("podcast.quickSummary")}
+                                        </BadgeText>
                                       </QuickBadge>
                                     )}
                                 </ItemMeta>
@@ -824,7 +815,9 @@ function PodcastList() {
                                 <DetailCard>
                                   <DetailIcon>⏱️</DetailIcon>
                                   <DetailContent>
-                                    <DetailLabel>재생 시간</DetailLabel>
+                                    <DetailLabel>
+                                      {t("podcast.playTime")}
+                                    </DetailLabel>
                                     <DetailValue>
                                       {formatDuration(podcast.duration)}
                                     </DetailValue>
@@ -838,7 +831,9 @@ function PodcastList() {
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <TranscriptIcon>📄</TranscriptIcon>
-                                <TranscriptText>대본 보기</TranscriptText>
+                                <TranscriptText>
+                                  {t("podcast.transcript")}
+                                </TranscriptText>
                               </TranscriptLink>
                             </ItemActions>
 
@@ -894,15 +889,19 @@ function PodcastList() {
                   >
                     <PastSectionTitleWrapper>
                       <PastSectionIcon>📚</PastSectionIcon>
-                      <PastSectionTitle>과거 뉴스</PastSectionTitle>
+                      <PastSectionTitle>
+                        {t("podcast.pastNews")}
+                      </PastSectionTitle>
                       <PastSectionCount>
-                        {pastPodcasts.length}개
+                        {t("podcast.count", { count: pastPodcasts.length })}
                       </PastSectionCount>
                     </PastSectionTitleWrapper>
                     <PastSectionToggle $expanded={isPastExpanded}>
                       <ToggleIcon>{isPastExpanded ? "▼" : "▶"}</ToggleIcon>
                       <ToggleText>
-                        {isPastExpanded ? "접기" : "펼치기"}
+                        {isPastExpanded
+                          ? t("podcast.collapse")
+                          : t("podcast.expand")}
                       </ToggleText>
                     </PastSectionToggle>
                   </PastSectionHeader>
@@ -940,7 +939,7 @@ function PodcastList() {
                                   </PastItemPlayCount>
                                   {hasTimeline && !isSelected && (
                                     <PastTimelineBadge>
-                                      타임라인
+                                      {t("podcast.timeline")}
                                     </PastTimelineBadge>
                                   )}
                                   <PastTranscriptLink
@@ -949,7 +948,7 @@ function PodcastList() {
                                     )}`}
                                     onClick={(e) => e.stopPropagation()}
                                   >
-                                    📄 대본
+                                    📄 {t("transcript.title")}
                                   </PastTranscriptLink>
                                 </PastItemMeta>
                               </PastItemInfo>
