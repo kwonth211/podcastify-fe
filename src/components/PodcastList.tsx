@@ -1468,7 +1468,7 @@ const PodcastItem = styled.div<{ $isNew?: boolean; $isSelected?: boolean }>`
 const NewBadge = styled.div`
   position: absolute;
   bottom: 1rem;
-  left: 1rem;
+  right: 1rem;
   z-index: 10;
   animation: pulse 2s ease-in-out infinite;
 

@@ -323,8 +323,11 @@ function MiniPlayer({
             </SkipIconWrapper>
           </SkipButton>
 
-          <TranscriptButton onClick={handleTranscript} aria-label="대본 보기">
-            📄
+          <TranscriptButton onClick={handleTranscript} title="대본 보기">
+            <TranscriptIcon viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v2H4v-2zm10 6H4v-2h10v2zm6 0h-4v-2h4v2zm0-4H10v-2h10v2z" />
+            </TranscriptIcon>
+            <TranscriptLabel>대본</TranscriptLabel>
           </TranscriptButton>
 
           <CloseButton onClick={handleClose} aria-label="닫기">
@@ -612,29 +615,37 @@ const TranscriptButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: transparent;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #e5e7eb;
+  background: white;
   color: #4b5563;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 16px;
   transition: all 0.15s ease;
-  padding: 0;
-  font-size: 1.1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
 
   &:hover {
     background: rgba(102, 126, 234, 0.1);
+    border-color: #667eea;
     color: #667eea;
-  }
-
-  &:active {
-    transform: scale(0.9);
   }
 
   @media (max-width: 360px) {
     display: none;
   }
+`;
+
+const TranscriptIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+`;
+
+const TranscriptLabel = styled.span`
+  white-space: nowrap;
 `;
 
 const CloseButton = styled.button`
