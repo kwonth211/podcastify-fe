@@ -91,6 +91,22 @@
       });
     </script>
 
+    <!-- Google Analytics 4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-CW9BGYNXE2"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-CW9BGYNXE2", {
+        send_page_view: false, // React Router에서 수동으로 페이지뷰 전송
+      });
+    </script>
+
     <!-- Google AdSense -->
     <script
       async

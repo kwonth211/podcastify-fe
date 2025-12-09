@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import * as analytics from "../utils/analytics";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -45,14 +46,22 @@ const InstallPrompt = () => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       // 3초 후에 프롬프트 표시 (UX 개선)
-      setTimeout(() => setShowPrompt(true), 3000);
+      setTimeout(() => {
+        setShowPrompt(true);
+        // GA 이벤트: 설치 프롬프트 표시 (Android/Chrome)
+        analytics.trackInstallPromptShown();
+      }, 3000);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // iOS: 직접 안내 표시 (3초 후)
     if (isIOSDevice) {
-      setTimeout(() => setShowPrompt(true), 3000);
+      setTimeout(() => {
+        setShowPrompt(true);
+        // GA 이벤트: 설치 프롬프트 표시 (iOS)
+        analytics.trackInstallPromptShown();
+      }, 3000);
     }
 
     return () => {
@@ -64,12 +73,20 @@ const InstallPrompt = () => {
   }, []);
 
   const handleInstall = async () => {
+    // GA 이벤트: 설치 버튼 클릭
+    analytics.trackInstallClick();
+
     if (deferredPrompt) {
       // Android/Chrome 설치
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") {
+        // GA 이벤트: 설치 완료
+        analytics.trackInstallComplete();
         setShowPrompt(false);
+      } else {
+        // GA 이벤트: 설치 거부
+        analytics.trackInstallDismiss();
       }
       setDeferredPrompt(null);
     } else if (isIOS) {
@@ -79,6 +96,9 @@ const InstallPrompt = () => {
   };
 
   const handleDismiss = () => {
+    // GA 이벤트: 설치 프롬프트 닫기
+    analytics.trackInstallDismiss();
+
     setShowPrompt(false);
     setShowIOSGuide(false);
     localStorage.setItem("pwa-prompt-dismissed", new Date().toISOString());

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import * as analytics from "../utils/analytics";
 
 interface MiniPlayerProps {
   audioUrl: string;
@@ -78,9 +79,27 @@ function MiniPlayer({
       });
     };
 
-    const handleEnded = () => setIsPlaying(false);
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => {
+      setIsPlaying(false);
+      // GA 이벤트: 팟캐스트 재생 완료
+      if (podcastKey) {
+        analytics.trackPodcastComplete(podcastKey, title);
+      }
+    };
+    const handlePlay = () => {
+      setIsPlaying(true);
+      // GA 이벤트: 팟캐스트 재생 시작
+      if (podcastKey) {
+        analytics.trackPodcastPlay(podcastKey, title, audio.duration);
+      }
+    };
+    const handlePause = () => {
+      setIsPlaying(false);
+      // GA 이벤트: 팟캐스트 일시정지
+      if (podcastKey) {
+        analytics.trackPodcastPause(podcastKey, title, audio.currentTime);
+      }
+    };
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -225,10 +244,14 @@ function MiniPlayer({
 
   const handleTranscript = useCallback(() => {
     if (podcastKey) {
+      // GA 이벤트: 대본 보기 클릭
+      analytics.trackTranscriptView(podcastKey, title);
+      analytics.trackButtonClick("transcript_button", "mini_player");
+
       const timeParam = currentTime > 0 ? `?t=${Math.floor(currentTime)}` : "";
       navigate(`/transcript/${encodeURIComponent(podcastKey)}${timeParam}`);
     }
-  }, [podcastKey, currentTime, navigate]);
+  }, [podcastKey, currentTime, navigate, title]);
 
   const formatTime = (seconds: number): string => {
     if (!seconds || isNaN(seconds)) return "0:00";

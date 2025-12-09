@@ -10,6 +10,7 @@ import Terms from "./Terms";
 import About from "./About";
 import Timeline from "./Timeline";
 import type { PodcastFile } from "../types";
+import * as analytics from "../utils/analytics";
 
 function PodcastList() {
   const { playPodcast, stopPodcast, playerState } = usePlayer();
@@ -404,6 +405,12 @@ function PodcastList() {
 
   const handlePodcastClick = async (podcast: PodcastFile) => {
     try {
+      // GA 이벤트: 팟캐스트 선택
+      analytics.trackPodcastSelect(
+        podcast.key,
+        `${formatShortDate(podcast.date)} 뉴스`
+      );
+
       // URL 업데이트
       const url = new URL(window.location.href);
       url.searchParams.set("playerId", podcast.key);
@@ -427,6 +434,8 @@ function PodcastList() {
     } catch (err) {
       setError("오디오 파일을 불러오는데 실패했습니다.");
       console.error(err);
+      // GA 이벤트: 에러 트래킹
+      analytics.trackError("audio_load", String(err), "PodcastList");
     }
   };
 
@@ -437,6 +446,9 @@ function PodcastList() {
     seekTime: number
   ) => {
     e.stopPropagation(); // 부모의 팟캐스트 클릭 이벤트 방지
+
+    // GA 이벤트: 타임라인 세그먼트 클릭
+    analytics.trackTranscriptSegmentClick(podcast.key, seekTime);
 
     try {
       // 이미 선택된 팟캐스트인 경우 시간만 변경
@@ -692,6 +704,9 @@ function PodcastList() {
         const firstTodayPodcast = todayPodcasts[0];
 
         const handleBannerClick = async () => {
+          // GA 이벤트: CTA 배너 클릭
+          analytics.trackButtonClick("hero_banner_cta", "hero_section");
+
           // 첫 방문 상태 해제 및 방문 기록 저장
           if (isFirstVisitToday) {
             setIsFirstVisitToday(false);
