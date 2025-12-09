@@ -38,6 +38,17 @@ function MiniPlayer({
     });
   }, []);
 
+  // 새 팟캐스트 로드 시 재생 카운트
+  useEffect(() => {
+    if (!podcastKey) return;
+
+    fetch("/api/count", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: podcastKey }),
+    }).catch(() => {});
+  }, [podcastKey]);
+
   // 오디오 이벤트 핸들러
   useEffect(() => {
     const audio = audioRef.current;

@@ -320,35 +320,6 @@ function PodcastList() {
     return null;
   };
 
-  const incrementPlayCount = async (key: string): Promise<number | null> => {
-    // 이미 재생한 팟캐스트는 카운트하지 않음
-    const playedKey = `played_${key}`;
-
-    if (localStorage.getItem(playedKey)) {
-      return null;
-    }
-
-    try {
-      localStorage.setItem(playedKey, "true");
-      const response = await fetch("/api/count", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ key }),
-      });
-      const data = await response.json();
-      if (data.count !== undefined) {
-        updatePlayCountState(key, data.count);
-        return data.count;
-      }
-    } catch (err) {
-      console.warn(`조회수 증가 실패 (${key}):`, err);
-      localStorage.removeItem(playedKey);
-    }
-    return null;
-  };
-
   const loadPlayCounts = async (files: PodcastFile[]) => {
     // 각 팟캐스트의 재생 횟수 로드
     await Promise.all(files.map((file) => fetchPlayCount(file.key)));
@@ -453,9 +424,6 @@ function PodcastList() {
 
       // duration이 없으면 가져오기
       await ensureDuration(podcast, newAudioUrl);
-
-      // 클릭할 때마다 조회수 증가
-      await incrementPlayCount(podcast.key);
     } catch (err) {
       setError("오디오 파일을 불러오는데 실패했습니다.");
       console.error(err);
@@ -509,9 +477,6 @@ function PodcastList() {
 
       // duration이 없으면 가져오기
       await ensureDuration(podcast, newAudioUrl);
-
-      // 클릭할 때마다 조회수 증가
-      await incrementPlayCount(podcast.key);
     } catch (err) {
       setError("오디오 파일을 불러오는데 실패했습니다.");
       console.error(err);
