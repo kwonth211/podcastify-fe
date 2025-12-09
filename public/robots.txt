@@ -1,5 +1,16 @@
+# Daily News Podcast - robots.txt
+# https://dailynewspod.com
+
 User-agent: *
 Allow: /
+Allow: /about
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+Allow: /transcript/
 
+# Sitemap
 Sitemap: https://dailynewspod.com/sitemap.xml
 
+# Crawl-delay (optional, for polite crawling)
+Crawl-delay: 1

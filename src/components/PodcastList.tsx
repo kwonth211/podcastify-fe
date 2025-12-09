@@ -1,19 +1,17 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { listAudioFiles, getAudioUrl } from "../utils/r2Client";
 import { usePlayer } from "../contexts/PlayerContext";
 import Footer from "./Footer";
-import PrivacyPolicy from "./PrivacyPolicy";
-import Terms from "./Terms";
-import About from "./About";
 import Timeline from "./Timeline";
 import type { PodcastFile } from "../types";
 import * as analytics from "../utils/analytics";
 
 function PodcastList() {
-  const { playPodcast, stopPodcast, playerState } = usePlayer();
+  const { playPodcast, playerState } = usePlayer();
   const [podcasts, setPodcasts] = useState<PodcastFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,9 +20,7 @@ function PodcastList() {
   );
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [initialSeekTime, setInitialSeekTime] = useState<number | undefined>(
-    undefined
-  );
+  const [, setInitialSeekTime] = useState<number | undefined>(undefined);
 
   // 배너 스와이프 관련
   const touchStartX = useRef<number>(0);
@@ -33,11 +29,6 @@ function PodcastList() {
   const [dragOffset, setDragOffset] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const bannerContainerRef = useRef<HTMLDivElement>(null);
-
-  // 모달 상태 관리
-  const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
 
   // 과거 뉴스 섹션 펼침/접힘 상태
   const [isPastExpanded, setIsPastExpanded] = useState(false);
@@ -828,8 +819,8 @@ function PodcastList() {
                               </PlayIndicator>
                             </ItemHeader>
 
-                            {podcast.duration && (
-                              <ItemDetails>
+                            <ItemActions>
+                              {podcast.duration && (
                                 <DetailCard>
                                   <DetailIcon>⏱️</DetailIcon>
                                   <DetailContent>
@@ -839,8 +830,17 @@ function PodcastList() {
                                     </DetailValue>
                                   </DetailContent>
                                 </DetailCard>
-                              </ItemDetails>
-                            )}
+                              )}
+                              <TranscriptLink
+                                to={`/transcript/${encodeURIComponent(
+                                  podcast.key
+                                )}`}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <TranscriptIcon>📄</TranscriptIcon>
+                                <TranscriptText>대본 보기</TranscriptText>
+                              </TranscriptLink>
+                            </ItemActions>
 
                             {/* 타임라인 - 공통 컴포넌트 사용 */}
                             {timelinePreviews[podcast.key] &&
@@ -943,6 +943,14 @@ function PodcastList() {
                                       타임라인
                                     </PastTimelineBadge>
                                   )}
+                                  <PastTranscriptLink
+                                    to={`/transcript/${encodeURIComponent(
+                                      podcast.key
+                                    )}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    📄 대본
+                                  </PastTranscriptLink>
                                 </PastItemMeta>
                               </PastItemInfo>
                               <PastPlayIndicator>▶</PastPlayIndicator>
@@ -985,16 +993,7 @@ function PodcastList() {
       )}
 
       {/* Footer */}
-      <Footer
-        onPrivacyClick={() => setShowPrivacy(true)}
-        onTermsClick={() => setShowTerms(true)}
-        onAboutClick={() => setShowAbout(true)}
-      />
-
-      {/* 모달들 */}
-      {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
-      {showTerms && <Terms onClose={() => setShowTerms(false)} />}
-      {showAbout && <About onClose={() => setShowAbout(false)} />}
+      <Footer />
     </Container>
   );
 }
@@ -1597,16 +1596,6 @@ const PlayIcon = styled.span`
   font-weight: 600;
 `;
 
-const ItemDetails = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    gap: 0.75rem;
-  }
-`;
-
 const DetailCard = styled.div<{ $compact?: boolean }>`
   display: inline-flex;
   align-items: center;
@@ -1651,6 +1640,49 @@ const DetailValue = styled.div<{ $small?: boolean }>`
   color: #334155;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+`;
+
+const ItemActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+  }
+`;
+
+const TranscriptLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const TranscriptIcon = styled.span`
+  font-size: 1rem;
+`;
+
+const TranscriptText = styled.span`
+  font-size: 0.875rem;
 `;
 
 const EmptyState = styled.div`
@@ -1950,6 +1982,23 @@ const PastTimelineBadge = styled.span`
   padding: 0.125rem 0.5rem;
   border-radius: 6px;
   border: 1px solid rgba(6, 182, 212, 0.2);
+`;
+
+const PastTranscriptLink = styled(Link)`
+  font-size: 0.6875rem;
+  color: #06b6d4;
+  font-weight: 600;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 0.125rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.4);
+  }
 `;
 
 const PastPlayIndicator = styled.div`

@@ -1,12 +1,7 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-interface FooterProps {
-  onPrivacyClick: () => void;
-  onTermsClick: () => void;
-  onAboutClick: () => void;
-}
-
-function Footer({ onPrivacyClick, onTermsClick, onAboutClick }: FooterProps) {
+function Footer() {
   return (
     <FooterContainer>
       <FooterContent>
@@ -16,11 +11,13 @@ function Footer({ onPrivacyClick, onTermsClick, onAboutClick }: FooterProps) {
         </FooterLogo>
 
         <FooterLinks>
-          <FooterLink onClick={onAboutClick}>서비스 소개</FooterLink>
+          <FooterLink to="/about">서비스 소개</FooterLink>
           <FooterDivider>|</FooterDivider>
-          <FooterLink onClick={onPrivacyClick}>개인정보처리방침</FooterLink>
+          <FooterLink to="/contact">문의하기</FooterLink>
           <FooterDivider>|</FooterDivider>
-          <FooterLink onClick={onTermsClick}>이용약관</FooterLink>
+          <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+          <FooterDivider>|</FooterDivider>
+          <FooterLink to="/terms">이용약관</FooterLink>
         </FooterLinks>
 
         <FooterInfo>
@@ -100,13 +97,11 @@ const FooterLinks = styled.div`
   }
 `;
 
-const FooterLink = styled.button`
-  background: none;
-  border: none;
+const FooterLink = styled(Link)`
   color: #64748b;
   font-size: 0.9375rem;
   font-weight: 500;
-  cursor: pointer;
+  text-decoration: none;
   padding: 0.5rem;
   transition: color 0.2s ease;
 
@@ -169,4 +164,3 @@ const FooterDisclaimer = styled.p`
   line-height: 1.6;
   max-width: 500px;
 `;
-

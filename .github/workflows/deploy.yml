@@ -34,6 +34,14 @@ jobs:
           VITE_R2_BUCKET_NAME: ${{ secrets.VITE_R2_BUCKET_NAME }}
           VITE_R2_PUBLIC_URL: ${{ secrets.VITE_R2_PUBLIC_URL }}
 
+      - name: Generate Sitemap
+        run: node scripts/generate-sitemap.js
+        env:
+          VITE_R2_ENDPOINT: ${{ secrets.VITE_R2_ENDPOINT }}
+          VITE_R2_ACCESS_KEY_ID: ${{ secrets.VITE_R2_ACCESS_KEY_ID }}
+          VITE_R2_SECRET_ACCESS_KEY: ${{ secrets.VITE_R2_SECRET_ACCESS_KEY }}
+          VITE_R2_BUCKET_NAME: ${{ secrets.VITE_R2_BUCKET_NAME }}
+
       - name: Verify Secrets (Debug)
         run: |
           echo "Account ID length: ${#CLOUDFLARE_ACCOUNT_ID}"

@@ -8,6 +8,12 @@ import TranscriptPage from "./components/TranscriptPage";
 import GlobalMiniPlayer from "./components/GlobalMiniPlayer";
 import InstallPrompt from "./components/InstallPrompt";
 import {
+  AboutPage,
+  ContactPage,
+  PrivacyPage,
+  TermsPage,
+} from "./components/pages";
+import {
   usePageTracking,
   useScrollDepthTracking,
   useOutboundLinkTracking,
@@ -55,6 +61,10 @@ function App() {
                   }
                 />
                 <Route path="/transcript/:key" element={<TranscriptPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
               </Routes>
               <GlobalMiniPlayer />
             </AnalyticsWrapper>

@@ -2,21 +2,134 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dailynewspod.com/</loc>
-    <lastmod>2025-12-08</lastmod>
+    <lastmod>2025-12-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://dailynewspod.com/privacy.html</loc>
-    <lastmod>2025-12-08</lastmod>
+    <loc>https://dailynewspod.com/about</loc>
+    <lastmod>2025-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dailynewspod.com/terms.html</loc>
-    <lastmod>2025-12-08</lastmod>
+    <loc>https://dailynewspod.com/contact</loc>
+    <lastmod>2025-12-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/privacy</loc>
+    <lastmod>2025-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/terms</loc>
+    <lastmod>2025-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/50-20044664199_podcast_20251209.mp3</loc>
+    <lastmod>2025-12-09</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/49-20011160393_podcast_20251208.mp3</loc>
+    <lastmod>2025-12-08</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/48-19995017265_podcast_20251207.mp3</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/46-19977556089_podcast_20251206.mp3</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/47-19981210043_podcast_20251206.mp3</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/43-19945731630_podcast_20251205.mp3</loc>
+    <lastmod>2025-12-05</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/45-19956644539_podcast_20251205.mp3</loc>
+    <lastmod>2025-12-05</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/42-19913558987_podcast_20251204.mp3</loc>
+    <lastmod>2025-12-04</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/40-19875324023_podcast_20251203.mp3</loc>
+    <lastmod>2025-12-03</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/39-19842753052_podcast_20251202.mp3</loc>
+    <lastmod>2025-12-02</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/37-19805661258_podcast_20251201.mp3</loc>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/36-19790041655_podcast_20251130.mp3</loc>
+    <lastmod>2025-11-30</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/35-19774803471_podcast_20251129.mp3</loc>
+    <lastmod>2025-11-29</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/34-19748903176_podcast_20251128.mp3</loc>
+    <lastmod>2025-11-28</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/23-19721012775_podcast_20251127.mp3</loc>
+    <lastmod>2025-11-27</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/20-19692360179_podcast_20251126.mp3</loc>
+    <lastmod>2025-11-26</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dailynewspod.com/transcript/12-19685772872_podcast_20251125.mp3</loc>
+    <lastmod>2025-11-25</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
-

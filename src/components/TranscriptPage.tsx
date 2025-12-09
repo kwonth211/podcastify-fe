@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  Link,
+} from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import dayjs from "dayjs";
@@ -169,11 +174,39 @@ function TranscriptPage() {
   return (
     <Container>
       <Helmet>
-        <title>{formattedDate} 대본 - Daily News Podcast</title>
+        <title>
+          {formattedDate} 뉴스 대본 - Daily News Podcast | AI 뉴스 요약
+        </title>
         <meta
           name="description"
-          content={`${formattedDate} Daily News Podcast 대본`}
+          content={`${formattedDate} Daily News Podcast 전체 대본입니다. AI가 요약한 오늘의 주요 뉴스를 텍스트로 확인하세요. 타임라인과 함께 원하는 부분을 바로 찾아볼 수 있습니다.`}
         />
+        <meta
+          name="keywords"
+          content={`${formattedDate} 뉴스, 뉴스 대본, 팟캐스트 스크립트, AI 뉴스 요약, Daily News Podcast`}
+        />
+        <link
+          rel="canonical"
+          href={`https://dailynewspod.com/transcript/${encodeURIComponent(
+            decodedKey
+          )}`}
+        />
+        <meta
+          property="og:title"
+          content={`${formattedDate} 뉴스 대본 - Daily News Podcast`}
+        />
+        <meta
+          property="og:description"
+          content={`${formattedDate} Daily News Podcast 전체 대본. AI가 요약한 뉴스를 텍스트로 확인하세요.`}
+        />
+        <meta
+          property="og:url"
+          content={`https://dailynewspod.com/transcript/${encodeURIComponent(
+            decodedKey
+          )}`}
+        />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Daily News Podcast" />
       </Helmet>
 
       {/* 헤더 */}
@@ -216,6 +249,29 @@ function TranscriptPage() {
           </FullTranscriptSection>
         )}
       </TranscriptContainer>
+
+      {/* Footer */}
+      <TranscriptFooter>
+        <FooterContent>
+          <FooterLogo>
+            <FooterLogoIcon>🎙️</FooterLogoIcon>
+            <FooterLogoText>Daily News Podcast</FooterLogoText>
+          </FooterLogo>
+          <FooterLinks>
+            <FooterLink to="/about">서비스 소개</FooterLink>
+            <FooterDivider>|</FooterDivider>
+            <FooterLink to="/contact">문의하기</FooterLink>
+            <FooterDivider>|</FooterDivider>
+            <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+            <FooterDivider>|</FooterDivider>
+            <FooterLink to="/terms">이용약관</FooterLink>
+          </FooterLinks>
+          <FooterCopyright>
+            © {new Date().getFullYear()} Daily News Podcast. All rights
+            reserved.
+          </FooterCopyright>
+        </FooterContent>
+      </TranscriptFooter>
     </Container>
   );
 }
@@ -390,4 +446,76 @@ const DialogText = styled.p`
   color: #334155;
   font-size: 0.9375rem;
   line-height: 1.8;
+`;
+
+const TranscriptFooter = styled.footer`
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-top: 1px solid #e2e8f0;
+  padding: 2rem 1.5rem;
+  margin-top: 2rem;
+`;
+
+const FooterContent = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+`;
+
+const FooterLogo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const FooterLogoIcon = styled.span`
+  font-size: 1.25rem;
+`;
+
+const FooterLogoText = styled.span`
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+`;
+
+const FooterLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
+`;
+
+const FooterLink = styled(Link)`
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #667eea;
+  }
+`;
+
+const FooterDivider = styled.span`
+  color: #cbd5e1;
+  font-size: 0.75rem;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const FooterCopyright = styled.p`
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
 `;
