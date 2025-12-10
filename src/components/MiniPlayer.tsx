@@ -455,12 +455,12 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1rem;
   gap: 0.75rem;
   cursor: pointer;
 
   @media (min-width: 768px) {
-    padding: 0.875rem 1.5rem;
+    padding: 1.125rem 1.5rem;
   }
 `;
 
