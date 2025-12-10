@@ -140,15 +140,15 @@ function TranscriptPage() {
     if (audioUrl && initialTime) {
       const time = parseInt(initialTime, 10);
       if (!isNaN(time)) {
-        playPodcast(decodedKey, audioUrl, formattedDate, time);
+        playPodcast(decodedKey, audioUrl, time);
       }
     }
-  }, [audioUrl, initialTime, decodedKey, formattedDate, playPodcast]);
+  }, [audioUrl, initialTime, decodedKey, playPodcast]);
 
   // 타임라인 클릭 시 전역 플레이어로 재생
   const handleTimelineClick = (time: number) => {
     if (!audioUrl) return;
-    playPodcast(decodedKey, audioUrl, formattedDate, time);
+    playPodcast(decodedKey, audioUrl, time);
   };
 
   if (loading) {

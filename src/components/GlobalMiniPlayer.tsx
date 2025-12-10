@@ -24,7 +24,6 @@ function GlobalMiniPlayer() {
   return (
     <MiniPlayer
       audioUrl={playerState.audioUrl}
-      title={playerState.title}
       podcastKey={playerState.podcastKey}
       onClose={handleClose}
       initialSeekTime={playerState.seekTime ?? undefined}

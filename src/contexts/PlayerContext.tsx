@@ -9,7 +9,6 @@ import {
 interface PlayerState {
   podcastKey: string | null;
   audioUrl: string | null;
-  title: string;
   isPlaying: boolean;
   currentTime: number;
   seekTime: number | null; // 타임라인 클릭 시 이동할 시간
@@ -17,12 +16,7 @@ interface PlayerState {
 
 interface PlayerContextType {
   playerState: PlayerState;
-  playPodcast: (
-    key: string,
-    url: string,
-    title: string,
-    seekTime?: number
-  ) => void;
+  playPodcast: (key: string, url: string, seekTime?: number) => void;
   stopPodcast: () => void;
   updateCurrentTime: (time: number) => void;
   setIsPlaying: (playing: boolean) => void;
@@ -35,18 +29,16 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const [playerState, setPlayerState] = useState<PlayerState>({
     podcastKey: null,
     audioUrl: null,
-    title: "",
     isPlaying: false,
     currentTime: 0,
     seekTime: null,
   });
 
   const playPodcast = useCallback(
-    (key: string, url: string, title: string, seekTime?: number) => {
+    (key: string, url: string, seekTime?: number) => {
       setPlayerState((prev) => ({
         podcastKey: key,
         audioUrl: url,
-        title,
         isPlaying: true,
         currentTime: prev.podcastKey === key ? prev.currentTime : 0,
         seekTime: seekTime ?? null,
@@ -59,7 +51,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setPlayerState({
       podcastKey: null,
       audioUrl: null,
-      title: "",
       isPlaying: false,
       currentTime: 0,
       seekTime: null,

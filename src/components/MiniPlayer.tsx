@@ -1,12 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import dayjs from "dayjs";
 import * as analytics from "../utils/analytics";
+
+// podcastKey에서 날짜 추출 (파일명 끝의 _YYYYMMDD 패턴)
+const extractDateFromKey = (key: string): string | null => {
+  const match = key.match(/_(\d{4})(\d{2})(\d{2})\./);
+  if (match) {
+    return `${match[1]}-${match[2]}-${match[3]}`;
+  }
+  return null;
+};
 
 interface MiniPlayerProps {
   audioUrl: string;
-  title: string;
-  podcastKey?: string;
+  podcastKey: string;
   onClose: () => void;
   initialSeekTime?: number;
   onTimeUpdate?: (time: number) => void;
@@ -15,13 +24,17 @@ interface MiniPlayerProps {
 
 function MiniPlayer({
   audioUrl,
-  title,
   podcastKey,
   onClose,
   initialSeekTime,
   onTimeUpdate,
   onSeekComplete,
 }: MiniPlayerProps) {
+  // podcastKey에서 날짜 추출 및 포맷팅
+  const title = (() => {
+    const date = extractDateFromKey(podcastKey);
+    return date ? dayjs(date).format("M/D") : "";
+  })();
   const navigate = useNavigate();
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -31,6 +44,7 @@ function MiniPlayer({
   const [isVisible, setIsVisible] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragProgress, setDragProgress] = useState(0);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   // 마운트 시 애니메이션
   useEffect(() => {
@@ -223,14 +237,28 @@ function MiniPlayer({
   const skipBackward = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.currentTime = Math.max(0, audio.currentTime - 15);
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
   }, []);
 
   const skipForward = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.currentTime = Math.min(duration, audio.currentTime + 15);
+    audio.currentTime = Math.min(duration, audio.currentTime + 10);
   }, [duration]);
+
+  const speedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
+
+  const handleSpeedChange = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const currentIndex = speedOptions.indexOf(playbackRate);
+    const nextIndex = (currentIndex + 1) % speedOptions.length;
+    const newRate = speedOptions[nextIndex];
+
+    setPlaybackRate(newRate);
+    audio.playbackRate = newRate;
+  }, [playbackRate]);
 
   const handleClose = useCallback(() => {
     setIsVisible(false);
@@ -253,20 +281,11 @@ function MiniPlayer({
     }
   }, [podcastKey, currentTime, navigate, title]);
 
-  const formatTime = (seconds: number): string => {
-    if (!seconds || isNaN(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
   const progress = isDragging
     ? dragProgress * 100
     : duration
     ? (currentTime / duration) * 100
     : 0;
-
-  const displayTime = isDragging ? dragProgress * duration : currentTime;
 
   return (
     <Container $visible={isVisible}>
@@ -286,26 +305,24 @@ function MiniPlayer({
         />
       </ProgressBarTop>
 
-      <Content>
+      <Content onClick={handleTranscript} title="대본 보기">
         <InfoSection>
           <PodcastIcon $isPlaying={isPlaying}>
             <IconEmoji>🎙️</IconEmoji>
           </PodcastIcon>
           <TextInfo>
             <Title>{title}</Title>
-            <TimeText>
-              {formatTime(displayTime)} / {formatTime(duration)}
-            </TimeText>
+            <TranscriptHint>탭하여 대본 보기</TranscriptHint>
           </TextInfo>
         </InfoSection>
 
-        <ControlsSection>
-          <SkipButton onClick={skipBackward} aria-label="15초 뒤로">
+        <ControlsSection onClick={(e) => e.stopPropagation()}>
+          <SkipButton onClick={skipBackward} aria-label="10초 뒤로">
             <SkipIconWrapper>
               <SkipSvg viewBox="0 0 24 24" $direction="backward">
                 <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
               </SkipSvg>
-              <SkipNumber>15</SkipNumber>
+              <SkipNumber>10</SkipNumber>
             </SkipIconWrapper>
           </SkipButton>
 
@@ -322,21 +339,18 @@ function MiniPlayer({
             )}
           </PlayButton>
 
-          <SkipButton onClick={skipForward} aria-label="15초 앞으로">
+          <SkipButton onClick={skipForward} aria-label="10초 앞으로">
             <SkipIconWrapper>
               <SkipSvg viewBox="0 0 24 24" $direction="forward">
                 <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" />
               </SkipSvg>
-              <SkipNumber>15</SkipNumber>
+              <SkipNumber>10</SkipNumber>
             </SkipIconWrapper>
           </SkipButton>
 
-          <TranscriptButton onClick={handleTranscript} title="대본 보기">
-            <TranscriptIcon viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v2H4v-2zm10 6H4v-2h10v2zm6 0h-4v-2h4v2zm0-4H10v-2h10v2z" />
-            </TranscriptIcon>
-            <TranscriptLabel>대본</TranscriptLabel>
-          </TranscriptButton>
+          <SpeedButton onClick={handleSpeedChange} title="배속 변경">
+            {playbackRate}x
+          </SpeedButton>
 
           <CloseButton onClick={handleClose} aria-label="닫기">
             <CloseSvg viewBox="0 0 24 24">
@@ -443,6 +457,7 @@ const Content = styled.div`
   justify-content: space-between;
   padding: 0.75rem 1rem;
   gap: 0.75rem;
+  cursor: pointer;
 
   @media (min-width: 768px) {
     padding: 0.875rem 1.5rem;
@@ -503,13 +518,11 @@ const Title = styled.p`
   }
 `;
 
-const TimeText = styled.p`
-  margin: 0;
-  font-size: 0.75rem;
-  color: #6b7280;
-  font-weight: 500;
+const TranscriptHint = styled.span`
+  display: block;
+  font-size: 0.6875rem;
+  color: #9ca3af;
   margin-top: 0.125rem;
-  font-variant-numeric: tabular-nums;
 `;
 
 const ControlsSection = styled.div`
@@ -526,8 +539,8 @@ const SkipButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   color: #4b5563;
@@ -546,8 +559,9 @@ const SkipButton = styled.button`
     background: rgba(0, 0, 0, 0.1);
   }
 
-  @media (max-width: 400px) {
-    display: none;
+  @media (max-width: 360px) {
+    width: 32px;
+    height: 32px;
   }
 `;
 
@@ -619,21 +633,22 @@ const PauseIcon = styled.svg`
   fill: white;
 `;
 
-const TranscriptButton = styled.button`
+const SpeedButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  height: 32px;
-  padding: 0 10px;
+  min-width: 40px;
+  height: 28px;
+  padding: 0 8px;
   border: 1px solid #e5e7eb;
   background: white;
   color: #4b5563;
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: 14px;
   transition: all 0.15s ease;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 
   &:hover {
     background: rgba(102, 126, 234, 0.1);
@@ -641,19 +656,15 @@ const TranscriptButton = styled.button`
     color: #667eea;
   }
 
-  @media (max-width: 360px) {
-    display: none;
+  &:active {
+    transform: scale(0.95);
   }
-`;
 
-const TranscriptIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
-`;
-
-const TranscriptLabel = styled.span`
-  white-space: nowrap;
+  @media (max-width: 360px) {
+    min-width: 36px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
 `;
 
 const CloseButton = styled.button`

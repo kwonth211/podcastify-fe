@@ -370,7 +370,7 @@ function PodcastList() {
     setAudioUrl(newAudioUrl);
 
     // 전역 플레이어에 재생 요청
-    playPodcast(podcast.key, newAudioUrl, formatMiniDate(podcast.date));
+    playPodcast(podcast.key, newAudioUrl);
 
     // 과거 뉴스인 경우 자동으로 섹션 펼치기
     if (!isToday(podcast.date)) {
@@ -415,7 +415,7 @@ function PodcastList() {
       setAudioUrl(newAudioUrl);
 
       // 전역 플레이어에 재생 요청
-      playPodcast(podcast.key, newAudioUrl, formatMiniDate(podcast.date));
+      playPodcast(podcast.key, newAudioUrl);
 
       // 과거 뉴스 클릭 시 자동으로 섹션 펼치기
       if (!isToday(podcast.date)) {
@@ -448,12 +448,7 @@ function PodcastList() {
       if (selectedPodcast?.key === podcast.key && audioUrl) {
         setInitialSeekTime(seekTime);
         // 전역 플레이어에 시간 업데이트
-        playPodcast(
-          podcast.key,
-          audioUrl,
-          formatMiniDate(podcast.date),
-          seekTime
-        );
+        playPodcast(podcast.key, audioUrl, seekTime);
         return;
       }
 
@@ -468,12 +463,7 @@ function PodcastList() {
       setInitialSeekTime(seekTime);
 
       // 전역 플레이어에 재생 요청
-      playPodcast(
-        podcast.key,
-        newAudioUrl,
-        formatMiniDate(podcast.date),
-        seekTime
-      );
+      playPodcast(podcast.key, newAudioUrl, seekTime);
 
       // 과거 뉴스 클릭 시 자동으로 섹션 펼치기
       if (!isToday(podcast.date)) {
@@ -508,12 +498,6 @@ function PodcastList() {
 
   const formatShortDate = (dateString: string): string => {
     const format = i18n.language === "ko" ? "YYYY년 M월 D일" : "MMMM D, YYYY";
-    return dayjs(dateString, "YYYY-MM-DD").format(format);
-  };
-
-  // MiniPlayer용 짧은 날짜 형식
-  const formatMiniDate = (dateString: string): string => {
-    const format = i18n.language === "ko" ? "M월D일" : "MMM D";
     return dayjs(dateString, "YYYY-MM-DD").format(format);
   };
 
