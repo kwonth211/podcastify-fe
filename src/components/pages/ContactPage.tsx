@@ -1,25 +1,23 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
-function ContactPage() {
+const ContactPage = () => {
+  const { t, i18n } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
   return (
     <Container>
       <Helmet>
-        <title>문의하기 - Daily News Podcast | 연락처 및 피드백</title>
-        <meta
-          name="description"
-          content="Daily News Podcast에 문의사항이나 피드백이 있으시면 연락주세요. 서비스 개선을 위한 여러분의 소중한 의견을 기다립니다."
-        />
-        <meta
-          name="keywords"
-          content="Daily News Podcast, 문의, 연락처, 피드백, 고객센터, 서비스 문의"
-        />
+        <html lang={i18n.language} />
+        <title>{t("contact.seo.title")}</title>
+        <meta name="description" content={t("contact.seo.description")} />
         <link rel="canonical" href="https://dailynewspod.com/contact" />
-        <meta property="og:title" content="문의하기 - Daily News Podcast" />
+        <meta property="og:title" content={t("contact.seo.title")} />
         <meta
           property="og:description"
-          content="Daily News Podcast에 문의사항이나 피드백이 있으시면 연락주세요."
+          content={t("contact.seo.description")}
         />
         <meta property="og:url" content="https://dailynewspod.com/contact" />
         <meta property="og:type" content="website" />
@@ -32,10 +30,10 @@ function ContactPage() {
             <LogoText>Daily News Podcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">홈</NavLink>
-            <NavLink to="/about">소개</NavLink>
+            <NavLink to="/">{t("nav.home")}</NavLink>
+            <NavLink to="/about">{t("nav.about")}</NavLink>
             <NavLink to="/contact" $active>
-              문의
+              {t("nav.contact")}
             </NavLink>
           </Nav>
         </HeaderContent>
@@ -44,108 +42,79 @@ function ContactPage() {
       <Main>
         <PageHeader>
           <PageIcon>📬</PageIcon>
-          <PageTitle>문의하기</PageTitle>
-          <PageSubtitle>
-            서비스 이용 중 문의사항이나 피드백이 있으시면 연락주세요
-          </PageSubtitle>
+          <PageTitle>{t("contact.title")}</PageTitle>
+          <PageSubtitle>{t("contact.subtitle")}</PageSubtitle>
         </PageHeader>
 
         <ContentSection>
           <ContactCard>
             <ContactCardHeader>
               <ContactCardIcon>✉️</ContactCardIcon>
-              <ContactCardTitle>이메일 문의</ContactCardTitle>
+              <ContactCardTitle>{t("contact.email.title")}</ContactCardTitle>
             </ContactCardHeader>
             <ContactCardContent>
               <ContactEmail href="mailto:contact@dailynewspod.com">
                 contact@dailynewspod.com
               </ContactEmail>
               <ContactDescription>
-                일반적인 문의사항, 서비스 피드백, 협업 제안 등 모든 문의를
-                환영합니다.
-                <br />
-                보내주신 이메일은 영업일 기준 1-2일 내에 답변드리겠습니다.
+                <Trans i18nKey="contact.email.desc">
+                  일반적인 문의사항, 서비스 피드백, 협업 제안 등 모든 문의를
+                  환영합니다.
+                  <br />
+                  보내주신 이메일은 영업일 기준 1-2일 내에 답변드리겠습니다.
+                </Trans>
               </ContactDescription>
             </ContactCardContent>
           </ContactCard>
 
           <Section>
-            <SectionTitle>💬 자주 묻는 질문</SectionTitle>
+            <SectionTitle>{t("contact.faq.title")}</SectionTitle>
             <FAQList>
               <FAQItem>
-                <FAQQuestion>서비스 이용 요금이 있나요?</FAQQuestion>
-                <FAQAnswer>
-                  아니요, Daily News Podcast는 완전 무료 서비스입니다. 별도의
-                  가입이나 결제 없이 모든 콘텐츠를 이용하실 수 있습니다.
-                </FAQAnswer>
+                <FAQQuestion>{t("contact.faq.q1")}</FAQQuestion>
+                <FAQAnswer>{t("contact.faq.a1")}</FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>
-                  팟캐스트는 얼마나 자주 업데이트되나요?
-                </FAQQuestion>
-                <FAQAnswer>
-                  매일 새로운 뉴스 요약 팟캐스트가 업로드됩니다. 최신 뉴스를
-                  놓치지 않고 들을 수 있습니다.
-                </FAQAnswer>
+                <FAQQuestion>{t("contact.faq.q2")}</FAQQuestion>
+                <FAQAnswer>{t("contact.faq.a2")}</FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>AI 요약의 정확도는 어느 정도인가요?</FAQQuestion>
-                <FAQAnswer>
-                  AI 기술의 특성상 간혹 오류가 있을 수 있습니다. 중요한 정보는
-                  원본 뉴스 출처를 확인하시는 것을 권장합니다.
-                </FAQAnswer>
+                <FAQQuestion>{t("contact.faq.q3")}</FAQQuestion>
+                <FAQAnswer>{t("contact.faq.a3")}</FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>모바일에서도 이용 가능한가요?</FAQQuestion>
-                <FAQAnswer>
-                  네, 반응형 웹으로 제작되어 PC, 태블릿, 스마트폰 등 모든
-                  기기에서 편리하게 이용하실 수 있습니다.
-                </FAQAnswer>
+                <FAQQuestion>{t("contact.faq.q4")}</FAQQuestion>
+                <FAQAnswer>{t("contact.faq.a4")}</FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>대본(스크립트)도 볼 수 있나요?</FAQQuestion>
-                <FAQAnswer>
-                  네, 모든 팟캐스트 에피소드에 대해 전체 대본을 제공합니다. 각
-                  에피소드 페이지에서 확인하실 수 있습니다.
-                </FAQAnswer>
+                <FAQQuestion>{t("contact.faq.q5")}</FAQQuestion>
+                <FAQAnswer>{t("contact.faq.a5")}</FAQAnswer>
               </FAQItem>
             </FAQList>
           </Section>
 
           <Section>
-            <SectionTitle>📝 문의 시 참고사항</SectionTitle>
+            <SectionTitle>{t("contact.tips.title")}</SectionTitle>
             <InfoBox>
               <InfoItem>
                 <InfoIcon>💡</InfoIcon>
-                <InfoText>
-                  문의 내용에 구체적인 상황을 설명해 주시면 더 빠른 답변이
-                  가능합니다.
-                </InfoText>
+                <InfoText>{t("contact.tips.tip1")}</InfoText>
               </InfoItem>
               <InfoItem>
                 <InfoIcon>🔒</InfoIcon>
-                <InfoText>
-                  개인정보는 문의 응대 목적으로만 사용되며, 응대 완료 후
-                  파기됩니다.
-                </InfoText>
+                <InfoText>{t("contact.tips.tip2")}</InfoText>
               </InfoItem>
               <InfoItem>
                 <InfoIcon>⏰</InfoIcon>
-                <InfoText>
-                  답변은 영업일 기준 1-2일 내에 드리고 있습니다. 양해
-                  부탁드립니다.
-                </InfoText>
+                <InfoText>{t("contact.tips.tip3")}</InfoText>
               </InfoItem>
             </InfoBox>
           </Section>
 
           <Section>
-            <SectionTitle>🤝 협업 및 제휴 문의</SectionTitle>
+            <SectionTitle>{t("contact.partnership.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                Daily News Podcast와의 협업, 광고, 제휴에 관심이 있으시면 아래
-                이메일로 연락주세요. 다양한 형태의 파트너십을 환영합니다.
-              </Paragraph>
+              <Paragraph>{t("contact.partnership.desc")}</Paragraph>
             </SectionContent>
             <PartnershipBox>
               <PartnershipIcon>🤝</PartnershipIcon>
@@ -157,11 +126,9 @@ function ContactPage() {
         </ContentSection>
 
         <CTASection>
-          <CTATitle>지금 바로 뉴스를 들어보세요</CTATitle>
-          <CTADescription>
-            AI가 요약한 오늘의 뉴스 팟캐스트를 확인해보세요.
-          </CTADescription>
-          <CTAButton to="/">팟캐스트 듣기 →</CTAButton>
+          <CTATitle>{t("contact.cta.title")}</CTATitle>
+          <CTADescription>{t("contact.cta.desc")}</CTADescription>
+          <CTAButton to="/">{t("contact.cta.button")}</CTAButton>
         </CTASection>
       </Main>
 
@@ -172,23 +139,22 @@ function ContactPage() {
             <FooterLogoText>Daily News Podcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">서비스 소개</FooterLink>
+            <FooterLink to="/about">{t("footer.about")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">문의하기</FooterLink>
+            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">이용약관</FooterLink>
+            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            © {new Date().getFullYear()} Daily News Podcast. All rights
-            reserved.
+            {t("footer.copyright", { year: currentYear })}
           </FooterCopyright>
         </FooterContent>
       </Footer>
     </Container>
   );
-}
+};
 
 export default ContactPage;
 

@@ -1,26 +1,23 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
-function TermsPage() {
+const TermsPage = () => {
+  const { t, i18n } = useTranslation();
+  const currentYear = new Date().getFullYear();
+  const lastUpdatedDate =
+    i18n.language === "ko" ? "2025년 12월 9일" : "December 9, 2025";
+
   return (
     <Container>
       <Helmet>
-        <title>이용약관 - Daily News Podcast</title>
-        <meta
-          name="description"
-          content="Daily News Podcast 이용약관입니다. 서비스 이용조건, 이용자 의무, 콘텐츠 저작권, 면책조항 등에 대한 안내입니다."
-        />
-        <meta
-          name="keywords"
-          content="Daily News Podcast, 이용약관, 서비스 약관, 이용조건"
-        />
+        <html lang={i18n.language} />
+        <title>{t("terms.seo.title")}</title>
+        <meta name="description" content={t("terms.seo.description")} />
         <link rel="canonical" href="https://dailynewspod.com/terms" />
-        <meta property="og:title" content="이용약관 - Daily News Podcast" />
-        <meta
-          property="og:description"
-          content="Daily News Podcast 이용약관입니다."
-        />
+        <meta property="og:title" content={t("terms.seo.title")} />
+        <meta property="og:description" content={t("terms.seo.description")} />
         <meta property="og:url" content="https://dailynewspod.com/terms" />
         <meta property="og:type" content="website" />
       </Helmet>
@@ -32,166 +29,131 @@ function TermsPage() {
             <LogoText>Daily News Podcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">홈</NavLink>
-            <NavLink to="/about">소개</NavLink>
-            <NavLink to="/contact">문의</NavLink>
+            <NavLink to="/">{t("nav.home")}</NavLink>
+            <NavLink to="/about">{t("nav.about")}</NavLink>
+            <NavLink to="/contact">{t("nav.contact")}</NavLink>
           </Nav>
         </HeaderContent>
       </Header>
 
       <Main>
         <PageHeader>
-          <PageTitle>이용약관</PageTitle>
-          <LastUpdated>최종 수정일: 2025년 12월 9일</LastUpdated>
+          <PageTitle>{t("terms.title")}</PageTitle>
+          <LastUpdated>
+            {t("common.lastUpdated", { date: lastUpdatedDate })}
+          </LastUpdated>
         </PageHeader>
 
         <ContentSection>
           <Section>
-            <SectionTitle>제1조 (목적)</SectionTitle>
+            <SectionTitle>{t("terms.article1.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                본 약관은 Daily News Podcast(이하 "서비스")가 제공하는 AI 뉴스
-                요약 팟캐스트 서비스의 이용조건 및 절차, 이용자와 서비스
-                제공자의 권리, 의무, 책임사항 등을 규정함을 목적으로 합니다.
-              </Paragraph>
+              <Paragraph>{t("terms.article1.content")}</Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제2조 (서비스의 정의)</SectionTitle>
+            <SectionTitle>{t("terms.article2.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                "서비스"란 인공지능(AI) 기술을 활용하여 뉴스를 요약하고, 이를
-                음성으로 변환하여 제공하는 팟캐스트 서비스를 말합니다.
-              </Paragraph>
+              <Paragraph>{t("terms.article2.content")}</Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제3조 (이용자의 의무)</SectionTitle>
+            <SectionTitle>{t("terms.article3.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>이용자는 다음 행위를 해서는 안 됩니다:</Paragraph>
+              <Paragraph>{t("terms.article3.intro")}</Paragraph>
               <List>
-                <ListItem>서비스의 정상적인 운영을 방해하는 행위</ListItem>
-                <ListItem>
-                  타인의 명예를 손상시키거나 불이익을 주는 행위
-                </ListItem>
-                <ListItem>
-                  서비스를 통해 제공받은 콘텐츠를 무단으로 복제, 배포, 판매하는
-                  행위
-                </ListItem>
-                <ListItem>기타 관계 법령에 위배되는 행위</ListItem>
+                <ListItem>{t("terms.article3.item1")}</ListItem>
+                <ListItem>{t("terms.article3.item2")}</ListItem>
+                <ListItem>{t("terms.article3.item3")}</ListItem>
+                <ListItem>{t("terms.article3.item4")}</ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제4조 (서비스 제공 및 변경)</SectionTitle>
+            <SectionTitle>{t("terms.article4.title")}</SectionTitle>
             <SectionContent>
               <List>
-                <ListItem>
-                  서비스는 연중무휴, 1일 24시간 제공함을 원칙으로 합니다.
-                </ListItem>
-                <ListItem>
-                  서비스 제공자는 기술적 사양의 변경, 시스템 점검 등의 필요에
-                  따라 서비스를 일시적으로 중단할 수 있습니다.
-                </ListItem>
-                <ListItem>
-                  서비스 내용의 변경이 있는 경우, 서비스 내 공지를 통해
-                  안내합니다.
-                </ListItem>
+                <ListItem>{t("terms.article4.item1")}</ListItem>
+                <ListItem>{t("terms.article4.item2")}</ListItem>
+                <ListItem>{t("terms.article4.item3")}</ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제5조 (콘텐츠의 저작권)</SectionTitle>
+            <SectionTitle>{t("terms.article5.title")}</SectionTitle>
             <SectionContent>
               <List>
-                <ListItem>
-                  서비스에서 제공하는 AI 생성 콘텐츠의 저작권은 서비스
-                  제공자에게 있습니다.
-                </ListItem>
-                <ListItem>
-                  이용자는 개인적이고 비상업적인 용도로만 콘텐츠를 이용할 수
-                  있습니다.
-                </ListItem>
-                <ListItem>
-                  원본 뉴스의 저작권은 해당 뉴스 제공자에게 있으며, 서비스는
-                  뉴스를 요약하여 제공하는 것입니다.
-                </ListItem>
+                <ListItem>{t("terms.article5.item1")}</ListItem>
+                <ListItem>{t("terms.article5.item2")}</ListItem>
+                <ListItem>{t("terms.article5.item3")}</ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제6조 (면책조항)</SectionTitle>
+            <SectionTitle>{t("terms.article6.title")}</SectionTitle>
             <SectionContent>
               <List>
                 <ListItem>
-                  <strong>AI 생성 콘텐츠 한계:</strong> 본 서비스는 AI 기술을
-                  활용하여 콘텐츠를 생성합니다. AI의 특성상 오류, 부정확한
-                  정보가 포함될 수 있으며, 이로 인한 손해에 대해 서비스 제공자는
-                  책임을 지지 않습니다.
+                  <Trans i18nKey="terms.article6.item1">
+                    <strong>AI 생성 콘텐츠 한계:</strong> 본 서비스는 AI 기술을
+                    활용하여 콘텐츠를 생성합니다.
+                  </Trans>
                 </ListItem>
                 <ListItem>
-                  <strong>정보의 정확성:</strong> 제공되는 뉴스 요약은
-                  참고용이며, 정확한 정보는 원본 뉴스 출처를 확인하시기
-                  바랍니다.
+                  <Trans i18nKey="terms.article6.item2">
+                    <strong>정보의 정확성:</strong> 제공되는 뉴스 요약은
+                    참고용입니다.
+                  </Trans>
                 </ListItem>
                 <ListItem>
-                  <strong>서비스 중단:</strong> 천재지변, 시스템 장애 등
-                  불가항력적인 사유로 인한 서비스 중단에 대해 책임을 지지
-                  않습니다.
+                  <Trans i18nKey="terms.article6.item3">
+                    <strong>서비스 중단:</strong> 천재지변, 시스템 장애 등
+                    불가항력적인 사유로 인한 서비스 중단에 대해 책임을 지지
+                    않습니다.
+                  </Trans>
                 </ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제7조 (광고 게재)</SectionTitle>
+            <SectionTitle>{t("terms.article7.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                서비스는 서비스 운영을 위해 광고를 게재할 수 있으며, 이용자는
-                서비스 이용 시 노출되는 광고 게재에 대해 동의합니다. 광고와
-                관련하여 발생하는 거래는 광고주와 이용자 간의 문제이며, 서비스
-                제공자는 이에 대해 책임을 지지 않습니다.
-              </Paragraph>
+              <Paragraph>{t("terms.article7.content")}</Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제8조 (분쟁해결)</SectionTitle>
+            <SectionTitle>{t("terms.article8.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                서비스 이용으로 발생한 분쟁에 대해 서비스 제공자와 이용자는
-                성실히 협의하여 해결하며, 협의가 이루어지지 않을 경우 관할법원에
-                소송을 제기할 수 있습니다.
-              </Paragraph>
+              <Paragraph>{t("terms.article8.content")}</Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>제9조 (약관의 변경)</SectionTitle>
+            <SectionTitle>{t("terms.article9.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                본 약관은 관계 법령 변경 또는 서비스 정책 변경에 따라 수정될 수
-                있으며, 변경 시 서비스 내 공지를 통해 안내합니다. 변경된 약관에
-                동의하지 않는 경우, 이용자는 서비스 이용을 중단할 수 있습니다.
-              </Paragraph>
+              <Paragraph>{t("terms.article9.content")}</Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>부칙</SectionTitle>
+            <SectionTitle>{t("terms.supplement.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>본 약관은 2025년 12월 9일부터 시행됩니다.</Paragraph>
+              <Paragraph>
+                {t("terms.supplement.content", { date: lastUpdatedDate })}
+              </Paragraph>
             </SectionContent>
           </Section>
         </ContentSection>
 
         <BackToHome>
-          <BackLink to="/">← 홈으로 돌아가기</BackLink>
+          <BackLink to="/">{t("common.backToHome")}</BackLink>
         </BackToHome>
       </Main>
 
@@ -202,23 +164,22 @@ function TermsPage() {
             <FooterLogoText>Daily News Podcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">서비스 소개</FooterLink>
+            <FooterLink to="/about">{t("footer.about")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">문의하기</FooterLink>
+            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">이용약관</FooterLink>
+            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            © {new Date().getFullYear()} Daily News Podcast. All rights
-            reserved.
+            {t("footer.copyright", { year: currentYear })}
           </FooterCopyright>
         </FooterContent>
       </Footer>
     </Container>
   );
-}
+};
 
 export default TermsPage;
 

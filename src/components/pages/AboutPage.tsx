@@ -1,26 +1,21 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
-function AboutPage() {
+const AboutPage = () => {
+  const { t, i18n } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
   return (
     <Container>
       <Helmet>
-        <title>서비스 소개 - Daily News Podcast | AI 뉴스 요약 팟캐스트</title>
-        <meta
-          name="description"
-          content="Daily News Podcast는 AI 기술로 매일 주요 뉴스를 요약하고 음성으로 제공하는 무료 팟캐스트 서비스입니다. 출퇴근길, 운동 중에도 간편하게 뉴스를 들어보세요."
-        />
-        <meta
-          name="keywords"
-          content="Daily News Podcast, AI 뉴스 요약, 팟캐스트 서비스, 음성 뉴스, 뉴스 브리핑, 서비스 소개"
-        />
+        <html lang={i18n.language} />
+        <title>{t("about.seo.title")}</title>
+        <meta name="description" content={t("about.seo.description")} />
         <link rel="canonical" href="https://dailynewspod.com/about" />
-        <meta property="og:title" content="서비스 소개 - Daily News Podcast" />
-        <meta
-          property="og:description"
-          content="AI 기술로 매일 주요 뉴스를 요약하고 음성으로 제공하는 무료 팟캐스트 서비스입니다."
-        />
+        <meta property="og:title" content={t("about.seo.title")} />
+        <meta property="og:description" content={t("about.seo.description")} />
         <meta property="og:url" content="https://dailynewspod.com/about" />
         <meta property="og:type" content="website" />
       </Helmet>
@@ -32,11 +27,11 @@ function AboutPage() {
             <LogoText>Daily News Podcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">홈</NavLink>
+            <NavLink to="/">{t("nav.home")}</NavLink>
             <NavLink to="/about" $active>
-              소개
+              {t("nav.about")}
             </NavLink>
-            <NavLink to="/contact">문의</NavLink>
+            <NavLink to="/contact">{t("nav.contact")}</NavLink>
           </Nav>
         </HeaderContent>
       </Header>
@@ -45,149 +40,122 @@ function AboutPage() {
         <HeroSection>
           <HeroIcon>🎙️</HeroIcon>
           <HeroTitle>Daily News Podcast</HeroTitle>
-          <HeroSubtitle>AI가 요약한 오늘의 뉴스를 들어보세요</HeroSubtitle>
+          <HeroSubtitle>{t("about.heroSubtitle")}</HeroSubtitle>
         </HeroSection>
 
         <ContentSection>
           <Section>
-            <SectionTitle>📰 서비스 소개</SectionTitle>
+            <SectionTitle>{t("about.intro.title")}</SectionTitle>
             <SectionContent>
+              <Paragraph>{t("about.intro.p1")}</Paragraph>
+              <Paragraph>{t("about.intro.p2")}</Paragraph>
               <Paragraph>
-                Daily News Podcast는 매일 발행되는 주요 뉴스를 AI 기술을
-                활용하여 요약하고, 자연스러운 음성으로 변환하여 제공하는
-                서비스입니다.
-              </Paragraph>
-              <Paragraph>
-                바쁜 일상 속에서 뉴스를 읽을 시간이 없는 분들을 위해,
-                출퇴근길이나 운동 중에도 쉽게 들을 수 있는 오디오 형태로 뉴스를
-                제공합니다.
-              </Paragraph>
-              <Paragraph>
-                모든 콘텐츠는 <strong>완전 무료</strong>로 제공되며, 별도의 가입
-                없이 바로 청취하실 수 있습니다.
+                <Trans i18nKey="about.intro.p3">
+                  모든 콘텐츠는 <strong>완전 무료</strong>로 제공되며, 별도의
+                  가입 없이 바로 청취하실 수 있습니다.
+                </Trans>
               </Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>✨ 주요 특징</SectionTitle>
+            <SectionTitle>{t("about.features.title")}</SectionTitle>
             <FeatureGrid>
               <FeatureCard>
                 <FeatureIcon>🤖</FeatureIcon>
-                <FeatureTitle>AI 뉴스 요약</FeatureTitle>
+                <FeatureTitle>{t("about.features.ai.title")}</FeatureTitle>
                 <FeatureDescription>
-                  최신 AI 기술로 핵심 내용만 간결하게 요약하여 제공합니다.
-                  불필요한 내용은 제외하고 꼭 알아야 할 정보만 전달합니다.
+                  {t("about.features.ai.desc")}
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
                 <FeatureIcon>🎧</FeatureIcon>
-                <FeatureTitle>음성 변환</FeatureTitle>
+                <FeatureTitle>{t("about.features.voice.title")}</FeatureTitle>
                 <FeatureDescription>
-                  자연스러운 음성으로 편하게 청취할 수 있습니다. 눈이 피로할
-                  때도 귀로 뉴스를 확인하세요.
+                  {t("about.features.voice.desc")}
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
                 <FeatureIcon>📅</FeatureIcon>
-                <FeatureTitle>매일 업데이트</FeatureTitle>
+                <FeatureTitle>{t("about.features.daily.title")}</FeatureTitle>
                 <FeatureDescription>
-                  매일 새로운 뉴스 요약이 제공됩니다. 최신 소식을 놓치지 않고
-                  확인하실 수 있습니다.
+                  {t("about.features.daily.desc")}
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
                 <FeatureIcon>📱</FeatureIcon>
-                <FeatureTitle>어디서든 접속</FeatureTitle>
+                <FeatureTitle>
+                  {t("about.features.anywhere.title")}
+                </FeatureTitle>
                 <FeatureDescription>
-                  PC, 태블릿, 스마트폰 등 모든 기기에서 이용 가능합니다. 반응형
-                  디자인으로 편리하게 사용하세요.
+                  {t("about.features.anywhere.desc")}
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
                 <FeatureIcon>📄</FeatureIcon>
-                <FeatureTitle>대본 제공</FeatureTitle>
+                <FeatureTitle>
+                  {t("about.features.transcript.title")}
+                </FeatureTitle>
                 <FeatureDescription>
-                  모든 팟캐스트 에피소드에 대한 전체 대본을 제공합니다. 원하는
-                  부분을 빠르게 찾아볼 수 있습니다.
+                  {t("about.features.transcript.desc")}
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
                 <FeatureIcon>⏱️</FeatureIcon>
-                <FeatureTitle>타임라인</FeatureTitle>
+                <FeatureTitle>
+                  {t("about.features.timeline.title")}
+                </FeatureTitle>
                 <FeatureDescription>
-                  주요 뉴스 항목별 타임라인을 제공하여 원하는 뉴스로 바로 이동할
-                  수 있습니다.
+                  {t("about.features.timeline.desc")}
                 </FeatureDescription>
               </FeatureCard>
             </FeatureGrid>
           </Section>
 
           <Section>
-            <SectionTitle>🎯 이런 분들께 추천드립니다</SectionTitle>
+            <SectionTitle>{t("about.recommend.title")}</SectionTitle>
             <RecommendList>
               <RecommendItem>
                 <RecommendIcon>🚗</RecommendIcon>
-                <RecommendText>
-                  출퇴근 시간을 활용해 뉴스를 듣고 싶은 분
-                </RecommendText>
+                <RecommendText>{t("about.recommend.commute")}</RecommendText>
               </RecommendItem>
               <RecommendItem>
                 <RecommendIcon>🏃</RecommendIcon>
-                <RecommendText>
-                  운동 중에도 세상 돌아가는 소식이 궁금한 분
-                </RecommendText>
+                <RecommendText>{t("about.recommend.exercise")}</RecommendText>
               </RecommendItem>
               <RecommendItem>
                 <RecommendIcon>👀</RecommendIcon>
-                <RecommendText>
-                  눈의 피로 없이 뉴스를 접하고 싶은 분
-                </RecommendText>
+                <RecommendText>{t("about.recommend.eyes")}</RecommendText>
               </RecommendItem>
               <RecommendItem>
                 <RecommendIcon>⏰</RecommendIcon>
-                <RecommendText>
-                  바쁜 일정 속 짧은 시간에 핵심 뉴스만 파악하고 싶은 분
-                </RecommendText>
+                <RecommendText>{t("about.recommend.busy")}</RecommendText>
               </RecommendItem>
             </RecommendList>
           </Section>
 
           <Section>
-            <SectionTitle>⚠️ 유의사항</SectionTitle>
+            <SectionTitle>{t("about.notice.title")}</SectionTitle>
             <NoticeBox>
               <NoticeItem>
                 <NoticeIcon>ℹ️</NoticeIcon>
-                <NoticeText>
-                  본 서비스는 AI 기술을 활용하여 뉴스를 요약합니다. AI의 특성상
-                  일부 오류가 있을 수 있으며, 정확한 정보는 원본 뉴스 출처를
-                  확인해 주세요.
-                </NoticeText>
+                <NoticeText>{t("about.notice.ai")}</NoticeText>
               </NoticeItem>
               <NoticeItem>
                 <NoticeIcon>📋</NoticeIcon>
-                <NoticeText>
-                  제공되는 콘텐츠는 참고용이며, 투자 등 중요한 결정에 앞서
-                  반드시 원본 뉴스를 확인하시기 바랍니다.
-                </NoticeText>
+                <NoticeText>{t("about.notice.reference")}</NoticeText>
               </NoticeItem>
               <NoticeItem>
                 <NoticeIcon>🗣️</NoticeIcon>
-                <NoticeText>
-                  AI 한국어 음성 기술은 아직 발전 중이며, 일부 발음이
-                  부자연스러울 수 있습니다.
-                </NoticeText>
+                <NoticeText>{t("about.notice.voice")}</NoticeText>
               </NoticeItem>
             </NoticeBox>
           </Section>
 
           <Section>
-            <SectionTitle>📬 문의하기</SectionTitle>
+            <SectionTitle>{t("about.contactSection.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                서비스 이용 중 문의사항이나 피드백이 있으시면 언제든지 연락해
-                주세요. 더 나은 서비스를 위해 여러분의 의견을 소중히 듣겠습니다.
-              </Paragraph>
+              <Paragraph>{t("about.contactSection.desc")}</Paragraph>
             </SectionContent>
             <ContactBox>
               <ContactIcon>✉️</ContactIcon>
@@ -199,11 +167,9 @@ function AboutPage() {
         </ContentSection>
 
         <CTASection>
-          <CTATitle>지금 바로 시작하세요!</CTATitle>
-          <CTADescription>
-            오늘의 뉴스를 AI가 요약해 드립니다. 무료로 들어보세요.
-          </CTADescription>
-          <CTAButton to="/">팟캐스트 듣기 →</CTAButton>
+          <CTATitle>{t("about.cta.title")}</CTATitle>
+          <CTADescription>{t("about.cta.desc")}</CTADescription>
+          <CTAButton to="/">{t("about.cta.button")}</CTAButton>
         </CTASection>
       </Main>
 
@@ -214,23 +180,22 @@ function AboutPage() {
             <FooterLogoText>Daily News Podcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">서비스 소개</FooterLink>
+            <FooterLink to="/about">{t("footer.about")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">문의하기</FooterLink>
+            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">이용약관</FooterLink>
+            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            © {new Date().getFullYear()} Daily News Podcast. All rights
-            reserved.
+            {t("footer.copyright", { year: currentYear })}
           </FooterCopyright>
         </FooterContent>
       </Footer>
     </Container>
   );
-}
+};
 
 export default AboutPage;
 

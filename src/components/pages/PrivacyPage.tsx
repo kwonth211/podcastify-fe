@@ -1,28 +1,25 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
-function PrivacyPage() {
+const PrivacyPage = () => {
+  const { t, i18n } = useTranslation();
+  const currentYear = new Date().getFullYear();
+  const lastUpdatedDate =
+    i18n.language === "ko" ? "2025년 12월 9일" : "December 9, 2025";
+
   return (
     <Container>
       <Helmet>
-        <title>개인정보처리방침 - Daily News Podcast</title>
-        <meta
-          name="description"
-          content="Daily News Podcast의 개인정보처리방침입니다. 개인정보 수집 및 이용, 쿠키 사용, 제3자 광고 서비스에 대한 안내입니다."
-        />
-        <meta
-          name="keywords"
-          content="Daily News Podcast, 개인정보처리방침, 개인정보보호, 쿠키 정책, 광고 정책"
-        />
+        <html lang={i18n.language} />
+        <title>{t("privacy.seo.title")}</title>
+        <meta name="description" content={t("privacy.seo.description")} />
         <link rel="canonical" href="https://dailynewspod.com/privacy" />
-        <meta
-          property="og:title"
-          content="개인정보처리방침 - Daily News Podcast"
-        />
+        <meta property="og:title" content={t("privacy.seo.title")} />
         <meta
           property="og:description"
-          content="Daily News Podcast의 개인정보처리방침입니다."
+          content={t("privacy.seo.description")}
         />
         <meta property="og:url" content="https://dailynewspod.com/privacy" />
         <meta property="og:type" content="website" />
@@ -35,123 +32,117 @@ function PrivacyPage() {
             <LogoText>Daily News Podcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">홈</NavLink>
-            <NavLink to="/about">소개</NavLink>
-            <NavLink to="/contact">문의</NavLink>
+            <NavLink to="/">{t("nav.home")}</NavLink>
+            <NavLink to="/about">{t("nav.about")}</NavLink>
+            <NavLink to="/contact">{t("nav.contact")}</NavLink>
           </Nav>
         </HeaderContent>
       </Header>
 
       <Main>
         <PageHeader>
-          <PageTitle>개인정보처리방침</PageTitle>
-          <LastUpdated>최종 수정일: 2025년 12월 9일</LastUpdated>
+          <PageTitle>{t("privacy.title")}</PageTitle>
+          <LastUpdated>
+            {t("common.lastUpdated", { date: lastUpdatedDate })}
+          </LastUpdated>
         </PageHeader>
 
         <ContentSection>
           <Section>
-            <SectionTitle>1. 개인정보 수집 항목</SectionTitle>
+            <SectionTitle>{t("privacy.section1.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                Daily News Podcast(이하 "서비스")는 서비스 제공을 위해 다음과
-                같은 정보를 수집할 수 있습니다:
-              </Paragraph>
+              <Paragraph>{t("privacy.section1.intro")}</Paragraph>
               <List>
                 <ListItem>
-                  <strong>자동 수집 정보:</strong> 접속 IP 주소, 브라우저 유형,
-                  접속 일시, 서비스 이용 기록
+                  <Trans i18nKey="privacy.section1.item1">
+                    <strong>자동 수집 정보:</strong> 접속 IP 주소, 브라우저
+                    유형, 접속 일시, 서비스 이용 기록
+                  </Trans>
                 </ListItem>
                 <ListItem>
-                  <strong>쿠키 정보:</strong> 사용자 환경 설정, 세션 정보
+                  <Trans i18nKey="privacy.section1.item2">
+                    <strong>쿠키 정보:</strong> 사용자 환경 설정, 세션 정보
+                  </Trans>
                 </ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>2. 개인정보 수집 및 이용 목적</SectionTitle>
+            <SectionTitle>{t("privacy.section2.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>수집된 정보는 다음 목적으로 이용됩니다:</Paragraph>
+              <Paragraph>{t("privacy.section2.intro")}</Paragraph>
               <List>
-                <ListItem>서비스 제공 및 운영</ListItem>
-                <ListItem>서비스 개선 및 사용자 경험 최적화</ListItem>
-                <ListItem>통계 분석 및 서비스 품질 향상</ListItem>
-                <ListItem>광고 게재 및 맞춤형 광고 제공</ListItem>
+                <ListItem>{t("privacy.section2.item1")}</ListItem>
+                <ListItem>{t("privacy.section2.item2")}</ListItem>
+                <ListItem>{t("privacy.section2.item3")}</ListItem>
+                <ListItem>{t("privacy.section2.item4")}</ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>3. 쿠키(Cookie) 사용</SectionTitle>
+            <SectionTitle>{t("privacy.section3.title")}</SectionTitle>
             <SectionContent>
+              <Paragraph>{t("privacy.section3.p1")}</Paragraph>
               <Paragraph>
-                본 서비스는 사용자 경험 개선을 위해 쿠키를 사용합니다. 쿠키는
-                웹사이트가 사용자의 컴퓨터에 저장하는 작은 텍스트 파일입니다.
-              </Paragraph>
-              <Paragraph>
-                <strong>쿠키 사용 목적:</strong>
+                <Trans i18nKey="privacy.section3.p2">
+                  <strong>쿠키 사용 목적:</strong>
+                </Trans>
               </Paragraph>
               <List>
-                <ListItem>사용자 환경 설정 저장</ListItem>
-                <ListItem>서비스 이용 통계 수집</ListItem>
-                <ListItem>광고 효과 측정</ListItem>
+                <ListItem>{t("privacy.section3.item1")}</ListItem>
+                <ListItem>{t("privacy.section3.item2")}</ListItem>
+                <ListItem>{t("privacy.section3.item3")}</ListItem>
               </List>
+              <Paragraph>{t("privacy.section3.p3")}</Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>{t("privacy.section4.title")}</SectionTitle>
+            <SectionContent>
+              <Paragraph>{t("privacy.section4.p1")}</Paragraph>
               <Paragraph>
-                사용자는 브라우저 설정을 통해 쿠키 저장을 거부할 수 있으나, 이
-                경우 서비스 이용에 일부 제한이 있을 수 있습니다.
+                <Trans i18nKey="privacy.section4.p2">
+                  Google의 광고 쿠키 사용에 대한 자세한 내용은{" "}
+                  <ExternalLink
+                    href="https://policies.google.com/technologies/ads"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Google 광고 정책
+                  </ExternalLink>
+                  에서 확인하실 수 있습니다.
+                </Trans>
+              </Paragraph>
+              <Paragraph>
+                <Trans i18nKey="privacy.section4.p3">
+                  사용자는{" "}
+                  <ExternalLink
+                    href="https://adssettings.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Google 광고 설정
+                  </ExternalLink>
+                  에서 맞춤 광고를 거부할 수 있습니다.
+                </Trans>
               </Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>4. 제3자 광고 서비스</SectionTitle>
+            <SectionTitle>{t("privacy.section5.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                본 서비스는 Google AdSense를 포함한 제3자 광고 서비스를
-                사용합니다. 이러한 광고 서비스는 사용자의 관심사에 맞는 광고를
-                표시하기 위해 쿠키를 사용할 수 있습니다.
-              </Paragraph>
-              <Paragraph>
-                Google의 광고 쿠키 사용에 대한 자세한 내용은{" "}
-                <ExternalLink
-                  href="https://policies.google.com/technologies/ads"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google 광고 정책
-                </ExternalLink>
-                에서 확인하실 수 있습니다.
-              </Paragraph>
-              <Paragraph>
-                사용자는{" "}
-                <ExternalLink
-                  href="https://adssettings.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google 광고 설정
-                </ExternalLink>
-                에서 맞춤 광고를 거부할 수 있습니다.
-              </Paragraph>
+              <Paragraph>{t("privacy.section5.p1")}</Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>5. 개인정보 보유 및 파기</SectionTitle>
+            <SectionTitle>{t("privacy.section6.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                수집된 개인정보는 수집 목적이 달성되면 지체 없이 파기됩니다. 단,
-                관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관됩니다.
-              </Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>6. 개인정보 보호책임자</SectionTitle>
-            <SectionContent>
-              <Paragraph>
-                개인정보 관련 문의사항은 아래 연락처로 문의해 주시기 바랍니다.
-              </Paragraph>
+              <Paragraph>{t("privacy.section6.p1")}</Paragraph>
               <ContactBox>
                 <ContactIcon>✉️</ContactIcon>
                 <ContactEmail href="mailto:contact@dailynewspod.com">
@@ -162,18 +153,15 @@ function PrivacyPage() {
           </Section>
 
           <Section>
-            <SectionTitle>7. 개인정보처리방침 변경</SectionTitle>
+            <SectionTitle>{t("privacy.section7.title")}</SectionTitle>
             <SectionContent>
-              <Paragraph>
-                본 개인정보처리방침은 법령 또는 서비스 정책의 변경에 따라 수정될
-                수 있으며, 변경 시 서비스 내 공지를 통해 안내해 드립니다.
-              </Paragraph>
+              <Paragraph>{t("privacy.section7.p1")}</Paragraph>
             </SectionContent>
           </Section>
         </ContentSection>
 
         <BackToHome>
-          <BackLink to="/">← 홈으로 돌아가기</BackLink>
+          <BackLink to="/">{t("common.backToHome")}</BackLink>
         </BackToHome>
       </Main>
 
@@ -184,23 +172,22 @@ function PrivacyPage() {
             <FooterLogoText>Daily News Podcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">서비스 소개</FooterLink>
+            <FooterLink to="/about">{t("footer.about")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">문의하기</FooterLink>
+            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">개인정보처리방침</FooterLink>
+            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">이용약관</FooterLink>
+            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            © {new Date().getFullYear()} Daily News Podcast. All rights
-            reserved.
+            {t("footer.copyright", { year: currentYear })}
           </FooterCopyright>
         </FooterContent>
       </Footer>
     </Container>
   );
-}
+};
 
 export default PrivacyPage;
 

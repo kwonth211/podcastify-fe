@@ -17,7 +17,14 @@
     "daysAgo": "{{count}} days ago",
     "weeksAgo": "{{count}} weeks ago",
     "monthsAgo": "{{count}} months ago",
-    "yearsAgo": "{{count}} years ago"
+    "yearsAgo": "{{count}} years ago",
+    "backToHome": "← Back to Home",
+    "lastUpdated": "Last updated: {{date}}"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
   },
   "header": {
     "title": "Daily News Podcast"
@@ -89,5 +96,212 @@
   "date": {
     "format": "MMMM D, YYYY",
     "shortFormat": "MMM D"
+  },
+  "about": {
+    "seo": {
+      "title": "About - Daily News Podcast | AI News Summary Podcast",
+      "description": "Daily News Podcast is a free podcast service that summarizes daily news using AI technology and delivers it in audio format."
+    },
+    "heroSubtitle": "Listen to AI-summarized news today",
+    "intro": {
+      "title": "📰 About the Service",
+      "p1": "Daily News Podcast is a service that summarizes daily news using AI technology and converts it into natural-sounding audio.",
+      "p2": "For those who don't have time to read news in their busy daily lives, we provide news in audio format that can be easily listened to during commutes or workouts.",
+      "p3": "All content is provided <strong>completely free</strong>, and you can start listening immediately without any registration."
+    },
+    "features": {
+      "title": "✨ Key Features",
+      "ai": {
+        "title": "AI News Summary",
+        "desc": "We use the latest AI technology to provide concise summaries of key content. We filter out unnecessary information and deliver only what you need to know."
+      },
+      "voice": {
+        "title": "Voice Conversion",
+        "desc": "Listen comfortably with natural-sounding voice. Check the news with your ears even when your eyes are tired."
+      },
+      "daily": {
+        "title": "Daily Updates",
+        "desc": "New news summaries are provided every day. Stay up-to-date with the latest news."
+      },
+      "anywhere": {
+        "title": "Access Anywhere",
+        "desc": "Available on all devices including PC, tablet, and smartphone. Use conveniently with responsive design."
+      },
+      "transcript": {
+        "title": "Transcript Provided",
+        "desc": "We provide full transcripts for all podcast episodes. Quickly find the parts you want."
+      },
+      "timeline": {
+        "title": "Timeline",
+        "desc": "We provide timelines for each news item so you can jump directly to the news you want."
+      }
+    },
+    "recommend": {
+      "title": "🎯 Recommended For",
+      "commute": "Those who want to listen to news during commute time",
+      "exercise": "Those curious about what's happening in the world while exercising",
+      "eyes": "Those who want to consume news without eye strain",
+      "busy": "Those who want to grasp key news in a short time during busy schedules"
+    },
+    "notice": {
+      "title": "⚠️ Important Notes",
+      "ai": "This service uses AI technology to summarize news. Due to the nature of AI, there may be some errors. Please verify accurate information from original news sources.",
+      "reference": "The content provided is for reference only. Please verify original news before making important decisions such as investments.",
+      "voice": "AI Korean voice technology is still developing, and some pronunciations may be unnatural."
+    },
+    "contactSection": {
+      "title": "📬 Contact Us",
+      "desc": "If you have any questions or feedback while using the service, please feel free to contact us. We value your opinions for a better service."
+    },
+    "cta": {
+      "title": "Get Started Now!",
+      "desc": "AI summarizes today's news for you. Listen for free.",
+      "button": "Listen to Podcast →"
+    }
+  },
+  "contact": {
+    "seo": {
+      "title": "Contact - Daily News Podcast | Contact & Feedback",
+      "description": "Contact Daily News Podcast for inquiries or feedback."
+    },
+    "title": "Contact Us",
+    "subtitle": "If you have any questions or feedback while using the service, please contact us",
+    "email": {
+      "title": "Email Inquiry",
+      "desc": "We welcome all inquiries including general questions, service feedback, and collaboration proposals.<br/>We will respond to your email within 1-2 business days."
+    },
+    "faq": {
+      "title": "💬 Frequently Asked Questions",
+      "q1": "Is there a service fee?",
+      "a1": "No, Daily News Podcast is a completely free service. You can use all content without any registration or payment.",
+      "q2": "How often is the podcast updated?",
+      "a2": "New news summary podcasts are uploaded daily. You can listen to the latest news without missing anything.",
+      "q3": "How accurate is the AI summary?",
+      "a3": "Due to the nature of AI technology, there may occasionally be errors. We recommend verifying important information from original news sources.",
+      "q4": "Is it available on mobile?",
+      "a4": "Yes, it's built as a responsive web so you can use it conveniently on all devices including PC, tablet, and smartphone.",
+      "q5": "Can I see the transcript?",
+      "a5": "Yes, we provide full transcripts for all podcast episodes. You can check them on each episode page."
+    },
+    "tips": {
+      "title": "📝 Inquiry Tips",
+      "tip1": "Providing specific details about your situation will help us respond faster.",
+      "tip2": "Personal information is only used for responding to inquiries and is destroyed after the response is completed.",
+      "tip3": "We respond within 1-2 business days. Thank you for your patience."
+    },
+    "partnership": {
+      "title": "🤝 Partnership Inquiries",
+      "desc": "If you're interested in collaboration, advertising, or partnership with Daily News Podcast, please contact us at the email below. We welcome various forms of partnership."
+    },
+    "cta": {
+      "title": "Listen to the News Now",
+      "desc": "Check out today's AI-summarized news podcast.",
+      "button": "Listen to Podcast →"
+    }
+  },
+  "privacy": {
+    "seo": {
+      "title": "Privacy Policy - Daily News Podcast",
+      "description": "Privacy Policy of Daily News Podcast."
+    },
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "1. Information We Collect",
+      "intro": "Daily News Podcast (the \"Service\") may collect the following information to provide our services:",
+      "item1": "<strong>Automatically Collected Information:</strong> IP address, browser type, access time, service usage records",
+      "item2": "<strong>Cookie Information:</strong> User preferences, session information"
+    },
+    "section2": {
+      "title": "2. Purpose of Collection and Use",
+      "intro": "The collected information is used for the following purposes:",
+      "item1": "Service provision and operation",
+      "item2": "Service improvement and user experience optimization",
+      "item3": "Statistical analysis and service quality improvement",
+      "item4": "Advertising and personalized ad delivery"
+    },
+    "section3": {
+      "title": "3. Use of Cookies",
+      "p1": "This service uses cookies to improve user experience. Cookies are small text files that websites store on your computer.",
+      "p2": "<strong>Cookie Usage Purposes:</strong>",
+      "item1": "Storing user preferences",
+      "item2": "Collecting service usage statistics",
+      "item3": "Measuring advertising effectiveness",
+      "p3": "You can refuse cookie storage through your browser settings, but this may limit some service functionality."
+    },
+    "section4": {
+      "title": "4. Third-Party Advertising Services",
+      "p1": "This service uses third-party advertising services including Google AdSense. These advertising services may use cookies to display ads that match your interests.",
+      "p2": "For more information about Google's use of advertising cookies, please visit <link1>Google Advertising Policies</link1>.",
+      "p3": "You can opt out of personalized ads at <link2>Google Ads Settings</link2>."
+    },
+    "section5": {
+      "title": "5. Retention and Destruction of Personal Information",
+      "p1": "Collected personal information is destroyed without delay once the purpose of collection is achieved. However, if retention is required by relevant laws, it will be stored for the applicable period."
+    },
+    "section6": {
+      "title": "6. Privacy Officer",
+      "p1": "For privacy-related inquiries, please contact us at the following:"
+    },
+    "section7": {
+      "title": "7. Changes to Privacy Policy",
+      "p1": "This Privacy Policy may be modified according to changes in laws or service policies. Changes will be announced through service notifications."
+    }
+  },
+  "terms": {
+    "seo": {
+      "title": "Terms of Service - Daily News Podcast",
+      "description": "Terms of Service for Daily News Podcast."
+    },
+    "title": "Terms of Service",
+    "article1": {
+      "title": "Article 1 (Purpose)",
+      "content": "These Terms of Service govern the conditions, procedures, rights, obligations, and responsibilities between users and Daily News Podcast (the \"Service\") for the AI news summary podcast service."
+    },
+    "article2": {
+      "title": "Article 2 (Definition of Service)",
+      "content": "\"Service\" refers to a podcast service that uses artificial intelligence (AI) technology to summarize news and convert it into audio format."
+    },
+    "article3": {
+      "title": "Article 3 (User Obligations)",
+      "intro": "Users must not engage in the following:",
+      "item1": "Actions that interfere with normal service operation",
+      "item2": "Actions that damage others' reputation or cause harm",
+      "item3": "Unauthorized reproduction, distribution, or sale of content received through the service",
+      "item4": "Other actions that violate relevant laws"
+    },
+    "article4": {
+      "title": "Article 4 (Service Provision and Changes)",
+      "item1": "The service is provided 24 hours a day, 365 days a year in principle.",
+      "item2": "The service provider may temporarily suspend the service due to technical changes, system maintenance, etc.",
+      "item3": "If there are changes to the service content, we will notify you through service announcements."
+    },
+    "article5": {
+      "title": "Article 5 (Copyright of Content)",
+      "item1": "The copyright of AI-generated content provided by the service belongs to the service provider.",
+      "item2": "Users may only use the content for personal and non-commercial purposes.",
+      "item3": "The copyright of original news belongs to the respective news providers; the service summarizes and provides the news."
+    },
+    "article6": {
+      "title": "Article 6 (Disclaimer)",
+      "item1": "<strong>AI-Generated Content Limitations:</strong> This service generates content using AI technology. Due to the nature of AI, errors and inaccurate information may be included, and the service provider is not responsible for any resulting damages.",
+      "item2": "<strong>Accuracy of Information:</strong> News summaries provided are for reference only. Please verify accurate information from original news sources.",
+      "item3": "<strong>Service Interruption:</strong> We are not responsible for service interruptions due to force majeure such as natural disasters or system failures."
+    },
+    "article7": {
+      "title": "Article 7 (Advertising)",
+      "content": "The service may display advertisements for service operation, and users agree to the display of advertisements while using the service. Transactions related to advertisements are matters between advertisers and users, and the service provider is not responsible for them."
+    },
+    "article8": {
+      "title": "Article 8 (Dispute Resolution)",
+      "content": "The service provider and users shall sincerely negotiate to resolve disputes arising from service use. If negotiation fails, litigation may be filed with the competent court."
+    },
+    "article9": {
+      "title": "Article 9 (Changes to Terms)",
+      "content": "These Terms may be modified according to changes in relevant laws or service policies. Changes will be announced through service notifications. If you do not agree to the changed terms, you may discontinue use of the service."
+    },
+    "supplement": {
+      "title": "Supplementary Provisions",
+      "content": "These Terms take effect from {{date}}."
+    }
   }
 }
