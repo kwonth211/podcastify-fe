@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   useParams,
   useNavigate,
@@ -66,15 +66,21 @@ function TranscriptPage() {
   const [error, setError] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
+  // 대본 라인 참조를 위한 ref
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const date = extractDateFromKey(decodedKey);
   const formattedDate = date ? dayjs(date).format("YYYY년 M월 D일") : "";
 
   // 초기 시간 파라미터
   const initialTime = searchParams.get("t");
 
-  // 현재 재생 시간 (전역 플레이어에서 가져옴)
-  const currentTime =
-    playerState.podcastKey === decodedKey ? playerState.currentTime : 0;
+  // 현재 재생 시간, 전체 길이, 재생 속도 (전역 플레이어에서 가져옴)
+  const isCurrentPodcast = playerState.podcastKey === decodedKey;
+  const currentTime = isCurrentPodcast ? playerState.currentTime : 0;
+  const duration = isCurrentPodcast ? playerState.duration : 0;
+  const playbackRate = isCurrentPodcast ? playerState.playbackRate : 1;
 
   // 대본 및 오디오 로드
   useEffect(() => {
@@ -151,6 +157,68 @@ function TranscriptPage() {
     playPodcast(decodedKey, audioUrl, time);
   };
 
+  // 대본 라인 파싱 (메모이제이션)
+  const transcriptLines = fullTranscript ? parseContent(fullTranscript) : [];
+
+  // 특수문자, 마침표 등 제외하고 실제 읽히는 글자수만 계산
+  const getReadableCharCount = (text: string): number => {
+    // 한글, 영문, 숫자만 카운트 (특수문자, 공백, 마침표 등 제외)
+    const readableChars = text.replace(/[^가-힣a-zA-Z0-9]/g, "");
+    return readableChars.length;
+  };
+
+  // CPM(분당 글자수) 기반 활성 대본 라인 인덱스 계산
+  const getActiveLineIndex = useCallback((): number => {
+    if (transcriptLines.length === 0 || !isCurrentPodcast || duration <= 0) {
+      return -1;
+    }
+
+    // 각 라인의 글자수 계산 (특수문자 제외)
+    const charCounts = transcriptLines.map((line) =>
+      getReadableCharCount(line.text)
+    );
+    const totalChars = charCounts.reduce((sum, count) => sum + count, 0);
+
+    if (totalChars === 0) return 0;
+
+    // 실제 CPM 계산 (전체 글자수 / 전체 시간(분))
+    const actualCPM = totalChars / (duration / 60);
+    // 초당 글자수 (CPS), 재생 속도 반영
+    const CPS = (actualCPM / 60) * playbackRate;
+
+    // 포커스가 음성보다 약간 앞서가도록 글자 오프셋 추가
+    // 기준: 보통 속도 400 CPM = 약 6.67 글자/초, 0.7초분 ≈ 5글자
+    // 빠르면 값 감소, 느리면 값 증가
+    const CHAR_OFFSET = Math.round(CPS * 0.7); // 0.7초분의 글자수
+
+    // 현재 시간까지 읽은 글자수 + 오프셋
+    const charsRead = (currentTime / duration) * totalChars;
+    const targetChars = Math.min(charsRead + CHAR_OFFSET, totalChars);
+
+    // 누적 글자수로 현재 라인 찾기
+    let cumulativeChars = 0;
+    for (let i = 0; i < transcriptLines.length; i++) {
+      cumulativeChars += charCounts[i];
+      if (cumulativeChars >= targetChars) {
+        return i;
+      }
+    }
+
+    return transcriptLines.length - 1;
+  }, [currentTime, duration, playbackRate, transcriptLines, isCurrentPodcast]);
+
+  const activeLineIndex = getActiveLineIndex();
+
+  // 활성 대본 라인으로 자동 스크롤
+  useEffect(() => {
+    if (activeLineIndex >= 0 && lineRefs.current[activeLineIndex]) {
+      lineRefs.current[activeLineIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [activeLineIndex]);
+
   if (loading) {
     return (
       <Container>
@@ -220,31 +288,43 @@ function TranscriptPage() {
 
       {/* 콘텐츠 영역 */}
       <TranscriptContainer>
-        {/* 타임라인 - 공통 컴포넌트 사용 */}
+        {/* 타임라인 - 클릭으로 해당 시간으로 이동 */}
         {timelineItems.length > 0 && (
           <Timeline
             items={timelineItems}
-            currentTime={currentTime}
+            currentTime={0}
             onTimeClick={handleTimelineClick}
             variant="card"
             maxHeight="280px"
-            showActiveIndicator
           />
         )}
 
         {/* 전체 대본 - 내부 스크롤 영역 */}
-        {fullTranscript && (
+        {transcriptLines.length > 0 && (
           <FullTranscriptSection>
             <FullTranscriptTitle>📄 전체 대본</FullTranscriptTitle>
-            <TranscriptScrollArea>
-              {parseContent(fullTranscript).map((line, lineIndex) => (
-                <DialogLine key={lineIndex} $speaker={line.speaker}>
-                  <SpeakerBadge $speaker={line.speaker}>
-                    {line.speaker === "Person1" ? "🎙️ 진행자 1" : "🎧 진행자 2"}
-                  </SpeakerBadge>
-                  <DialogText>{line.text}</DialogText>
-                </DialogLine>
-              ))}
+            <TranscriptScrollArea ref={scrollAreaRef}>
+              {transcriptLines.map((line, lineIndex) => {
+                const isActive = lineIndex === activeLineIndex;
+                return (
+                  <DialogLine
+                    key={lineIndex}
+                    ref={(el) => {
+                      lineRefs.current[lineIndex] = el;
+                    }}
+                    $speaker={line.speaker}
+                    $isActive={isActive}
+                  >
+                    <SpeakerBadge $speaker={line.speaker}>
+                      {line.speaker === "Person1"
+                        ? "🎙️ 진행자 1"
+                        : "🎧 진행자 2"}
+                    </SpeakerBadge>
+                    <DialogText>{line.text}</DialogText>
+                    {isActive && <ActiveBadge>재생 중</ActiveBadge>}
+                  </DialogLine>
+                );
+              })}
             </TranscriptScrollArea>
           </FullTranscriptSection>
         )}
@@ -414,20 +494,37 @@ const TranscriptScrollArea = styled.div`
   }
 `;
 
-const DialogLine = styled.div<{ $speaker: "Person1" | "Person2" }>`
+const DialogLine = styled.div<{
+  $speaker: "Person1" | "Person2";
+  $isActive?: boolean;
+}>`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
   background: ${(props) =>
-    props.$speaker === "Person1"
+    props.$isActive
+      ? props.$speaker === "Person1"
+        ? "rgba(102, 126, 234, 0.25)"
+        : "rgba(6, 182, 212, 0.25)"
+      : props.$speaker === "Person1"
       ? "rgba(102, 126, 234, 0.1)"
       : "rgba(6, 182, 212, 0.1)"};
   border-radius: 12px;
-  border-left: 3px solid
+  border-left: 4px solid
     ${(props) => (props.$speaker === "Person1" ? "#667eea" : "#06b6d4")};
   margin-left: ${(props) => (props.$speaker === "Person2" ? "2rem" : "0")};
   margin-right: ${(props) => (props.$speaker === "Person1" ? "2rem" : "0")};
+  transition: all 0.3s ease;
+  position: relative;
+
+  ${(props) =>
+    props.$isActive &&
+    `
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    transform: scale(1.01);
+    border-left-width: 5px;
+  `}
 
   @media (max-width: 768px) {
     margin-left: ${(props) => (props.$speaker === "Person2" ? "1rem" : "0")};
@@ -446,6 +543,29 @@ const DialogText = styled.p`
   color: #334155;
   font-size: 0.9375rem;
   line-height: 1.8;
+`;
+
+const ActiveBadge = styled.span`
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.15);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
 `;
 
 const TranscriptFooter = styled.footer`

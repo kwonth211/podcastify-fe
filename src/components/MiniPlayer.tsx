@@ -19,6 +19,8 @@ interface MiniPlayerProps {
   onClose: () => void;
   initialSeekTime?: number;
   onTimeUpdate?: (time: number) => void;
+  onDurationUpdate?: (duration: number) => void;
+  onPlaybackRateChange?: (rate: number) => void;
   onSeekComplete?: () => void;
 }
 
@@ -28,6 +30,8 @@ function MiniPlayer({
   onClose,
   initialSeekTime,
   onTimeUpdate,
+  onDurationUpdate,
+  onPlaybackRateChange,
   onSeekComplete,
 }: MiniPlayerProps) {
   // podcastKey에서 날짜 추출 및 포맷팅
@@ -78,6 +82,7 @@ function MiniPlayer({
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration);
+      onDurationUpdate?.(audio.duration);
 
       // 초기 시작 시간이 있으면 해당 위치로 이동
       if (initialSeekTime !== undefined && initialSeekTime > 0) {
@@ -128,7 +133,14 @@ function MiniPlayer({
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
     };
-  }, [audioUrl, isDragging, onTimeUpdate, initialSeekTime, onSeekComplete]);
+  }, [
+    audioUrl,
+    isDragging,
+    onTimeUpdate,
+    onDurationUpdate,
+    initialSeekTime,
+    onSeekComplete,
+  ]);
 
   // initialSeekTime 변경 시 해당 시간으로 이동 (이미 로드된 오디오에서)
   useEffect(() => {
@@ -258,7 +270,8 @@ function MiniPlayer({
 
     setPlaybackRate(newRate);
     audio.playbackRate = newRate;
-  }, [playbackRate]);
+    onPlaybackRateChange?.(newRate);
+  }, [playbackRate, onPlaybackRateChange]);
 
   const handleClose = useCallback(() => {
     setIsVisible(false);

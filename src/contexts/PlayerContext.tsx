@@ -11,6 +11,8 @@ interface PlayerState {
   audioUrl: string | null;
   isPlaying: boolean;
   currentTime: number;
+  duration: number;
+  playbackRate: number;
   seekTime: number | null; // 타임라인 클릭 시 이동할 시간
 }
 
@@ -19,6 +21,8 @@ interface PlayerContextType {
   playPodcast: (key: string, url: string, seekTime?: number) => void;
   stopPodcast: () => void;
   updateCurrentTime: (time: number) => void;
+  updateDuration: (duration: number) => void;
+  updatePlaybackRate: (rate: number) => void;
   setIsPlaying: (playing: boolean) => void;
   clearSeekTime: () => void;
 }
@@ -31,6 +35,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     audioUrl: null,
     isPlaying: false,
     currentTime: 0,
+    duration: 0,
+    playbackRate: 1,
     seekTime: null,
   });
 
@@ -41,6 +47,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         audioUrl: url,
         isPlaying: true,
         currentTime: prev.podcastKey === key ? prev.currentTime : 0,
+        duration: prev.podcastKey === key ? prev.duration : 0,
+        playbackRate: prev.podcastKey === key ? prev.playbackRate : 1,
         seekTime: seekTime ?? null,
       }));
     },
@@ -53,12 +61,22 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       audioUrl: null,
       isPlaying: false,
       currentTime: 0,
+      duration: 0,
+      playbackRate: 1,
       seekTime: null,
     });
   }, []);
 
   const updateCurrentTime = useCallback((time: number) => {
     setPlayerState((prev) => ({ ...prev, currentTime: time }));
+  }, []);
+
+  const updateDuration = useCallback((duration: number) => {
+    setPlayerState((prev) => ({ ...prev, duration }));
+  }, []);
+
+  const updatePlaybackRate = useCallback((rate: number) => {
+    setPlayerState((prev) => ({ ...prev, playbackRate: rate }));
   }, []);
 
   const setIsPlaying = useCallback((playing: boolean) => {
@@ -76,6 +94,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         playPodcast,
         stopPodcast,
         updateCurrentTime,
+        updateDuration,
+        updatePlaybackRate,
         setIsPlaying,
         clearSeekTime,
       }}

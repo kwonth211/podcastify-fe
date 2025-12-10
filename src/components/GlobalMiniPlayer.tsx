@@ -2,8 +2,14 @@ import { usePlayer } from "../contexts/PlayerContext";
 import MiniPlayer from "./MiniPlayer";
 
 function GlobalMiniPlayer() {
-  const { playerState, stopPodcast, updateCurrentTime, clearSeekTime } =
-    usePlayer();
+  const {
+    playerState,
+    stopPodcast,
+    updateCurrentTime,
+    updateDuration,
+    updatePlaybackRate,
+    clearSeekTime,
+  } = usePlayer();
 
   if (!playerState.audioUrl || !playerState.podcastKey) {
     return null;
@@ -28,6 +34,8 @@ function GlobalMiniPlayer() {
       onClose={handleClose}
       initialSeekTime={playerState.seekTime ?? undefined}
       onTimeUpdate={updateCurrentTime}
+      onDurationUpdate={updateDuration}
+      onPlaybackRateChange={updatePlaybackRate}
       onSeekComplete={handleSeekComplete}
     />
   );
