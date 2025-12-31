@@ -187,9 +187,9 @@ function TranscriptPage() {
     const CPS = (actualCPM / 60) * playbackRate;
 
     // 포커스가 음성보다 약간 앞서가도록 글자 오프셋 추가
-    // 기준: 보통 속도 400 CPM = 약 6.67 글자/초, 0.7초분 ≈ 5글자
+    // 기준: 보통 속도 400 CPM = 약 6.67 글자/초, 0.4초분 ≈ 3글자
     // 빠르면 값 감소, 느리면 값 증가
-    const CHAR_OFFSET = Math.round(CPS * 0.7); // 0.7초분의 글자수
+    const CHAR_OFFSET = Math.round(CPS * 0.6); // 0.4초분의 글자수
 
     // 현재 시간까지 읽은 글자수 + 오프셋
     const charsRead = (currentTime / duration) * totalChars;
