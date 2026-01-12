@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/s3-request-presigner": "^3.939.0",
+    "@supabase/supabase-js": "^2.90.1",
     "dayjs": "^1.11.19",
     "i18next": "^25.7.2",
     "i18next-browser-languagedetector": "^8.2.0",

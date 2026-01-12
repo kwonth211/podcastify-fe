@@ -1,204 +1,206 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
 const PrivacyPage = () => {
-  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
-  const lastUpdatedDate =
-    i18n.language === "ko" ? "2025년 12월 9일" : "December 9, 2025";
 
   return (
     <Container>
       <Helmet>
-        <html lang={i18n.language} />
-        <title>{t("privacy.seo.title")}</title>
-        <meta name="description" content={t("privacy.seo.description")} />
-        <link rel="canonical" href="https://dailynewspod.com/privacy" />
-        <meta property="og:title" content={t("privacy.seo.title")} />
+        <title>Privacy Policy - DailyNewsPodcast</title>
         <meta
-          property="og:description"
-          content={t("privacy.seo.description")}
+          name="description"
+          content="Privacy Policy of DailyNewsPodcast - Your personalized AI news podcast service."
         />
-        <meta property="og:url" content="https://dailynewspod.com/privacy" />
-        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://dailynewspodcast.com/privacy" />
       </Helmet>
 
       <Header>
         <HeaderContent>
           <Logo to="/">
-            <LogoIcon>🎙️</LogoIcon>
-            <LogoText>Daily News Podcast</LogoText>
+            <LogoBox>D</LogoBox>
+            <LogoText>DailyNewsPodcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">{t("nav.home")}</NavLink>
-            <NavLink to="/about">{t("nav.about")}</NavLink>
-            <NavLink to="/contact">{t("nav.contact")}</NavLink>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/about">About</NavLink>
+            <NavLink to="/contact">Contact</NavLink>
           </Nav>
         </HeaderContent>
       </Header>
 
       <Main>
         <PageHeader>
-          <PageTitle>{t("privacy.title")}</PageTitle>
-          <LastUpdated>
-            {t("common.lastUpdated", { date: lastUpdatedDate })}
-          </LastUpdated>
+          <PageTitle>Privacy Policy</PageTitle>
+          <LastUpdated>Last updated: January 9, 2026</LastUpdated>
         </PageHeader>
 
         <ContentSection>
           <Section>
-            <SectionTitle>{t("privacy.section1.title")}</SectionTitle>
+            <SectionTitle>1. Information We Collect</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("privacy.section1.intro")}</Paragraph>
+              <Paragraph>
+                DailyNewsPodcast ("Service") may collect the following
+                information to provide our services:
+              </Paragraph>
               <List>
                 <ListItem>
-                  <Trans i18nKey="privacy.section1.item1">
-                    <strong>자동 수집 정보:</strong> 접속 IP 주소, 브라우저
-                    유형, 접속 일시, 서비스 이용 기록
-                  </Trans>
+                  <strong>Automatically Collected Information:</strong> IP
+                  address, browser type, access time, service usage records
                 </ListItem>
                 <ListItem>
-                  <Trans i18nKey="privacy.section1.item2">
-                    <strong>쿠키 정보:</strong> 사용자 환경 설정, 세션 정보
-                  </Trans>
+                  <strong>Cookie Information:</strong> User preferences, session
+                  information
                 </ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>{t("privacy.section2.title")}</SectionTitle>
+            <SectionTitle>2. Purpose of Collection and Use</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("privacy.section2.intro")}</Paragraph>
+              <Paragraph>
+                The collected information is used for the following purposes:
+              </Paragraph>
               <List>
-                <ListItem>{t("privacy.section2.item1")}</ListItem>
-                <ListItem>{t("privacy.section2.item2")}</ListItem>
-                <ListItem>{t("privacy.section2.item3")}</ListItem>
-                <ListItem>{t("privacy.section2.item4")}</ListItem>
+                <ListItem>Service provision and operation</ListItem>
+                <ListItem>
+                  Service improvement and user experience optimization
+                </ListItem>
+                <ListItem>
+                  Statistical analysis and service quality improvement
+                </ListItem>
+                <ListItem>Advertising and personalized ad delivery</ListItem>
               </List>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>{t("privacy.section3.title")}</SectionTitle>
+            <SectionTitle>3. Use of Cookies</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("privacy.section3.p1")}</Paragraph>
               <Paragraph>
-                <Trans i18nKey="privacy.section3.p2">
-                  <strong>쿠키 사용 목적:</strong>
-                </Trans>
+                This service uses cookies to improve user experience. Cookies
+                are small text files that websites store on your computer.
+              </Paragraph>
+              <Paragraph>
+                <strong>Cookie Usage Purposes:</strong>
               </Paragraph>
               <List>
-                <ListItem>{t("privacy.section3.item1")}</ListItem>
-                <ListItem>{t("privacy.section3.item2")}</ListItem>
-                <ListItem>{t("privacy.section3.item3")}</ListItem>
+                <ListItem>Storing user preferences</ListItem>
+                <ListItem>Collecting service usage statistics</ListItem>
+                <ListItem>Measuring advertising effectiveness</ListItem>
               </List>
-              <Paragraph>{t("privacy.section3.p3")}</Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("privacy.section4.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("privacy.section4.p1")}</Paragraph>
               <Paragraph>
-                <Trans i18nKey="privacy.section4.p2">
-                  Google의 광고 쿠키 사용에 대한 자세한 내용은{" "}
-                  <ExternalLink
-                    href="https://policies.google.com/technologies/ads"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Google 광고 정책
-                  </ExternalLink>
-                  에서 확인하실 수 있습니다.
-                </Trans>
-              </Paragraph>
-              <Paragraph>
-                <Trans i18nKey="privacy.section4.p3">
-                  사용자는{" "}
-                  <ExternalLink
-                    href="https://adssettings.google.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Google 광고 설정
-                  </ExternalLink>
-                  에서 맞춤 광고를 거부할 수 있습니다.
-                </Trans>
+                You can refuse cookie storage through your browser settings, but
+                this may limit some service functionality.
               </Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>{t("privacy.section5.title")}</SectionTitle>
+            <SectionTitle>4. Third-Party Advertising Services</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("privacy.section5.p1")}</Paragraph>
+              <Paragraph>
+                This service uses third-party advertising services including
+                Google AdSense. These advertising services may use cookies to
+                display ads that match your interests.
+              </Paragraph>
+              <Paragraph>
+                For more information about Google's use of advertising cookies,
+                please visit{" "}
+                <ExternalLink
+                  href="https://policies.google.com/technologies/ads"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Google Advertising Policies
+                </ExternalLink>
+                .
+              </Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>{t("privacy.section6.title")}</SectionTitle>
+            <SectionTitle>
+              5. Retention and Destruction of Personal Information
+            </SectionTitle>
             <SectionContent>
-              <Paragraph>{t("privacy.section6.p1")}</Paragraph>
+              <Paragraph>
+                Collected personal information is destroyed without delay once
+                the purpose of collection is achieved. However, if retention is
+                required by relevant laws, it will be stored for the applicable
+                period.
+              </Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>6. Privacy Officer</SectionTitle>
+            <SectionContent>
+              <Paragraph>
+                For privacy-related inquiries, please contact us at:
+              </Paragraph>
               <ContactBox>
                 <ContactIcon>✉️</ContactIcon>
-                <ContactEmail href="mailto:contact@dailynewspod.com">
-                  contact@dailynewspod.com
+                <ContactEmail href="mailto:contact@dailynewspodcast.com">
+                  contact@dailynewspodcast.com
                 </ContactEmail>
               </ContactBox>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>{t("privacy.section7.title")}</SectionTitle>
+            <SectionTitle>7. Changes to Privacy Policy</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("privacy.section7.p1")}</Paragraph>
+              <Paragraph>
+                This Privacy Policy may be modified according to changes in laws
+                or service policies. Changes will be announced through service
+                notifications.
+              </Paragraph>
             </SectionContent>
           </Section>
         </ContentSection>
 
         <BackToHome>
-          <BackLink to="/">{t("common.backToHome")}</BackLink>
+          <BackLink to="/">← Back to Home</BackLink>
         </BackToHome>
       </Main>
 
-      <Footer>
+      <FooterSection>
         <FooterContent>
           <FooterLogo>
-            <LogoIcon>🎙️</LogoIcon>
-            <FooterLogoText>Daily News Podcast</FooterLogoText>
+            <LogoBox>D</LogoBox>
+            <FooterLogoText>DailyNewsPodcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">{t("footer.about")}</FooterLink>
+            <FooterLink to="/about">About</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
+            <FooterLink to="/contact">Contact</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
+            <FooterLink to="/privacy">Privacy</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
+            <FooterLink to="/terms">Terms</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            {t("footer.copyright", { year: currentYear })}
+            © {currentYear} DailyNewsPodcast. All rights reserved.
           </FooterCopyright>
         </FooterContent>
-      </Footer>
+      </FooterSection>
     </Container>
   );
 };
 
 export default PrivacyPage;
 
-// Styled Components
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
 `;
 
 const Header = styled.header`
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
@@ -227,14 +229,23 @@ const Logo = styled(Link)`
   text-decoration: none;
 `;
 
-const LogoIcon = styled.span`
-  font-size: 1.5rem;
+const LogoBox = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background: #4f46e5;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
 `;
 
 const LogoText = styled.span`
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -249,16 +260,16 @@ const Nav = styled.nav`
   }
 `;
 
-const NavLink = styled(Link)<{ $active?: boolean }>`
-  color: ${(props) => (props.$active ? "#667eea" : "#4b5563")};
+const NavLink = styled(Link)`
+  color: #4b5563;
   text-decoration: none;
-  font-weight: ${(props) => (props.$active ? "600" : "500")};
+  font-weight: 500;
   font-size: 0.9375rem;
   padding: 0.5rem;
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
@@ -344,7 +355,7 @@ const ListItem = styled.li`
 `;
 
 const ExternalLink = styled.a`
-  color: #667eea;
+  color: #4f46e5;
   text-decoration: none;
   font-weight: 500;
 
@@ -369,7 +380,7 @@ const ContactIcon = styled.span`
 `;
 
 const ContactEmail = styled.a`
-  color: #667eea;
+  color: #4f46e5;
   font-size: 0.9375rem;
   font-weight: 600;
   text-decoration: none;
@@ -388,20 +399,20 @@ const BackToHome = styled.div`
 const BackLink = styled(Link)`
   display: inline-flex;
   align-items: center;
-  color: #667eea;
+  color: #4f46e5;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s;
 
   &:hover {
-    color: #764ba2;
+    color: #4338ca;
   }
 `;
 
-const Footer = styled.footer`
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-top: 1px solid #e2e8f0;
+const FooterSection = styled.footer`
+  background: white;
+  border-top: 1px solid #f3f4f6;
   padding: 3rem 2rem;
   margin-top: 4rem;
 `;
@@ -425,7 +436,7 @@ const FooterLogo = styled.div`
 const FooterLogoText = styled.span`
   font-size: 1.125rem;
   font-weight: 700;
-  color: #334155;
+  color: #111827;
 `;
 
 const FooterLinks = styled.div`
@@ -441,19 +452,19 @@ const FooterLinks = styled.div`
 `;
 
 const FooterLink = styled(Link)`
-  color: #64748b;
+  color: #6b7280;
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
 const FooterDivider = styled.span`
-  color: #cbd5e1;
+  color: #d1d5db;
   font-size: 0.875rem;
 
   @media (max-width: 768px) {
@@ -463,6 +474,6 @@ const FooterDivider = styled.span`
 
 const FooterCopyright = styled.p`
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 0;
 `;

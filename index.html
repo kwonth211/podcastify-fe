@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/icon.png" />
@@ -12,195 +12,148 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="데일리뉴스팟" />
+    <meta name="apple-mobile-web-app-title" content="DailyNewsPodcast" />
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Google Analytics will be loaded dynamically from main.tsx -->
 
     <!-- Primary Meta Tags -->
-    <title>
-      Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트 | 매일 뉴스 음성
-      요약
-    </title>
+    <title>DailyNewsPodcast - 자동화 워크플로우 팟캐스트 | 직장인 뉴스</title>
     <meta
       name="title"
-      content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트 | 매일 뉴스 음성 요약"
+      content="DailyNewsPodcast - 자동화 워크플로우 팟캐스트 | 직장인 뉴스"
     />
     <meta
       name="description"
-      content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 간결하게 제공합니다. 출퇴근길, 운동 중에도 간편하게 뉴스를 청취하세요. 정치, 경제, 사회, IT 뉴스를 빠르게 확인!"
+      content="직장인을 위한 자동화 워크플로우 팟캐스트. 관심사만 입력하면 AI가 매일 뉴스를 크롤링하고 요약하여 맞춤형 팟캐스트로 전달합니다. 출퇴근길, 점심시간에 듣는 직장인 뉴스."
     />
     <meta
       name="keywords"
-      content="팟캐스트, 뉴스 팟캐스트, AI 뉴스, 음성 뉴스, 데일리 뉴스, 데일리 뉴스 팟, 데일리뉴스팟, 뉴스 요약, 오늘의 뉴스, 아침 뉴스, 뉴스 브리핑, podcast, news podcast, daily news, AI news summary, korean news, 한국 뉴스, 뉴스 듣기, 음성 브리핑, 인공지능 뉴스, 자동 뉴스 요약, 짧은 뉴스"
+      content="자동화 워크플로우, 팟캐스트, 직장인 뉴스, AI 뉴스, 자동화 뉴스, 맞춤형 팟캐스트, 뉴스 자동화, 워크플로우 자동화, 직장인 팟캐스트, 출퇴근 뉴스, AI 팟캐스트, 뉴스 요약, 뉴스 크롤링, 자동화 시스템, 뉴스 워크플로우, DailyNewsPodcast"
     />
-    <meta name="author" content="Daily News Podcast" />
+    <meta name="author" content="DailyNewsPodcast" />
     <meta
       name="robots"
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
-    <meta name="language" content="Korean" />
+    <meta name="language" content="English" />
     <meta name="revisit-after" content="1 days" />
-    <meta name="theme-color" content="#667eea" />
-    <meta name="google-site-verification" content="" />
-    <link rel="canonical" href="https://dailynewspod.com/" />
-
-    <!-- Preload LCP Banner Image -->
-    <link rel="preload" as="image" href="/a.png" fetchpriority="high" />
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="canonical" href="https://dailynewspodcast.com/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://dailynewspod.com/" />
+    <meta property="og:url" content="https://dailynewspodcast.com/" />
     <meta
       property="og:title"
-      content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트"
+      content="DailyNewsPodcast - 자동화 워크플로우 팟캐스트 | 직장인 뉴스"
     />
     <meta
       property="og:description"
-      content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 간결하게 제공합니다. 출퇴근길에 간편하게 뉴스 청취!"
+      content="직장인을 위한 자동화 워크플로우 팟캐스트. 관심사만 입력하면 AI가 매일 뉴스를 크롤링하고 요약하여 맞춤형 팟캐스트로 전달합니다."
     />
-    <meta property="og:image" content="https://dailynewspod.com/icon.png" />
+    <meta property="og:image" content="https://dailynewspodcast.com/icon.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Daily News Podcast 로고" />
-    <meta property="og:locale" content="ko_KR" />
-    <meta property="og:site_name" content="Daily News Podcast" />
+    <meta property="og:image:alt" content="DailyNewsPodcast Logo" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="DailyNewsPodcast" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://dailynewspod.com/" />
+    <meta name="twitter:url" content="https://dailynewspodcast.com/" />
     <meta
       name="twitter:title"
-      content="Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트"
+      content="DailyNewsPodcast - 자동화 워크플로우 팟캐스트 | 직장인 뉴스"
     />
     <meta
       name="twitter:description"
-      content="AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
+      content="직장인을 위한 자동화 워크플로우 팟캐스트. 관심사만 입력하면 AI가 매일 뉴스를 크롤링하고 요약하여 맞춤형 팟캐스트로 전달합니다."
     />
-    <meta name="twitter:image" content="https://dailynewspod.com/icon.png" />
-    <meta name="twitter:image:alt" content="Daily News Podcast 로고" />
+    <meta
+      name="twitter:image"
+      content="https://dailynewspodcast.com/icon.png"
+    />
+    <meta name="twitter:image:alt" content="DailyNewsPodcast Logo" />
 
-    <!-- OneSignal Push Notifications -->
-    <script
-      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
-      defer
-    ></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function (OneSignal) {
-        await OneSignal.init({
-          appId: "7d84373c-c82b-45e6-bb6f-edb1fe4735e5",
-        });
-      });
-    </script>
-
-    <!-- Google Analytics 4 -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-CW9BGYNXE2"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-CW9BGYNXE2", {
-        send_page_view: false, // React Router에서 수동으로 페이지뷰 전송
-      });
-    </script>
-
-    <!-- Google AdSense -->
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415763008354504"
-      crossorigin="anonymous"
-    ></script>
-
-    <!-- Structured Data: Organization with Logo (구글 검색 로고 표시) -->
+    <!-- Structured Data: Organization with Logo -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Daily News Podcast",
+        "name": "DailyNewsPodcast",
         "alternateName": [
-          "데일리뉴스팟캐스트",
-          "데일리 뉴스 팟캐스트",
-          "데일리 뉴스 팟",
-          "데일리뉴스팟",
-          "AI 뉴스 팟캐스트"
+          "Daily News Podcast",
+          "AI News Podcast",
+          "자동화 워크플로우 팟캐스트",
+          "직장인 뉴스"
         ],
-        "url": "https://dailynewspod.com",
-        "logo": "https://dailynewspod.com/icon.png",
-        "image": "https://dailynewspod.com/a.png",
-        "description": "AI가 요약한 오늘의 뉴스를 팟캐스트로 제공하는 서비스",
+        "url": "https://dailynewspodcast.com",
+        "logo": "https://dailynewspodcast.com/icon.png",
+        "description": "직장인을 위한 자동화 워크플로우 팟캐스트. 관심사만 입력하면 AI가 매일 뉴스를 크롤링하고 요약하여 맞춤형 팟캐스트로 전달합니다",
         "foundingDate": "2025",
         "contactPoint": {
           "@type": "ContactPoint",
-          "email": "contact@dailynewspod.com",
+          "email": "contact@dailynewspodcast.com",
           "contactType": "customer service",
-          "availableLanguage": "Korean"
+          "availableLanguage": "English"
         },
         "sameAs": []
       }
     </script>
 
-    <!-- Structured Data: WebSite with Search -->
+    <!-- Structured Data: WebSite -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Daily News Podcast",
-        "alternateName": "데일리뉴스팟캐스트",
-        "url": "https://dailynewspod.com/",
-        "description": "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다.",
+        "name": "DailyNewsPodcast",
+        "alternateName": "Daily News Podcast",
+        "url": "https://dailynewspodcast.com/",
+        "description": "직장인을 위한 자동화 워크플로우 팟캐스트. 관심사만 입력하면 AI가 매일 뉴스를 크롤링하고 요약하여 맞춤형 팟캐스트로 전달합니다.",
         "publisher": {
           "@type": "Organization",
-          "name": "Daily News Podcast",
+          "name": "DailyNewsPodcast",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://dailynewspod.com/icon.png"
+            "url": "https://dailynewspodcast.com/icon.png"
           }
         },
-        "inLanguage": "ko",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://dailynewspod.com/?search={search_term_string}",
-          "query-input": "required name=search_term_string"
+        "inLanguage": "en"
+      }
+    </script>
+
+    <!-- Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DailyNewsPodcast",
+        "description": "직장인을 위한 자동화 워크플로우 팟캐스트 서비스. 관심사만 입력하면 AI가 매일 뉴스를 크롤링하고 요약하여 맞춤형 팟캐스트로 전달합니다",
+        "url": "https://dailynewspodcast.com/",
+        "applicationCategory": "NewsApplication",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free tier available"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "DailyNewsPodcast"
         }
       }
     </script>
 
-    <!-- Structured Data: PodcastSeries -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "PodcastSeries",
-        "name": "Daily News Podcast",
-        "description": "AI가 요약한 오늘의 뉴스 팟캐스트. 매일 최신 뉴스를 음성으로 간결하게 제공합니다.",
-        "url": "https://dailynewspod.com/",
-        "image": {
-          "@type": "ImageObject",
-          "url": "https://dailynewspod.com/icon.png",
-          "width": 1200,
-          "height": 1200
-        },
-        "author": {
-          "@type": "Organization",
-          "name": "Daily News Podcast"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Daily News Podcast",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://dailynewspod.com/icon.png"
-          }
-        },
-        "inLanguage": "ko",
-        "genre": ["News", "Daily News", "Technology"],
-        "keywords": "뉴스, 팟캐스트, AI, 음성뉴스, 데일리뉴스"
-      }
-    </script>
-
-    <!-- Structured Data: FAQ (구글 검색 결과에 FAQ 표시) -->
+    <!-- Structured Data: FAQ -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -208,51 +161,35 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Daily News Podcast는 무엇인가요?",
+            "name": "DailyNewsPodcast는 무엇인가요?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Daily News Podcast는 AI가 매일 주요 뉴스를 요약하고 음성으로 변환하여 제공하는 팟캐스트 서비스입니다. 바쁜 일상 속에서도 출퇴근길이나 운동 중에 간편하게 뉴스를 들을 수 있습니다."
+              "text": "DailyNewsPodcast는 직장인을 위한 자동화 워크플로우 팟캐스트 서비스입니다. 관심사만 입력하면 AI가 매일 웹을 크롤링하여 뉴스를 큐레이션하고 요약하여 맞춤형 팟캐스트로 전달합니다."
             }
           },
           {
             "@type": "Question",
-            "name": "팟캐스트는 얼마나 자주 업데이트되나요?",
+            "name": "DailyNewsPodcast는 어떻게 작동하나요?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "매일 새로운 뉴스 요약 팟캐스트가 업로드됩니다. 최신 뉴스를 놓치지 않고 들을 수 있습니다."
+              "text": "간단한 프롬프트로 관심사를 입력하세요. AI 에이전트가 수천 개의 소스를 크롤링하고, 관련 스토리를 선택하며, 매력적인 스크립트를 작성한 후 자연스러운 오디오로 변환하여 이메일이나 RSS 피드로 전달합니다."
             }
           },
           {
             "@type": "Question",
-            "name": "무료로 이용할 수 있나요?",
+            "name": "Is DailyNewsPodcast free?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "네, Daily News Podcast는 완전 무료로 이용 가능합니다. 별도의 가입 없이 바로 청취할 수 있습니다."
+              "text": "Yes! DailyNewsPodcast offers a free tier with weekly podcasts. Premium plans starting at $19/month unlock daily podcasts, premium voices, and private RSS feeds."
             }
           },
           {
             "@type": "Question",
-            "name": "팟캐스트 길이는 얼마나 되나요?",
+            "name": "Can I use my own podcast app?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "각 에피소드는 핵심 뉴스만 간결하게 요약하여 짧은 시간 안에 들을 수 있도록 제공합니다."
+              "text": "Pro subscribers get a private RSS feed that works with Spotify, Apple Podcasts, and any podcast player you prefer."
             }
-          }
-        ]
-      }
-    </script>
-
-    <!-- Structured Data: BreadcrumbList -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "홈",
-            "item": "https://dailynewspod.com/"
           }
         ]
       }
@@ -261,11 +198,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      // PWA Service Worker 등록 (PWA Builder 감지용)
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js", { scope: "/" });
-      }
-    </script>
   </body>
 </html>

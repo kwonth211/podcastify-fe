@@ -2,5 +2,8 @@ export { default as AboutPage } from "./AboutPage";
 export { default as ContactPage } from "./ContactPage";
 export { default as PrivacyPage } from "./PrivacyPage";
 export { default as TermsPage } from "./TermsPage";
-
-
+export { default as MyPodcastsPage } from "./MyPodcastsPage";
+export { default as PodcastDetailPage } from "./PodcastDetailPage";
+export { default as GeneratePage } from "./GeneratePage";
+export { default as PricingPage } from "./PricingPage";
+export { default as SchedulerPage } from "./SchedulerPage";

@@ -1,309 +1,387 @@
 {
   "common": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "retry": "Retry",
-    "close": "Close",
-    "save": "Save",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "play": "Play",
-    "pause": "Pause",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "weeksAgo": "{{count}} weeks ago",
-    "monthsAgo": "{{count}} months ago",
-    "yearsAgo": "{{count}} years ago",
-    "backToHome": "← Back to Home",
-    "lastUpdated": "Last updated: {{date}}"
-  },
-  "nav": {
+    "getStarted": "Get Started",
+    "features": "Features",
+    "pricing": "Pricing",
+    "createMyNews": "Create My News",
     "home": "Home",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "copyright": "© {{year}} DailyNewsPodcast. All rights reserved.",
+    "scheduler": "Scheduler"
   },
-  "header": {
-    "title": "Daily News Podcast"
+  "navbar": {
+    "features": "Features",
+    "createMyNews": "Create My News",
+    "pricing": "Pricing",
+    "getStarted": "Get Started",
+    "myPodcasts": "My Podcasts",
+    "logout": "Logout"
   },
   "hero": {
-    "titleToday": "Listen to today's news now",
-    "titleDefault": "Listen to AI-summarized news as a podcast",
-    "subtitleToday": "Today's top headlines summary",
-    "subtitleDefault": "Daily news delivered in audio format",
-    "notice": "Using Gemini 3.0 model · Korean support may still be unstable"
+    "badge": "Introducing Personalized AI Podcasts",
+    "titleLine1": "Don't just read the news.",
+    "titleLine2": "Hear it come alive.",
+    "description": "Set it once, forget it forever. Every morning, a perfectly curated podcast arrives in your inbox automatically. Our AI crawls thousands of news sources and curates them just for you. Commute, lunch break, evening walk - your personalized news is always ready.",
+    "getStartedFree": "Get Started Free",
+    "loggingIn": "Signing in...",
+    "listenToExample": "Listen to Example",
+    "samplePodcast": "Sample Podcast",
+    "playerTitle": "Morning Tech Digest",
+    "playerSubtitle": "Curated by AI • 8:30 AM",
+    "playerQuote": "Good morning! Today we're looking at the breakthrough in solid-state batteries and why everyone is talking about the new AI agents..."
   },
-  "podcast": {
-    "todayNews": "Today's News",
-    "pastNews": "Past News",
-    "count": "{{count}} episodes",
-    "expand": "Expand",
-    "collapse": "Collapse",
-    "new": "NEW",
-    "playCount": "Views",
-    "playTime": "Duration",
-    "quickSummary": "3 min",
-    "transcript": "View Transcript",
-    "timeline": "Timeline",
-    "noPodcasts": "No podcasts available.",
-    "loadError": "Failed to load podcast list.",
-    "audioLoadError": "Failed to load audio file."
+  "features": {
+    "label": "The Future of Audio",
+    "title": "Your Own News Anchor",
+    "subtitle": "The world's first fully automated podcasting platform designed around your specific interests.",
+    "naturalAiVoices": {
+      "title": "Natural AI Voices",
+      "desc": "Our high-fidelity neural voices deliver your news with emotion and clarity. Choose from various accents and professional personas."
+    },
+    "promptToScript": {
+      "title": "Prompt-to-Script",
+      "desc": "Our AI agents crawl thousands of sources based on your specific prompts and write a cohesive, engaging radio script every day."
+    },
+    "multitaskingHero": {
+      "title": "Multitasking Hero",
+      "desc": "Stay informed while driving, running, or cooking. Hands-free news tailored exactly to what you need to know for your day."
+    },
+    "smartSummaries": {
+      "title": "Smart Summaries",
+      "desc": "We don't just read headlines. We digest complex stories into tight, understandable summaries so you're briefed in minutes."
+    },
+    "privateRssFeed": {
+      "title": "Private RSS Feed",
+      "desc": "Listen via our app or add your unique, secure RSS link to your favorite podcast player like Spotify or Apple Podcasts."
+    },
+    "zeroClickAutomation": {
+      "title": "Zero-Click Automation",
+      "desc": "Set it and forget it. Your podcast is ready and waiting exactly when you wake up, every single day."
+    },
+    "emailDelivery": {
+      "title": "Auto-Delivery to Your Inbox",
+      "desc": "Set it once, and every morning your inbox receives a ready-to-listen podcast automatically. Commute, lunch break, evening walk - your personalized news is always ready."
+    }
   },
-  "player": {
-    "playbackSpeed": "Playback Speed",
-    "skipBack": "Skip 10s back",
-    "skipForward": "Skip 10s forward",
-    "volume": "Volume"
+  "interactiveDemo": {
+    "badge": "Live Playground",
+    "title": "Experience Your Personal Podcast",
+    "description": "Input a topic and we'll crawl the latest news, summarize it, and generate a professional audio snippet just for you.",
+    "placeholder": "e.g., 'What's happening in space tech this week?'",
+    "generating": "Curating...",
+    "generatePodcast": "Generate Podcast",
+    "examples": {
+      "stock": "Latest Apple and Tesla stock news",
+      "fusion": "Advances in fusion energy research",
+      "football": "Weekend football results from Europe",
+      "coffee": "New coffee roasting techniques in 2024"
+    },
+    "readyForAir": "Ready for Air",
+    "readyDescription": "Your personalized radio station is waiting for a prompt.",
+    "customPodcast": "Custom Podcast"
   },
-  "transcript": {
-    "title": "Transcript",
-    "backToList": "Back to List",
-    "loading": "Loading transcript...",
-    "error": "Failed to load transcript.",
-    "noTranscript": "No transcript available."
+  "newsCreator": {
+    "title": "AI News Channel Creator",
+    "subtitle": "Build your automated news empire in 3 simple steps.",
+    "step1": "Define Topic",
+    "step2": "Choose Voice",
+    "step3": "Schedule",
+    "channelReady": "✓ Channel Ready",
+    "step1Title": "What should your AI news agents crawl for?",
+    "step1Helper": "Be as specific as possible. Mention companies, trends, or regions.",
+    "step1Placeholder": "e.g. 'Daily updates on Nvidia stock performance, AI regulations in Europe, and any news about open-source LLMs.'",
+    "nextChooseVoice": "Next: Choose Voice",
+    "step2Title": "Select Your Personal News Anchor",
+    "step2Helper": "This voice will read your custom scripts every morning.",
+    "voices": {
+      "professional": {
+        "name": "Professional Anchor",
+        "desc": "Deep, clear, and trustworthy."
+      },
+      "tech": {
+        "name": "Tech Enthusiast",
+        "desc": "Energetic and fast-paced."
+      },
+      "financial": {
+        "name": "Financial Expert",
+        "desc": "Calm, analytical, and steady."
+      },
+      "casual": {
+        "name": "Casual Friend",
+        "desc": "Friendly and conversational."
+      }
+    },
+    "back": "Back",
+    "nextSetSchedule": "Next: Set Schedule",
+    "step3Title": "When should we deliver your news?",
+    "step3Helper": "Automated delivery via Email and private RSS feed.",
+    "daily": "Daily",
+    "initializeAgents": "Initialize AI Agents & Create Preview",
+    "channelLive": "Your Channel is Live!",
+    "channelLiveDesc": "Agents have successfully crawled the web based on your prompt. Here is your first automated news brief preview.",
+    "firstEdition": "First Edition: {{date}}",
+    "confirmSubscription": "Confirm & Start Subscription",
+    "modifySettings": "Modify Settings"
+  },
+  "pricing": {
+    "title": "Choose your plan",
+    "subtitle": "Transparent pricing for the next generation of news.",
+    "pageTitle": "Pricing Plans",
+    "recommended": "Recommended",
+    "perMonth": "mo",
+    "paymentError": "An error occurred during payment processing.",
+    "processing": "Processing...",
+    "compareTitle": "Compare Plans",
+    "feature": "Feature",
+    "month": "month",
+    "unlimited": "Unlimited",
+    "schedule": "schedule",
+    "schedules": "schedules",
+    "standard": "Standard",
+    "premium": "Premium",
+    "available": "Available",
+    "compare": {
+      "generations": "Monthly Generations",
+      "batchTokens": "Generation Tokens",
+      "scheduler": "Auto Scheduler",
+      "voices": "AI Voices",
+      "rss": "RSS Feed",
+      "priority": "Priority Crawling"
+    },
+    "features": {
+      "generations": "{{count}} generations/month",
+      "unlimitedGenerations": "Unlimited generations",
+      "scheduler": "{{count}} schedules (same as generation limit)",
+      "noScheduler": "No scheduler",
+      "premiumVoices": "Premium voices",
+      "standardVoices": "Standard voices",
+      "rssFeed": "Private RSS feed",
+      "noRssFeed": "No RSS feed",
+      "batchTokens": "{{count}} generation tokens",
+      "batchTokensValid": "{{count}} generation tokens ({{days}} days valid)",
+      "unlimitedBatchTokens": "Unlimited generation tokens"
+    },
+    "faqTitle": "Frequently Asked Questions",
+    "faq": {
+      "q1": "What can I do with the free plan?",
+      "a1": "With the free plan, you can generate 1 podcast per month. Auto scheduler is only available on paid plans.",
+      "q2": "Can I change my plan anytime?",
+      "a2": "Yes, you can upgrade or downgrade your plan at any time. Changes will take effect from the next billing cycle.",
+      "q3": "What payment methods are accepted?",
+      "a3": "We accept credit card payments through Toss Payments in Korea and Stripe internationally.",
+      "q4": "What is your refund policy?",
+      "a4": "Full refund is available within 7 days of subscription if unused. Please refer to our terms of service for details."
+    },
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "desc": "Experience AI podcasts for free.",
+        "features": [
+          "7 Generation Tokens (7 days valid)",
+          "Unlimited schedule setup",
+          "1 manual generation/month"
+        ],
+        "button": "Start Free"
+      },
+      "basic": {
+        "name": "Basic",
+        "price": "$1",
+        "period": "/mo",
+        "desc": "Start your automated news briefing.",
+        "features": [
+          "30 Generation Tokens (30 days valid)",
+          "Unlimited schedule setup",
+          "3 manual generations/month"
+        ],
+        "button": "Get Started"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$10",
+        "period": "/mo",
+        "desc": "The complete news automation experience.",
+        "features": [
+          "Unlimited Prompt Profiles",
+          "Daily 15-min Podcast",
+          "Premium AI Voice",
+          "5 Schedules",
+          "Priority Crawling"
+        ],
+        "button": "Go Pro"
+      },
+      "listener": {
+        "name": "Listener",
+        "price": "$0",
+        "desc": "Explore the audio-first lifestyle.",
+        "features": [
+          "1 Prompt Profile",
+          "Weekly 5-min Podcast",
+          "Standard AI Voice",
+          "Email Script Archive"
+        ],
+        "button": "Get Started"
+      },
+      "expert": {
+        "name": "Expert Network",
+        "price": "$99",
+        "period": "/mo",
+        "desc": "For intelligence and research teams.",
+        "features": [
+          "Unlimited Audio Profiles",
+          "Multi-speaker Conversations",
+          "Audio Source Citations",
+          "White-label Distribution",
+          "API Voice Access"
+        ],
+        "button": "Contact Sales"
+      }
+    }
+  },
+  "scheduler": {
+    "pageTitle": "Scheduler",
+    "title": "Auto Podcast Schedules",
+    "subtitle": "Automatically generate podcasts at scheduled times and receive them via email.",
+    "addSchedule": "Add Schedule",
+    "quotaLabel": "Schedule Usage",
+    "schedules": "schedules",
+    "upgrade": "Upgrade",
+    "upgradeRequired": "Upgrade Required",
+    "upgradeDescription": "Auto scheduler feature is available on Basic plan and above.",
+    "viewPlans": "View Plans",
+    "emptyTitle": "No schedules yet",
+    "emptyDescription": "Create your first auto schedule. Custom podcasts will be delivered to your email at the scheduled time.",
+    "createFirst": "Create First Schedule",
+    "deleteConfirm": "Are you sure you want to delete this schedule?",
+    "newSchedule": "New Schedule",
+    "editSchedule": "Edit Schedule",
+    "form": {
+      "prompt": "Podcast Topic",
+      "promptPlaceholder": "e.g., Latest AI industry news and big tech trends",
+      "days": "Run Days",
+      "everyday": "Everyday",
+      "weekdays": "Weekdays",
+      "time": "Run Time",
+      "timezone": "Timezone",
+      "email": "Delivery Email",
+      "emailPlaceholder": "podcast@example.com",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving..."
+    },
+    "errors": {
+      "promptRequired": "Please enter a podcast topic.",
+      "daysRequired": "Please select at least one day.",
+      "emailRequired": "Please enter an email address.",
+      "emailInvalid": "Please enter a valid email address."
+    }
   },
   "footer": {
-    "about": "About",
-    "contact": "Contact",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "copyright": "© {{year}} Daily News Podcast. All rights reserved.",
-    "disclaimer": "This service uses AI technology to summarize and provide news in audio format. The content is for reference only. Please verify accurate information from original news sources."
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "disclaimer": "This service uses AI technology to summarize news and deliver it as audio. The content is for reference only. Please verify information with original news sources."
   },
-  "install": {
-    "title": "Add to Home Screen",
-    "description": "Access quickly like an app and use offline!",
-    "install": "Install",
-    "howTo": "How to",
-    "later": "Later",
-    "iosGuideTitle": "Add to Home Screen on iOS",
-    "iosStep1": "Tap the share button at the bottom of Safari",
-    "iosStep2": "Select \"Add to Home Screen\" from the menu",
-    "iosStep3": "Tap \"Add\" in the top right corner and you're done!",
-    "addToHomeScreen": "Add to Home Screen"
+  "mobileCTA": {
+    "button": "Create My AI News Now"
   },
-  "seo": {
-    "title": "Daily News Podcast - AI-Summarized News Podcast",
-    "description": "Listen to AI-summarized news as a podcast. Daily news delivered in audio format."
-  },
-  "language": {
+  "languageSwitch": {
     "ko": "한국어",
     "en": "English"
   },
-  "date": {
-    "format": "MMMM D, YYYY",
-    "shortFormat": "MMM D"
+  "myPodcasts": {
+    "pageTitle": "My Podcasts",
+    "pageDescription": "Manage and listen to your generated podcasts",
+    "navTitle": "My Podcasts",
+    "title": "My Podcasts",
+    "subtitle": "Manage and listen to all your generated podcasts",
+    "createNew": "+ Create New Podcast",
+    "createFirst": "Create My First Podcast",
+    "emptyTitle": "No podcasts yet",
+    "emptyDescription": "Create your first personalized podcast and start listening!",
+    "statusCompleted": "Completed",
+    "statusGenerating": "Generating",
+    "statusFailed": "Failed",
+    "playCount": "{{count}} plays",
+    "play": "Play",
+    "edit": "Edit",
+    "generatingMessage": "Generating your podcast...",
+    "stats": {
+      "total": "Total",
+      "completed": "Completed",
+      "generating": "Generating",
+      "totalPlays": "Total Plays"
+    },
+    "searchPlaceholder": "Search podcasts...",
+    "filters": {
+      "all": "All"
+    },
+    "viewGrid": "Grid View",
+    "viewList": "List View",
+    "resultsCount": "{{count}} results",
+    "noResults": "No results found"
   },
-  "about": {
-    "seo": {
-      "title": "About - Daily News Podcast | AI News Summary Podcast",
-      "description": "Daily News Podcast is a free podcast service that summarizes daily news using AI technology and delivers it in audio format."
-    },
-    "heroSubtitle": "Listen to AI-summarized news today",
-    "intro": {
-      "title": "📰 About the Service",
-      "p1": "Daily News Podcast is a service that summarizes daily news using AI technology and converts it into natural-sounding audio.",
-      "p2": "For those who don't have time to read news in their busy daily lives, we provide news in audio format that can be easily listened to during commutes or workouts.",
-      "p3": "All content is provided <strong>completely free</strong>, and you can start listening immediately without any registration."
-    },
-    "features": {
-      "title": "✨ Key Features",
-      "ai": {
-        "title": "AI News Summary",
-        "desc": "We use the latest AI technology to provide concise summaries of key content. We filter out unnecessary information and deliver only what you need to know."
+  "podcastDetail": {
+    "pageTitle": "Podcast Details",
+    "detail": "Details",
+    "podcastTitle": "Podcast #{{id}}",
+    "notFound": "Podcast Not Found",
+    "notFoundDescription": "The podcast you're looking for doesn't exist or has been deleted.",
+    "backToList": "Back to My Podcasts",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this podcast? This action cannot be undone.",
+    "audioReady": "Your podcast is ready",
+    "generatingInProgress": "Generating your podcast...",
+    "generatingEstimate": "This usually takes 2-3 minutes",
+    "promptTitle": "Prompt",
+    "editPrompt": "Edit",
+    "promptPlaceholder": "Enter your podcast topic...",
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "regenerate": "Regenerate",
+    "regenerateConfirm": "This will create a new podcast with the updated prompt. Continue?",
+    "regenerateStarted": "Regeneration started! You'll be notified when it's ready.",
+    "editHint": "After saving, click 'Regenerate' to create a new podcast with the updated prompt.",
+    "scriptTitle": "Generated Script",
+    "totalPlays": "Total Plays",
+    "duration": "Duration",
+    "created": "Created"
+  },
+  "generate": {
+    "pageTitle": "Generate Podcast",
+    "pageDescription": "Enter your prompt and generate a personalized podcast",
+    "title": "Generate Podcast",
+    "subtitle": "Enter your prompt and AI will crawl news, summarize it, and create a podcast for you",
+    "badge": "Live Workflow",
+    "formTitle": "Enter Prompt",
+    "formDescription": "Enter a topic you're interested in. AI will collect and summarize the latest news.",
+    "readyTitle": "Ready to Generate",
+    "readyDescription": "Enter your prompt to start the workflow.",
+    "tipsTitle": "Prompt Writing Tips",
+    "tip1": "Include specific dates or keywords for more accurate results",
+    "tip2": "Clearly describe topics, companies, or technologies you're interested in",
+    "tip3": "Specify language to search for news in that language",
+    "saveToDashboard": "Save to Dashboard",
+    "startNew": "Start New",
+    "workflow": {
+      "prompting": {
+        "title": "Analyzing Prompt",
+        "description": "Analyzing your input prompt..."
       },
-      "voice": {
-        "title": "Voice Conversion",
-        "desc": "Listen comfortably with natural-sounding voice. Check the news with your ears even when your eyes are tired."
+      "crawling": {
+        "title": "Searching the web...",
+        "description": "Collecting relevant news and information..."
       },
-      "daily": {
-        "title": "Daily Updates",
-        "desc": "New news summaries are provided every day. Stay up-to-date with the latest news."
+      "summarizing": {
+        "title": "Summarizing and organizing...",
+        "description": "Analyzing collected news and organizing key content..."
       },
-      "anywhere": {
-        "title": "Access Anywhere",
-        "desc": "Available on all devices including PC, tablet, and smartphone. Use conveniently with responsive design."
-      },
-      "transcript": {
-        "title": "Transcript Provided",
-        "desc": "We provide full transcripts for all podcast episodes. Quickly find the parts you want."
-      },
-      "timeline": {
-        "title": "Timeline",
-        "desc": "We provide timelines for each news item so you can jump directly to the news you want."
+      "generating": {
+        "title": "Creating audio file...",
+        "description": "Generating podcast audio file..."
       }
-    },
-    "recommend": {
-      "title": "🎯 Recommended For",
-      "commute": "Those who want to listen to news during commute time",
-      "exercise": "Those curious about what's happening in the world while exercising",
-      "eyes": "Those who want to consume news without eye strain",
-      "busy": "Those who want to grasp key news in a short time during busy schedules"
-    },
-    "notice": {
-      "title": "⚠️ Important Notes",
-      "ai": "This service uses AI technology to summarize news. Due to the nature of AI, there may be some errors. Please verify accurate information from original news sources.",
-      "reference": "The content provided is for reference only. Please verify original news before making important decisions such as investments.",
-      "voice": "AI Korean voice technology is still developing, and some pronunciations may be unnatural."
-    },
-    "contactSection": {
-      "title": "📬 Contact Us",
-      "desc": "If you have any questions or feedback while using the service, please feel free to contact us. We value your opinions for a better service."
-    },
-    "cta": {
-      "title": "Get Started Now!",
-      "desc": "AI summarizes today's news for you. Listen for free.",
-      "button": "Listen to Podcast →"
-    }
-  },
-  "contact": {
-    "seo": {
-      "title": "Contact - Daily News Podcast | Contact & Feedback",
-      "description": "Contact Daily News Podcast for inquiries or feedback."
-    },
-    "title": "Contact Us",
-    "subtitle": "If you have any questions or feedback while using the service, please contact us",
-    "email": {
-      "title": "Email Inquiry",
-      "desc": "We welcome all inquiries including general questions, service feedback, and collaboration proposals.<br/>We will respond to your email within 1-2 business days."
-    },
-    "faq": {
-      "title": "💬 Frequently Asked Questions",
-      "q1": "Is there a service fee?",
-      "a1": "No, Daily News Podcast is a completely free service. You can use all content without any registration or payment.",
-      "q2": "How often is the podcast updated?",
-      "a2": "New news summary podcasts are uploaded daily. You can listen to the latest news without missing anything.",
-      "q3": "How accurate is the AI summary?",
-      "a3": "Due to the nature of AI technology, there may occasionally be errors. We recommend verifying important information from original news sources.",
-      "q4": "Is it available on mobile?",
-      "a4": "Yes, it's built as a responsive web so you can use it conveniently on all devices including PC, tablet, and smartphone.",
-      "q5": "Can I see the transcript?",
-      "a5": "Yes, we provide full transcripts for all podcast episodes. You can check them on each episode page."
-    },
-    "tips": {
-      "title": "📝 Inquiry Tips",
-      "tip1": "Providing specific details about your situation will help us respond faster.",
-      "tip2": "Personal information is only used for responding to inquiries and is destroyed after the response is completed.",
-      "tip3": "We respond within 1-2 business days. Thank you for your patience."
-    },
-    "partnership": {
-      "title": "🤝 Partnership Inquiries",
-      "desc": "If you're interested in collaboration, advertising, or partnership with Daily News Podcast, please contact us at the email below. We welcome various forms of partnership."
-    },
-    "cta": {
-      "title": "Listen to the News Now",
-      "desc": "Check out today's AI-summarized news podcast.",
-      "button": "Listen to Podcast →"
-    }
-  },
-  "privacy": {
-    "seo": {
-      "title": "Privacy Policy - Daily News Podcast",
-      "description": "Privacy Policy of Daily News Podcast."
-    },
-    "title": "Privacy Policy",
-    "section1": {
-      "title": "1. Information We Collect",
-      "intro": "Daily News Podcast (the \"Service\") may collect the following information to provide our services:",
-      "item1": "<strong>Automatically Collected Information:</strong> IP address, browser type, access time, service usage records",
-      "item2": "<strong>Cookie Information:</strong> User preferences, session information"
-    },
-    "section2": {
-      "title": "2. Purpose of Collection and Use",
-      "intro": "The collected information is used for the following purposes:",
-      "item1": "Service provision and operation",
-      "item2": "Service improvement and user experience optimization",
-      "item3": "Statistical analysis and service quality improvement",
-      "item4": "Advertising and personalized ad delivery"
-    },
-    "section3": {
-      "title": "3. Use of Cookies",
-      "p1": "This service uses cookies to improve user experience. Cookies are small text files that websites store on your computer.",
-      "p2": "<strong>Cookie Usage Purposes:</strong>",
-      "item1": "Storing user preferences",
-      "item2": "Collecting service usage statistics",
-      "item3": "Measuring advertising effectiveness",
-      "p3": "You can refuse cookie storage through your browser settings, but this may limit some service functionality."
-    },
-    "section4": {
-      "title": "4. Third-Party Advertising Services",
-      "p1": "This service uses third-party advertising services including Google AdSense. These advertising services may use cookies to display ads that match your interests.",
-      "p2": "For more information about Google's use of advertising cookies, please visit <link1>Google Advertising Policies</link1>.",
-      "p3": "You can opt out of personalized ads at <link2>Google Ads Settings</link2>."
-    },
-    "section5": {
-      "title": "5. Retention and Destruction of Personal Information",
-      "p1": "Collected personal information is destroyed without delay once the purpose of collection is achieved. However, if retention is required by relevant laws, it will be stored for the applicable period."
-    },
-    "section6": {
-      "title": "6. Privacy Officer",
-      "p1": "For privacy-related inquiries, please contact us at the following:"
-    },
-    "section7": {
-      "title": "7. Changes to Privacy Policy",
-      "p1": "This Privacy Policy may be modified according to changes in laws or service policies. Changes will be announced through service notifications."
-    }
-  },
-  "terms": {
-    "seo": {
-      "title": "Terms of Service - Daily News Podcast",
-      "description": "Terms of Service for Daily News Podcast."
-    },
-    "title": "Terms of Service",
-    "article1": {
-      "title": "Article 1 (Purpose)",
-      "content": "These Terms of Service govern the conditions, procedures, rights, obligations, and responsibilities between users and Daily News Podcast (the \"Service\") for the AI news summary podcast service."
-    },
-    "article2": {
-      "title": "Article 2 (Definition of Service)",
-      "content": "\"Service\" refers to a podcast service that uses artificial intelligence (AI) technology to summarize news and convert it into audio format."
-    },
-    "article3": {
-      "title": "Article 3 (User Obligations)",
-      "intro": "Users must not engage in the following:",
-      "item1": "Actions that interfere with normal service operation",
-      "item2": "Actions that damage others' reputation or cause harm",
-      "item3": "Unauthorized reproduction, distribution, or sale of content received through the service",
-      "item4": "Other actions that violate relevant laws"
-    },
-    "article4": {
-      "title": "Article 4 (Service Provision and Changes)",
-      "item1": "The service is provided 24 hours a day, 365 days a year in principle.",
-      "item2": "The service provider may temporarily suspend the service due to technical changes, system maintenance, etc.",
-      "item3": "If there are changes to the service content, we will notify you through service announcements."
-    },
-    "article5": {
-      "title": "Article 5 (Copyright of Content)",
-      "item1": "The copyright of AI-generated content provided by the service belongs to the service provider.",
-      "item2": "Users may only use the content for personal and non-commercial purposes.",
-      "item3": "The copyright of original news belongs to the respective news providers; the service summarizes and provides the news."
-    },
-    "article6": {
-      "title": "Article 6 (Disclaimer)",
-      "item1": "<strong>AI-Generated Content Limitations:</strong> This service generates content using AI technology. Due to the nature of AI, errors and inaccurate information may be included, and the service provider is not responsible for any resulting damages.",
-      "item2": "<strong>Accuracy of Information:</strong> News summaries provided are for reference only. Please verify accurate information from original news sources.",
-      "item3": "<strong>Service Interruption:</strong> We are not responsible for service interruptions due to force majeure such as natural disasters or system failures."
-    },
-    "article7": {
-      "title": "Article 7 (Advertising)",
-      "content": "The service may display advertisements for service operation, and users agree to the display of advertisements while using the service. Transactions related to advertisements are matters between advertisers and users, and the service provider is not responsible for them."
-    },
-    "article8": {
-      "title": "Article 8 (Dispute Resolution)",
-      "content": "The service provider and users shall sincerely negotiate to resolve disputes arising from service use. If negotiation fails, litigation may be filed with the competent court."
-    },
-    "article9": {
-      "title": "Article 9 (Changes to Terms)",
-      "content": "These Terms may be modified according to changes in relevant laws or service policies. Changes will be announced through service notifications. If you do not agree to the changed terms, you may discontinue use of the service."
-    },
-    "supplement": {
-      "title": "Supplementary Provisions",
-      "content": "These Terms take effect from {{date}}."
     }
   }
 }
-
-

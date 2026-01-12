@@ -1,37 +1,33 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
 const AboutPage = () => {
-  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
     <Container>
       <Helmet>
-        <html lang={i18n.language} />
-        <title>{t("about.seo.title")}</title>
-        <meta name="description" content={t("about.seo.description")} />
-        <link rel="canonical" href="https://dailynewspod.com/about" />
-        <meta property="og:title" content={t("about.seo.title")} />
-        <meta property="og:description" content={t("about.seo.description")} />
-        <meta property="og:url" content="https://dailynewspod.com/about" />
-        <meta property="og:type" content="website" />
+        <title>About - DailyNewsPodcast | Personalized AI News Podcast</title>
+        <meta
+          name="description"
+          content="DailyNewsPodcast creates personalized AI-powered podcasts based on your interests. Get your custom news delivered daily."
+        />
+        <link rel="canonical" href="https://dailynewspodcast.com/about" />
       </Helmet>
 
       <Header>
         <HeaderContent>
           <Logo to="/">
-            <LogoIcon>🎙️</LogoIcon>
-            <LogoText>Daily News Podcast</LogoText>
+            <LogoBox>D</LogoBox>
+            <LogoText>DailyNewsPodcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">{t("nav.home")}</NavLink>
+            <NavLink to="/">Home</NavLink>
             <NavLink to="/about" $active>
-              {t("nav.about")}
+              About
             </NavLink>
-            <NavLink to="/contact">{t("nav.contact")}</NavLink>
+            <NavLink to="/contact">Contact</NavLink>
           </Nav>
         </HeaderContent>
       </Header>
@@ -39,174 +35,198 @@ const AboutPage = () => {
       <Main>
         <HeroSection>
           <HeroIcon>🎙️</HeroIcon>
-          <HeroTitle>Daily News Podcast</HeroTitle>
-          <HeroSubtitle>{t("about.heroSubtitle")}</HeroSubtitle>
+          <HeroTitle>DailyNewsPodcast</HeroTitle>
+          <HeroSubtitle>Your Personal AI News Anchor</HeroSubtitle>
         </HeroSection>
 
         <ContentSection>
           <Section>
-            <SectionTitle>{t("about.intro.title")}</SectionTitle>
+            <SectionTitle>📰 About the Service</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("about.intro.p1")}</Paragraph>
-              <Paragraph>{t("about.intro.p2")}</Paragraph>
               <Paragraph>
-                <Trans i18nKey="about.intro.p3">
-                  모든 콘텐츠는 <strong>완전 무료</strong>로 제공되며, 별도의
-                  가입 없이 바로 청취하실 수 있습니다.
-                </Trans>
+                DailyNewsPodcast is a revolutionary service that creates
+                personalized AI-powered podcasts based on your specific
+                interests and preferences.
+              </Paragraph>
+              <Paragraph>
+                Simply describe what topics you care about, and our AI agents
+                crawl the web daily to curate, summarize, and deliver a custom
+                news podcast straight to your inbox every morning.
+              </Paragraph>
+              <Paragraph>
+                <strong>100% personalized, 0% fluff.</strong> No more scrolling
+                through endless headlines—just listen to exactly what matters to
+                you.
               </Paragraph>
             </SectionContent>
           </Section>
 
           <Section>
-            <SectionTitle>{t("about.features.title")}</SectionTitle>
+            <SectionTitle>✨ Key Features</SectionTitle>
             <FeatureGrid>
               <FeatureCard>
-                <FeatureIcon>🤖</FeatureIcon>
-                <FeatureTitle>{t("about.features.ai.title")}</FeatureTitle>
+                <FeatureIcon>🎙️</FeatureIcon>
+                <FeatureTitle>Natural AI Voices</FeatureTitle>
                 <FeatureDescription>
-                  {t("about.features.ai.desc")}
+                  High-fidelity neural voices deliver your news with emotion and
+                  clarity. Choose from various accents and professional
+                  personas.
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
-                <FeatureIcon>🎧</FeatureIcon>
-                <FeatureTitle>{t("about.features.voice.title")}</FeatureTitle>
+                <FeatureIcon>✍️</FeatureIcon>
+                <FeatureTitle>Prompt-to-Script</FeatureTitle>
                 <FeatureDescription>
-                  {t("about.features.voice.desc")}
+                  Our AI agents crawl thousands of sources based on your prompts
+                  and write cohesive, engaging radio scripts every day.
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
-                <FeatureIcon>📅</FeatureIcon>
-                <FeatureTitle>{t("about.features.daily.title")}</FeatureTitle>
+                <FeatureIcon>🏃</FeatureIcon>
+                <FeatureTitle>Multitasking Hero</FeatureTitle>
                 <FeatureDescription>
-                  {t("about.features.daily.desc")}
+                  Stay informed while driving, running, or cooking. Hands-free
+                  news tailored exactly to what you need.
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
-                <FeatureIcon>📱</FeatureIcon>
-                <FeatureTitle>
-                  {t("about.features.anywhere.title")}
-                </FeatureTitle>
+                <FeatureIcon>🧠</FeatureIcon>
+                <FeatureTitle>Smart Summaries</FeatureTitle>
                 <FeatureDescription>
-                  {t("about.features.anywhere.desc")}
+                  We digest complex stories into tight, understandable summaries
+                  so you're briefed in minutes, not hours.
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
-                <FeatureIcon>📄</FeatureIcon>
-                <FeatureTitle>
-                  {t("about.features.transcript.title")}
-                </FeatureTitle>
+                <FeatureIcon>📡</FeatureIcon>
+                <FeatureTitle>Private RSS Feed</FeatureTitle>
                 <FeatureDescription>
-                  {t("about.features.transcript.desc")}
+                  Add your unique RSS link to Spotify, Apple Podcasts, or any
+                  podcast player you prefer.
                 </FeatureDescription>
               </FeatureCard>
               <FeatureCard>
-                <FeatureIcon>⏱️</FeatureIcon>
-                <FeatureTitle>
-                  {t("about.features.timeline.title")}
-                </FeatureTitle>
+                <FeatureIcon>⚡</FeatureIcon>
+                <FeatureTitle>Zero-Click Automation</FeatureTitle>
                 <FeatureDescription>
-                  {t("about.features.timeline.desc")}
+                  Set it and forget it. Your podcast is ready and waiting
+                  exactly when you wake up, every single day.
                 </FeatureDescription>
               </FeatureCard>
             </FeatureGrid>
           </Section>
 
           <Section>
-            <SectionTitle>{t("about.recommend.title")}</SectionTitle>
+            <SectionTitle>🎯 Perfect For</SectionTitle>
             <RecommendList>
               <RecommendItem>
                 <RecommendIcon>🚗</RecommendIcon>
-                <RecommendText>{t("about.recommend.commute")}</RecommendText>
+                <RecommendText>
+                  Professionals who want to stay informed during their commute
+                </RecommendText>
               </RecommendItem>
               <RecommendItem>
                 <RecommendIcon>🏃</RecommendIcon>
-                <RecommendText>{t("about.recommend.exercise")}</RecommendText>
+                <RecommendText>
+                  Fitness enthusiasts who like to learn while exercising
+                </RecommendText>
               </RecommendItem>
               <RecommendItem>
-                <RecommendIcon>👀</RecommendIcon>
-                <RecommendText>{t("about.recommend.eyes")}</RecommendText>
+                <RecommendIcon>📊</RecommendIcon>
+                <RecommendText>
+                  Investors tracking specific markets and companies
+                </RecommendText>
               </RecommendItem>
               <RecommendItem>
-                <RecommendIcon>⏰</RecommendIcon>
-                <RecommendText>{t("about.recommend.busy")}</RecommendText>
+                <RecommendIcon>🌍</RecommendIcon>
+                <RecommendText>
+                  Anyone who wants personalized news without the noise
+                </RecommendText>
               </RecommendItem>
             </RecommendList>
           </Section>
 
           <Section>
-            <SectionTitle>{t("about.notice.title")}</SectionTitle>
+            <SectionTitle>⚠️ Important Notes</SectionTitle>
             <NoticeBox>
               <NoticeItem>
                 <NoticeIcon>ℹ️</NoticeIcon>
-                <NoticeText>{t("about.notice.ai")}</NoticeText>
+                <NoticeText>
+                  This service uses AI technology to generate content. Due to
+                  the nature of AI, there may be occasional errors. Please
+                  verify important information from original sources.
+                </NoticeText>
               </NoticeItem>
               <NoticeItem>
                 <NoticeIcon>📋</NoticeIcon>
-                <NoticeText>{t("about.notice.reference")}</NoticeText>
-              </NoticeItem>
-              <NoticeItem>
-                <NoticeIcon>🗣️</NoticeIcon>
-                <NoticeText>{t("about.notice.voice")}</NoticeText>
+                <NoticeText>
+                  The content provided is for reference only. For important
+                  decisions, please check original news sources.
+                </NoticeText>
               </NoticeItem>
             </NoticeBox>
           </Section>
 
           <Section>
-            <SectionTitle>{t("about.contactSection.title")}</SectionTitle>
+            <SectionTitle>📬 Contact Us</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("about.contactSection.desc")}</Paragraph>
+              <Paragraph>
+                Have questions or feedback? We'd love to hear from you. Contact
+                us anytime.
+              </Paragraph>
             </SectionContent>
             <ContactBox>
               <ContactIcon>✉️</ContactIcon>
-              <ContactEmail href="mailto:contact@dailynewspod.com">
-                contact@dailynewspod.com
+              <ContactEmail href="mailto:contact@dailynewspodcast.com">
+                contact@dailynewspodcast.com
               </ContactEmail>
             </ContactBox>
           </Section>
         </ContentSection>
 
         <CTASection>
-          <CTATitle>{t("about.cta.title")}</CTATitle>
-          <CTADescription>{t("about.cta.desc")}</CTADescription>
-          <CTAButton to="/">{t("about.cta.button")}</CTAButton>
+          <CTATitle>Get Started Now!</CTATitle>
+          <CTADescription>
+            Create your personalized AI news podcast today. It's free to try.
+          </CTADescription>
+          <CTAButton to="/">Create My Podcast →</CTAButton>
         </CTASection>
       </Main>
 
-      <Footer>
+      <FooterSection>
         <FooterContent>
           <FooterLogo>
-            <LogoIcon>🎙️</LogoIcon>
-            <FooterLogoText>Daily News Podcast</FooterLogoText>
+            <LogoBox>D</LogoBox>
+            <FooterLogoText>DailyNewsPodcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">{t("footer.about")}</FooterLink>
+            <FooterLink to="/about">About</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
+            <FooterLink to="/contact">Contact</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
+            <FooterLink to="/privacy">Privacy</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
+            <FooterLink to="/terms">Terms</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            {t("footer.copyright", { year: currentYear })}
+            © {currentYear} DailyNewsPodcast. All rights reserved.
           </FooterCopyright>
         </FooterContent>
-      </Footer>
+      </FooterSection>
     </Container>
   );
 };
 
 export default AboutPage;
 
-// Styled Components
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
 `;
 
 const Header = styled.header`
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
@@ -235,14 +255,23 @@ const Logo = styled(Link)`
   text-decoration: none;
 `;
 
-const LogoIcon = styled.span`
-  font-size: 1.5rem;
+const LogoBox = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background: #4f46e5;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
 `;
 
 const LogoText = styled.span`
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -258,7 +287,7 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)<{ $active?: boolean }>`
-  color: ${(props) => (props.$active ? "#667eea" : "#4b5563")};
+  color: ${(props) => (props.$active ? "#4f46e5" : "#4b5563")};
   text-decoration: none;
   font-weight: ${(props) => (props.$active ? "600" : "500")};
   font-size: 0.9375rem;
@@ -266,7 +295,7 @@ const NavLink = styled(Link)<{ $active?: boolean }>`
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
@@ -283,7 +312,7 @@ const Main = styled.main`
 const HeroSection = styled.div`
   text-align: center;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
   border-radius: 20px;
   margin-bottom: 3rem;
 `;
@@ -297,7 +326,7 @@ const HeroTitle = styled.h1`
   margin: 0 0 0.75rem 0;
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -372,8 +401,8 @@ const FeatureCard = styled.div`
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #667eea;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+    border-color: #4f46e5;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
     transform: translateY(-2px);
   }
 `;
@@ -457,7 +486,7 @@ const ContactBox = styled.div`
   gap: 0.75rem;
   margin-top: 1rem;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   border-radius: 12px;
 `;
 
@@ -479,7 +508,7 @@ const ContactEmail = styled.a`
 const CTASection = styled.div`
   text-align: center;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   border-radius: 20px;
   margin-top: 3rem;
 `;
@@ -500,7 +529,7 @@ const CTADescription = styled.p`
 const CTAButton = styled(Link)`
   display: inline-block;
   background: white;
-  color: #667eea;
+  color: #4f46e5;
   font-size: 1rem;
   font-weight: 700;
   padding: 1rem 2rem;
@@ -514,9 +543,9 @@ const CTAButton = styled(Link)`
   }
 `;
 
-const Footer = styled.footer`
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-top: 1px solid #e2e8f0;
+const FooterSection = styled.footer`
+  background: white;
+  border-top: 1px solid #f3f4f6;
   padding: 3rem 2rem;
   margin-top: 4rem;
 `;
@@ -540,7 +569,7 @@ const FooterLogo = styled.div`
 const FooterLogoText = styled.span`
   font-size: 1.125rem;
   font-weight: 700;
-  color: #334155;
+  color: #111827;
 `;
 
 const FooterLinks = styled.div`
@@ -556,19 +585,19 @@ const FooterLinks = styled.div`
 `;
 
 const FooterLink = styled(Link)`
-  color: #64748b;
+  color: #6b7280;
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
 const FooterDivider = styled.span`
-  color: #cbd5e1;
+  color: #d1d5db;
   font-size: 0.875rem;
 
   @media (max-width: 768px) {
@@ -578,6 +607,6 @@ const FooterDivider = styled.span`
 
 const FooterCopyright = styled.p`
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 0;
 `;

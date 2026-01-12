@@ -1,309 +1,386 @@
 {
   "common": {
-    "loading": "로딩 중...",
-    "error": "오류가 발생했습니다",
-    "retry": "다시 시도",
-    "close": "닫기",
-    "save": "저장",
-    "cancel": "취소",
-    "confirm": "확인",
-    "back": "뒤로",
-    "next": "다음",
-    "previous": "이전",
-    "play": "재생",
-    "pause": "일시정지",
-    "today": "오늘",
-    "yesterday": "어제",
-    "daysAgo": "{{count}}일 전",
-    "weeksAgo": "{{count}}주 전",
-    "monthsAgo": "{{count}}개월 전",
-    "yearsAgo": "{{count}}년 전",
-    "backToHome": "← 홈으로 돌아가기",
-    "lastUpdated": "최종 수정일: {{date}}"
-  },
-  "nav": {
+    "getStarted": "시작하기",
+    "features": "기능",
+    "pricing": "가격",
+    "createMyNews": "내 뉴스 만들기",
     "home": "홈",
     "about": "소개",
-    "contact": "문의"
-  },
-  "header": {
-    "title": "Daily News Podcast"
-  },
-  "hero": {
-    "titleToday": "지금 바로 오늘의 뉴스를 들어보세요",
-    "titleDefault": "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요",
-    "subtitleToday": "오늘의 주요 헤드라인 요약",
-    "subtitleDefault": "매일 최신 뉴스를 음성으로 제공합니다",
-    "notice": "Gemini 3.0 모델 사용 · 한국어 지원이 아직 불안정할 수 있습니다"
-  },
-  "podcast": {
-    "todayNews": "오늘의 뉴스",
-    "pastNews": "과거 뉴스",
-    "count": "{{count}}개",
-    "expand": "펼치기",
-    "collapse": "접기",
-    "new": "NEW",
-    "playCount": "조회수",
-    "playTime": "재생 시간",
-    "quickSummary": "3분요약",
-    "transcript": "대본 보기",
-    "timeline": "타임라인",
-    "noPodcasts": "등록된 팟캐스트가 없습니다.",
-    "loadError": "팟캐스트 목록을 불러오는데 실패했습니다.",
-    "audioLoadError": "오디오 파일을 불러오는데 실패했습니다."
-  },
-  "player": {
-    "playbackSpeed": "재생 속도",
-    "skipBack": "10초 뒤로",
-    "skipForward": "10초 앞으로",
-    "volume": "볼륨"
-  },
-  "transcript": {
-    "title": "대본",
-    "backToList": "목록으로",
-    "loading": "대본을 불러오는 중...",
-    "error": "대본을 불러오는데 실패했습니다.",
-    "noTranscript": "대본이 없습니다."
-  },
-  "footer": {
-    "about": "서비스 소개",
-    "contact": "문의하기",
+    "contact": "문의",
     "privacy": "개인정보처리방침",
     "terms": "이용약관",
-    "copyright": "© {{year}} Daily News Podcast. All rights reserved.",
+    "copyright": "© {{year}} DailyNewsPodcast. All rights reserved.",
+    "scheduler": "스케줄러"
+  },
+  "navbar": {
+    "features": "기능",
+    "createMyNews": "내 뉴스 만들기",
+    "pricing": "가격",
+    "getStarted": "시작하기",
+    "myPodcasts": "내 팟캐스트",
+    "logout": "로그아웃"
+  },
+  "hero": {
+    "badge": "개인화된 AI 팟캐스트 소개",
+    "titleLine1": "뉴스를 읽지 마세요.",
+    "titleLine2": "생생하게 들으세요.",
+    "description": "설정 한 번으로 끝. 매일 아침 당신의 메일함에 완성된 맞춤형 팟캐스트가 자동으로 도착합니다. AI가 수천 개의 뉴스를 크롤링하고, 당신만을 위해 큐레이션합니다. 출근길, 점심시간, 퇴근길 - 언제 어디서나 당신의 뉴스를 들으세요.",
+    "getStartedFree": "무료로 시작하기",
+    "loggingIn": "로그인 중...",
+    "listenToExample": "예시 듣기",
+    "samplePodcast": "샘플 팟캐스트",
+    "playerTitle": "모닝 테크 다이제스트",
+    "playerSubtitle": "AI 큐레이션 • 오전 8:30",
+    "playerQuote": "좋은 아침입니다! 오늘은 고체 배터리의 획기적인 발전과 왜 모두가 새로운 AI 에이전트에 대해 이야기하는지 살펴보겠습니다..."
+  },
+  "features": {
+    "label": "오디오의 미래",
+    "title": "나만의 뉴스 앵커",
+    "subtitle": "당신의 관심사에 맞춰 설계된 세계 최초의 완전 자동화 팟캐스팅 플랫폼.",
+    "naturalAiVoices": {
+      "title": "자연스러운 AI 음성",
+      "desc": "고품질 뉴럴 음성이 감정과 명료함으로 뉴스를 전달합니다. 다양한 억양과 전문적인 페르소나 중에서 선택하세요."
+    },
+    "promptToScript": {
+      "title": "프롬프트 → 스크립트",
+      "desc": "AI 에이전트가 당신의 프롬프트를 기반으로 수천 개의 소스를 크롤링하고 매일 일관성 있고 흥미로운 라디오 스크립트를 작성합니다."
+    },
+    "multitaskingHero": {
+      "title": "멀티태스킹 히어로",
+      "desc": "운전, 러닝, 요리 중에도 정보를 얻으세요. 당신의 하루에 필요한 정보를 핸즈프리로 전달합니다."
+    },
+    "smartSummaries": {
+      "title": "스마트 요약",
+      "desc": "헤드라인만 읽지 않습니다. 복잡한 스토리를 간결하고 이해하기 쉬운 요약으로 정리하여 몇 분 만에 브리핑합니다."
+    },
+    "privateRssFeed": {
+      "title": "개인 RSS 피드",
+      "desc": "앱으로 듣거나 Spotify, Apple Podcasts 등 즐겨 사용하는 팟캐스트 플레이어에 고유한 보안 RSS 링크를 추가하세요."
+    },
+    "zeroClickAutomation": {
+      "title": "제로클릭 자동화",
+      "desc": "설정하고 잊으세요. 매일 아침 당신의 메일함에 완성된 팟캐스트가 자동으로 도착합니다. 아무것도 할 필요 없습니다."
+    },
+    "emailDelivery": {
+      "title": "메일함에 자동 도착",
+      "desc": "설정 한 번으로 매일 아침 메일함에 완성된 팟캐스트가 자동으로 도착합니다. 출근 전, 점심시간, 퇴근길 - 언제든지 들을 수 있습니다."
+    }
+  },
+  "interactiveDemo": {
+    "badge": "라이브 플레이그라운드",
+    "title": "개인 팟캐스트 체험하기",
+    "description": "주제를 입력하면 최신 뉴스를 크롤링하고, 요약하고, 전문적인 오디오 스니펫을 생성합니다.",
+    "placeholder": "예: '이번 주 우주 기술 분야에서 무슨 일이?'",
+    "generating": "큐레이팅 중...",
+    "generatePodcast": "팟캐스트 생성",
+    "examples": {
+      "stock": "최신 Apple 및 Tesla 주식 뉴스",
+      "fusion": "핵융합 에너지 연구 발전",
+      "football": "유럽 주말 축구 결과",
+      "coffee": "2024년 새로운 커피 로스팅 기술"
+    },
+    "readyForAir": "방송 준비 완료",
+    "readyDescription": "개인화된 라디오 방송국이 프롬프트를 기다리고 있습니다.",
+    "customPodcast": "맞춤 팟캐스트"
+  },
+  "newsCreator": {
+    "title": "AI 뉴스 채널 크리에이터",
+    "subtitle": "3단계로 자동화된 뉴스 제국을 구축하세요.",
+    "step1": "주제 정의",
+    "step2": "음성 선택",
+    "step3": "일정 설정",
+    "channelReady": "✓ 채널 준비 완료",
+    "step1Title": "AI 뉴스 에이전트가 크롤링할 내용은?",
+    "step1Helper": "가능한 한 구체적으로 작성하세요. 회사, 트렌드 또는 지역을 언급하세요.",
+    "step1Placeholder": "예: 'Nvidia 주가 성과, 유럽의 AI 규제, 오픈소스 LLM 관련 뉴스에 대한 일일 업데이트.'",
+    "nextChooseVoice": "다음: 음성 선택",
+    "step2Title": "개인 뉴스 앵커 선택",
+    "step2Helper": "이 음성이 매일 아침 맞춤 스크립트를 읽어줍니다.",
+    "voices": {
+      "professional": {
+        "name": "프로페셔널 앵커",
+        "desc": "깊고, 명료하며, 신뢰감 있는 음성."
+      },
+      "tech": {
+        "name": "테크 열정가",
+        "desc": "에너지 넘치고 빠른 속도."
+      },
+      "financial": {
+        "name": "금융 전문가",
+        "desc": "차분하고, 분석적이며, 안정적."
+      },
+      "casual": {
+        "name": "친근한 친구",
+        "desc": "친근하고 대화하는 듯한."
+      }
+    },
+    "back": "뒤로",
+    "nextSetSchedule": "다음: 일정 설정",
+    "step3Title": "언제 뉴스를 전달할까요?",
+    "step3Helper": "이메일과 개인 RSS 피드로 자동 전달.",
+    "daily": "매일",
+    "initializeAgents": "AI 에이전트 초기화 & 미리보기 생성",
+    "channelLive": "채널이 라이브입니다!",
+    "channelLiveDesc": "에이전트가 프롬프트를 기반으로 웹을 크롤링했습니다. 첫 번째 자동화된 뉴스 브리프 미리보기입니다.",
+    "firstEdition": "첫 번째 에디션: {{date}}",
+    "confirmSubscription": "확인 & 구독 시작",
+    "modifySettings": "설정 수정"
+  },
+  "pricing": {
+    "title": "가격 선택",
+    "subtitle": "차세대 뉴스를 위한 투명한 가격.",
+    "pageTitle": "가격 플랜",
+    "recommended": "추천",
+    "perMonth": "월",
+    "paymentError": "결제 처리 중 오류가 발생했습니다.",
+    "processing": "처리 중...",
+    "compareTitle": "플랜 비교",
+    "feature": "기능",
+    "month": "월",
+    "unlimited": "무제한",
+    "schedule": "스케줄",
+    "schedules": "스케줄",
+    "standard": "표준",
+    "premium": "프리미엄",
+    "available": "가능",
+    "compare": {
+      "generations": "월간 생성 횟수",
+      "batchTokens": "생성토큰",
+      "scheduler": "자동 스케줄러",
+      "voices": "AI 음성",
+      "rss": "RSS 피드",
+      "priority": "우선 크롤링"
+    },
+    "features": {
+      "generations": "월 {{count}}회 생성",
+      "unlimitedGenerations": "무제한 생성",
+      "scheduler": "스케줄 {{count}}개 (생성 가능 횟수와 동일)",
+      "noScheduler": "스케줄러 미지원",
+      "premiumVoices": "프리미엄 음성",
+      "standardVoices": "표준 음성",
+      "rssFeed": "개인 RSS 피드",
+      "noRssFeed": "RSS 피드 미지원",
+      "batchTokens": "생성토큰 {{count}}개",
+      "batchTokensValid": "생성토큰 {{count}}개 ({{days}}일 유효)",
+      "unlimitedBatchTokens": "무제한 생성토큰"
+    },
+    "faqTitle": "자주 묻는 질문",
+    "faq": {
+      "q1": "무료 플랜으로 무엇을 할 수 있나요?",
+      "a1": "무료 플랜에서는 월 1회 팟캐스트를 생성할 수 있습니다. 자동 스케줄러는 유료 플랜에서만 이용 가능합니다.",
+      "q2": "언제든지 플랜을 변경할 수 있나요?",
+      "a2": "네, 언제든지 플랜을 업그레이드하거나 다운그레이드할 수 있습니다. 변경 사항은 다음 결제 주기부터 적용됩니다.",
+      "q3": "결제 수단은 무엇인가요?",
+      "a3": "한국에서는 토스페이먼츠를, 해외에서는 Stripe를 통해 신용카드 결제가 가능합니다.",
+      "q4": "환불 정책은 어떻게 되나요?",
+      "a4": "구독 시작 후 7일 이내에 사용하지 않은 경우 전액 환불이 가능합니다. 자세한 내용은 이용약관을 참조하세요."
+    },
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "₩0",
+        "desc": "AI 팟캐스트를 체험해보세요.",
+        "features": [
+          "생성토큰 7개 (7일 유효)",
+          "스케줄 7개 (생성 가능 횟수와 동일)"
+        ],
+        "button": "무료로 시작"
+      },
+      "basic": {
+        "name": "Basic",
+        "price": "$1",
+        "period": "/월",
+        "desc": "자동화된 뉴스 브리핑을 시작하세요.",
+        "features": [
+          "생성토큰 30개 (30일 유효)",
+          "스케줄 30개 (생성 가능 횟수와 동일)",
+          "월 3회 수동 생성"
+        ],
+        "button": "시작하기"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$10",
+        "period": "/월",
+        "desc": "완벽한 뉴스 자동화 경험.",
+        "features": [
+          "무제한 프롬프트 프로필",
+          "매일 15분 팟캐스트",
+          "프리미엄 AI 음성",
+          "스케줄 5개",
+          "우선 크롤링"
+        ],
+        "button": "프로 시작"
+      },
+      "listener": {
+        "name": "리스너",
+        "price": "$0",
+        "desc": "오디오 중심 라이프스타일을 경험하세요.",
+        "features": [
+          "1개 프롬프트 프로필",
+          "주간 5분 팟캐스트",
+          "표준 AI 음성",
+          "이메일 스크립트 아카이브"
+        ],
+        "button": "시작하기"
+      },
+      "expert": {
+        "name": "전문가 네트워크",
+        "price": "$99",
+        "period": "/월",
+        "desc": "인텔리전스 및 리서치 팀을 위해.",
+        "features": [
+          "무제한 오디오 프로필",
+          "다중 스피커 대화",
+          "오디오 소스 인용",
+          "화이트라벨 배포",
+          "API 음성 액세스"
+        ],
+        "button": "영업팀 문의"
+      }
+    }
+  },
+  "scheduler": {
+    "pageTitle": "스케줄러",
+    "title": "자동 팟캐스트 스케줄",
+    "subtitle": "설정한 시간에 자동으로 팟캐스트를 생성하여 이메일로 받아보세요.",
+    "addSchedule": "스케줄 추가",
+    "quotaLabel": "스케줄 사용량",
+    "schedules": "스케줄",
+    "upgrade": "업그레이드",
+    "upgradeRequired": "업그레이드가 필요합니다",
+    "upgradeDescription": "자동 스케줄러 기능은 Basic 플랜 이상에서 사용 가능합니다.",
+    "viewPlans": "플랜 보기",
+    "emptyTitle": "등록된 스케줄이 없습니다",
+    "emptyDescription": "첫 번째 자동 스케줄을 만들어보세요. 설정한 시간에 맞춤 팟캐스트가 이메일로 전송됩니다.",
+    "createFirst": "첫 스케줄 만들기",
+    "deleteConfirm": "이 스케줄을 삭제하시겠습니까?",
+    "newSchedule": "새 스케줄",
+    "editSchedule": "스케줄 수정",
+    "form": {
+      "prompt": "팟캐스트 주제",
+      "promptPlaceholder": "예: AI 산업 최신 뉴스와 빅테크 기업 동향",
+      "days": "실행 요일",
+      "everyday": "매일",
+      "weekdays": "평일",
+      "time": "실행 시간",
+      "timezone": "시간대",
+      "email": "수신 이메일",
+      "emailPlaceholder": "podcast@example.com",
+      "cancel": "취소",
+      "save": "저장",
+      "saving": "저장 중..."
+    },
+    "errors": {
+      "promptRequired": "팟캐스트 주제를 입력해주세요.",
+      "daysRequired": "실행 요일을 하나 이상 선택해주세요.",
+      "emailRequired": "수신 이메일을 입력해주세요.",
+      "emailInvalid": "올바른 이메일 형식을 입력해주세요."
+    }
+  },
+  "footer": {
+    "privacy": "개인정보처리방침",
+    "terms": "이용약관",
     "disclaimer": "본 서비스는 AI 기술을 활용하여 뉴스를 요약하고 음성으로 제공합니다. 제공되는 콘텐츠는 참고용이며, 정확한 정보는 원본 뉴스 출처를 확인해 주세요."
   },
-  "install": {
-    "title": "홈 화면에 추가하기",
-    "description": "앱처럼 빠르게 접속하고 오프라인에서도 이용하세요!",
-    "install": "설치하기",
-    "howTo": "방법 보기",
-    "later": "나중에",
-    "iosGuideTitle": "iOS에서 홈 화면 추가하기",
-    "iosStep1": "Safari 하단의 공유 버튼을 탭하세요",
-    "iosStep2": "메뉴에서 \"홈 화면에 추가\"를 선택하세요",
-    "iosStep3": "오른쪽 상단의 \"추가\"를 탭하면 완료!",
-    "addToHomeScreen": "홈 화면에 추가"
+  "mobileCTA": {
+    "button": "지금 AI 뉴스 만들기"
   },
-  "seo": {
-    "title": "Daily News Podcast - AI가 요약한 오늘의 뉴스 팟캐스트",
-    "description": "AI가 요약한 오늘의 뉴스를 팟캐스트로 들어보세요. 매일 최신 뉴스를 음성으로 제공합니다."
-  },
-  "language": {
+  "languageSwitch": {
     "ko": "한국어",
     "en": "English"
   },
-  "date": {
-    "format": "YYYY년 M월 D일",
-    "shortFormat": "M월D일"
+  "myPodcasts": {
+    "pageTitle": "내 팟캐스트",
+    "pageDescription": "생성한 팟캐스트를 관리하고 들어보세요",
+    "navTitle": "내 팟캐스트",
+    "title": "내 팟캐스트",
+    "subtitle": "생성한 모든 팟캐스트를 관리하고 들어보세요",
+    "createNew": "+ 새 팟캐스트 만들기",
+    "createFirst": "첫 팟캐스트 만들기",
+    "emptyTitle": "아직 팟캐스트가 없습니다",
+    "emptyDescription": "첫 번째 맞춤 팟캐스트를 만들고 들어보세요!",
+    "statusCompleted": "완료",
+    "statusGenerating": "생성 중",
+    "statusFailed": "실패",
+    "playCount": "{{count}}회 재생",
+    "play": "재생",
+    "edit": "수정",
+    "generatingMessage": "팟캐스트 생성 중...",
+    "stats": {
+      "total": "전체",
+      "completed": "완료됨",
+      "generating": "생성 중",
+      "totalPlays": "총 재생"
+    },
+    "searchPlaceholder": "팟캐스트 검색...",
+    "filters": {
+      "all": "전체"
+    },
+    "viewGrid": "그리드 보기",
+    "viewList": "리스트 보기",
+    "resultsCount": "{{count}}개 결과",
+    "noResults": "검색 결과가 없습니다"
   },
-  "about": {
-    "seo": {
-      "title": "서비스 소개 - Daily News Podcast | AI 뉴스 요약 팟캐스트",
-      "description": "Daily News Podcast는 AI 기술로 매일 주요 뉴스를 요약하고 음성으로 제공하는 무료 팟캐스트 서비스입니다."
-    },
-    "heroSubtitle": "AI가 요약한 오늘의 뉴스를 들어보세요",
-    "intro": {
-      "title": "📰 서비스 소개",
-      "p1": "Daily News Podcast는 매일 발행되는 주요 뉴스를 AI 기술을 활용하여 요약하고, 자연스러운 음성으로 변환하여 제공하는 서비스입니다.",
-      "p2": "바쁜 일상 속에서 뉴스를 읽을 시간이 없는 분들을 위해, 출퇴근길이나 운동 중에도 쉽게 들을 수 있는 오디오 형태로 뉴스를 제공합니다.",
-      "p3": "모든 콘텐츠는 <strong>완전 무료</strong>로 제공되며, 별도의 가입 없이 바로 청취하실 수 있습니다."
-    },
-    "features": {
-      "title": "✨ 주요 특징",
-      "ai": {
-        "title": "AI 뉴스 요약",
-        "desc": "최신 AI 기술로 핵심 내용만 간결하게 요약하여 제공합니다. 불필요한 내용은 제외하고 꼭 알아야 할 정보만 전달합니다."
+  "podcastDetail": {
+    "pageTitle": "팟캐스트 상세",
+    "detail": "상세",
+    "podcastTitle": "팟캐스트 #{{id}}",
+    "notFound": "팟캐스트를 찾을 수 없습니다",
+    "notFoundDescription": "찾으시는 팟캐스트가 존재하지 않거나 삭제되었습니다.",
+    "backToList": "내 팟캐스트로 돌아가기",
+    "delete": "삭제",
+    "deleteConfirm": "이 팟캐스트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "audioReady": "팟캐스트가 준비되었습니다",
+    "generatingInProgress": "팟캐스트 생성 중...",
+    "generatingEstimate": "보통 2-3분 정도 소요됩니다",
+    "promptTitle": "프롬프트",
+    "editPrompt": "수정",
+    "promptPlaceholder": "팟캐스트 주제를 입력하세요...",
+    "cancel": "취소",
+    "save": "변경사항 저장",
+    "regenerate": "다시 생성",
+    "regenerateConfirm": "수정된 프롬프트로 새 팟캐스트를 생성합니다. 계속하시겠습니까?",
+    "regenerateStarted": "재생성이 시작되었습니다! 완료되면 알려드릴게요.",
+    "editHint": "저장 후 '다시 생성'을 클릭하면 수정된 프롬프트로 새 팟캐스트가 만들어집니다.",
+    "scriptTitle": "생성된 스크립트",
+    "totalPlays": "총 재생 수",
+    "duration": "재생 시간",
+    "created": "생성일"
+  },
+  "generate": {
+    "pageTitle": "팟캐스트 생성",
+    "pageDescription": "프롬프트를 입력하고 맞춤형 팟캐스트를 생성하세요",
+    "title": "팟캐스트 생성",
+    "subtitle": "프롬프트를 입력하면 AI가 뉴스를 크롤링하고 요약하여 팟캐스트를 만들어드립니다",
+    "badge": "라이브 워크플로우",
+    "formTitle": "프롬프트 입력",
+    "formDescription": "관심 있는 주제를 입력하세요. AI가 최신 뉴스를 수집하고 요약합니다.",
+    "readyTitle": "생성 준비 완료",
+    "readyDescription": "프롬프트를 입력하면 워크플로우가 시작됩니다.",
+    "tipsTitle": "프롬프트 작성 팁",
+    "tip1": "구체적인 날짜나 키워드를 포함하면 더 정확한 결과를 얻을 수 있습니다",
+    "tip2": "관심 있는 주제, 회사, 기술 등을 명확하게 작성하세요",
+    "tip3": "언어를 명시하면 해당 언어로 뉴스를 검색합니다",
+    "saveToDashboard": "대시보드에 저장",
+    "startNew": "새로 시작",
+    "workflow": {
+      "prompting": {
+        "title": "프롬프트 분석 중",
+        "description": "입력하신 프롬프트를 분석하고 있습니다..."
       },
-      "voice": {
-        "title": "음성 변환",
-        "desc": "자연스러운 음성으로 편하게 청취할 수 있습니다. 눈이 피로할 때도 귀로 뉴스를 확인하세요."
+      "crawling": {
+        "title": "웹 검색하는 중...",
+        "description": "관련 뉴스와 정보를 수집하고 있습니다..."
       },
-      "daily": {
-        "title": "매일 업데이트",
-        "desc": "매일 새로운 뉴스 요약이 제공됩니다. 최신 소식을 놓치지 않고 확인하실 수 있습니다."
+      "summarizing": {
+        "title": "요약 정리 하는 중...",
+        "description": "수집한 뉴스를 분석하고 핵심 내용을 정리하고 있습니다..."
       },
-      "anywhere": {
-        "title": "어디서든 접속",
-        "desc": "PC, 태블릿, 스마트폰 등 모든 기기에서 이용 가능합니다. 반응형 디자인으로 편리하게 사용하세요."
-      },
-      "transcript": {
-        "title": "대본 제공",
-        "desc": "모든 팟캐스트 에피소드에 대한 전체 대본을 제공합니다. 원하는 부분을 빠르게 찾아볼 수 있습니다."
-      },
-      "timeline": {
-        "title": "타임라인",
-        "desc": "주요 뉴스 항목별 타임라인을 제공하여 원하는 뉴스로 바로 이동할 수 있습니다."
+      "generating": {
+        "title": "음성 파일 만드는 중...",
+        "description": "팟캐스트 오디오 파일을 생성하고 있습니다..."
       }
-    },
-    "recommend": {
-      "title": "🎯 이런 분들께 추천드립니다",
-      "commute": "출퇴근 시간을 활용해 뉴스를 듣고 싶은 분",
-      "exercise": "운동 중에도 세상 돌아가는 소식이 궁금한 분",
-      "eyes": "눈의 피로 없이 뉴스를 접하고 싶은 분",
-      "busy": "바쁜 일정 속 짧은 시간에 핵심 뉴스만 파악하고 싶은 분"
-    },
-    "notice": {
-      "title": "⚠️ 유의사항",
-      "ai": "본 서비스는 AI 기술을 활용하여 뉴스를 요약합니다. AI의 특성상 일부 오류가 있을 수 있으며, 정확한 정보는 원본 뉴스 출처를 확인해 주세요.",
-      "reference": "제공되는 콘텐츠는 참고용이며, 투자 등 중요한 결정에 앞서 반드시 원본 뉴스를 확인하시기 바랍니다.",
-      "voice": "AI 한국어 음성 기술은 아직 발전 중이며, 일부 발음이 부자연스러울 수 있습니다."
-    },
-    "contactSection": {
-      "title": "📬 문의하기",
-      "desc": "서비스 이용 중 문의사항이나 피드백이 있으시면 언제든지 연락해 주세요. 더 나은 서비스를 위해 여러분의 의견을 소중히 듣겠습니다."
-    },
-    "cta": {
-      "title": "지금 바로 시작하세요!",
-      "desc": "오늘의 뉴스를 AI가 요약해 드립니다. 무료로 들어보세요.",
-      "button": "팟캐스트 듣기 →"
-    }
-  },
-  "contact": {
-    "seo": {
-      "title": "문의하기 - Daily News Podcast | 연락처 및 피드백",
-      "description": "Daily News Podcast에 문의사항이나 피드백이 있으시면 연락주세요."
-    },
-    "title": "문의하기",
-    "subtitle": "서비스 이용 중 문의사항이나 피드백이 있으시면 연락주세요",
-    "email": {
-      "title": "이메일 문의",
-      "desc": "일반적인 문의사항, 서비스 피드백, 협업 제안 등 모든 문의를 환영합니다.<br/>보내주신 이메일은 영업일 기준 1-2일 내에 답변드리겠습니다."
-    },
-    "faq": {
-      "title": "💬 자주 묻는 질문",
-      "q1": "서비스 이용 요금이 있나요?",
-      "a1": "아니요, Daily News Podcast는 완전 무료 서비스입니다. 별도의 가입이나 결제 없이 모든 콘텐츠를 이용하실 수 있습니다.",
-      "q2": "팟캐스트는 얼마나 자주 업데이트되나요?",
-      "a2": "매일 새로운 뉴스 요약 팟캐스트가 업로드됩니다. 최신 뉴스를 놓치지 않고 들을 수 있습니다.",
-      "q3": "AI 요약의 정확도는 어느 정도인가요?",
-      "a3": "AI 기술의 특성상 간혹 오류가 있을 수 있습니다. 중요한 정보는 원본 뉴스 출처를 확인하시는 것을 권장합니다.",
-      "q4": "모바일에서도 이용 가능한가요?",
-      "a4": "네, 반응형 웹으로 제작되어 PC, 태블릿, 스마트폰 등 모든 기기에서 편리하게 이용하실 수 있습니다.",
-      "q5": "대본(스크립트)도 볼 수 있나요?",
-      "a5": "네, 모든 팟캐스트 에피소드에 대해 전체 대본을 제공합니다. 각 에피소드 페이지에서 확인하실 수 있습니다."
-    },
-    "tips": {
-      "title": "📝 문의 시 참고사항",
-      "tip1": "문의 내용에 구체적인 상황을 설명해 주시면 더 빠른 답변이 가능합니다.",
-      "tip2": "개인정보는 문의 응대 목적으로만 사용되며, 응대 완료 후 파기됩니다.",
-      "tip3": "답변은 영업일 기준 1-2일 내에 드리고 있습니다. 양해 부탁드립니다."
-    },
-    "partnership": {
-      "title": "🤝 협업 및 제휴 문의",
-      "desc": "Daily News Podcast와의 협업, 광고, 제휴에 관심이 있으시면 아래 이메일로 연락주세요. 다양한 형태의 파트너십을 환영합니다."
-    },
-    "cta": {
-      "title": "지금 바로 뉴스를 들어보세요",
-      "desc": "AI가 요약한 오늘의 뉴스 팟캐스트를 확인해보세요.",
-      "button": "팟캐스트 듣기 →"
-    }
-  },
-  "privacy": {
-    "seo": {
-      "title": "개인정보처리방침 - Daily News Podcast",
-      "description": "Daily News Podcast의 개인정보처리방침입니다."
-    },
-    "title": "개인정보처리방침",
-    "section1": {
-      "title": "1. 개인정보 수집 항목",
-      "intro": "Daily News Podcast(이하 \"서비스\")는 서비스 제공을 위해 다음과 같은 정보를 수집할 수 있습니다:",
-      "item1": "<strong>자동 수집 정보:</strong> 접속 IP 주소, 브라우저 유형, 접속 일시, 서비스 이용 기록",
-      "item2": "<strong>쿠키 정보:</strong> 사용자 환경 설정, 세션 정보"
-    },
-    "section2": {
-      "title": "2. 개인정보 수집 및 이용 목적",
-      "intro": "수집된 정보는 다음 목적으로 이용됩니다:",
-      "item1": "서비스 제공 및 운영",
-      "item2": "서비스 개선 및 사용자 경험 최적화",
-      "item3": "통계 분석 및 서비스 품질 향상",
-      "item4": "광고 게재 및 맞춤형 광고 제공"
-    },
-    "section3": {
-      "title": "3. 쿠키(Cookie) 사용",
-      "p1": "본 서비스는 사용자 경험 개선을 위해 쿠키를 사용합니다. 쿠키는 웹사이트가 사용자의 컴퓨터에 저장하는 작은 텍스트 파일입니다.",
-      "p2": "<strong>쿠키 사용 목적:</strong>",
-      "item1": "사용자 환경 설정 저장",
-      "item2": "서비스 이용 통계 수집",
-      "item3": "광고 효과 측정",
-      "p3": "사용자는 브라우저 설정을 통해 쿠키 저장을 거부할 수 있으나, 이 경우 서비스 이용에 일부 제한이 있을 수 있습니다."
-    },
-    "section4": {
-      "title": "4. 제3자 광고 서비스",
-      "p1": "본 서비스는 Google AdSense를 포함한 제3자 광고 서비스를 사용합니다. 이러한 광고 서비스는 사용자의 관심사에 맞는 광고를 표시하기 위해 쿠키를 사용할 수 있습니다.",
-      "p2": "Google의 광고 쿠키 사용에 대한 자세한 내용은 <link1>Google 광고 정책</link1>에서 확인하실 수 있습니다.",
-      "p3": "사용자는 <link2>Google 광고 설정</link2>에서 맞춤 광고를 거부할 수 있습니다."
-    },
-    "section5": {
-      "title": "5. 개인정보 보유 및 파기",
-      "p1": "수집된 개인정보는 수집 목적이 달성되면 지체 없이 파기됩니다. 단, 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관됩니다."
-    },
-    "section6": {
-      "title": "6. 개인정보 보호책임자",
-      "p1": "개인정보 관련 문의사항은 아래 연락처로 문의해 주시기 바랍니다."
-    },
-    "section7": {
-      "title": "7. 개인정보처리방침 변경",
-      "p1": "본 개인정보처리방침은 법령 또는 서비스 정책의 변경에 따라 수정될 수 있으며, 변경 시 서비스 내 공지를 통해 안내해 드립니다."
-    }
-  },
-  "terms": {
-    "seo": {
-      "title": "이용약관 - Daily News Podcast",
-      "description": "Daily News Podcast 이용약관입니다."
-    },
-    "title": "이용약관",
-    "article1": {
-      "title": "제1조 (목적)",
-      "content": "본 약관은 Daily News Podcast(이하 \"서비스\")가 제공하는 AI 뉴스 요약 팟캐스트 서비스의 이용조건 및 절차, 이용자와 서비스 제공자의 권리, 의무, 책임사항 등을 규정함을 목적으로 합니다."
-    },
-    "article2": {
-      "title": "제2조 (서비스의 정의)",
-      "content": "\"서비스\"란 인공지능(AI) 기술을 활용하여 뉴스를 요약하고, 이를 음성으로 변환하여 제공하는 팟캐스트 서비스를 말합니다."
-    },
-    "article3": {
-      "title": "제3조 (이용자의 의무)",
-      "intro": "이용자는 다음 행위를 해서는 안 됩니다:",
-      "item1": "서비스의 정상적인 운영을 방해하는 행위",
-      "item2": "타인의 명예를 손상시키거나 불이익을 주는 행위",
-      "item3": "서비스를 통해 제공받은 콘텐츠를 무단으로 복제, 배포, 판매하는 행위",
-      "item4": "기타 관계 법령에 위배되는 행위"
-    },
-    "article4": {
-      "title": "제4조 (서비스 제공 및 변경)",
-      "item1": "서비스는 연중무휴, 1일 24시간 제공함을 원칙으로 합니다.",
-      "item2": "서비스 제공자는 기술적 사양의 변경, 시스템 점검 등의 필요에 따라 서비스를 일시적으로 중단할 수 있습니다.",
-      "item3": "서비스 내용의 변경이 있는 경우, 서비스 내 공지를 통해 안내합니다."
-    },
-    "article5": {
-      "title": "제5조 (콘텐츠의 저작권)",
-      "item1": "서비스에서 제공하는 AI 생성 콘텐츠의 저작권은 서비스 제공자에게 있습니다.",
-      "item2": "이용자는 개인적이고 비상업적인 용도로만 콘텐츠를 이용할 수 있습니다.",
-      "item3": "원본 뉴스의 저작권은 해당 뉴스 제공자에게 있으며, 서비스는 뉴스를 요약하여 제공하는 것입니다."
-    },
-    "article6": {
-      "title": "제6조 (면책조항)",
-      "item1": "<strong>AI 생성 콘텐츠 한계:</strong> 본 서비스는 AI 기술을 활용하여 콘텐츠를 생성합니다. AI의 특성상 오류, 부정확한 정보가 포함될 수 있으며, 이로 인한 손해에 대해 서비스 제공자는 책임을 지지 않습니다.",
-      "item2": "<strong>정보의 정확성:</strong> 제공되는 뉴스 요약은 참고용이며, 정확한 정보는 원본 뉴스 출처를 확인하시기 바랍니다.",
-      "item3": "<strong>서비스 중단:</strong> 천재지변, 시스템 장애 등 불가항력적인 사유로 인한 서비스 중단에 대해 책임을 지지 않습니다."
-    },
-    "article7": {
-      "title": "제7조 (광고 게재)",
-      "content": "서비스는 서비스 운영을 위해 광고를 게재할 수 있으며, 이용자는 서비스 이용 시 노출되는 광고 게재에 대해 동의합니다. 광고와 관련하여 발생하는 거래는 광고주와 이용자 간의 문제이며, 서비스 제공자는 이에 대해 책임을 지지 않습니다."
-    },
-    "article8": {
-      "title": "제8조 (분쟁해결)",
-      "content": "서비스 이용으로 발생한 분쟁에 대해 서비스 제공자와 이용자는 성실히 협의하여 해결하며, 협의가 이루어지지 않을 경우 관할법원에 소송을 제기할 수 있습니다."
-    },
-    "article9": {
-      "title": "제9조 (약관의 변경)",
-      "content": "본 약관은 관계 법령 변경 또는 서비스 정책 변경에 따라 수정될 수 있으며, 변경 시 서비스 내 공지를 통해 안내합니다. 변경된 약관에 동의하지 않는 경우, 이용자는 서비스 이용을 중단할 수 있습니다."
-    },
-    "supplement": {
-      "title": "부칙",
-      "content": "본 약관은 {{date}}부터 시행됩니다."
     }
   }
 }
-
-

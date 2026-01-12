@@ -1,196 +1,238 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
 const TermsPage = () => {
-  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
-  const lastUpdatedDate =
-    i18n.language === "ko" ? "2025년 12월 9일" : "December 9, 2025";
 
   return (
     <Container>
       <Helmet>
-        <html lang={i18n.language} />
-        <title>{t("terms.seo.title")}</title>
-        <meta name="description" content={t("terms.seo.description")} />
-        <link rel="canonical" href="https://dailynewspod.com/terms" />
-        <meta property="og:title" content={t("terms.seo.title")} />
-        <meta property="og:description" content={t("terms.seo.description")} />
-        <meta property="og:url" content="https://dailynewspod.com/terms" />
-        <meta property="og:type" content="website" />
+        <title>Terms of Service - DailyNewsPodcast</title>
+        <meta
+          name="description"
+          content="Terms of Service for DailyNewsPodcast - Your personalized AI news podcast service."
+        />
+        <link rel="canonical" href="https://dailynewspodcast.com/terms" />
       </Helmet>
 
       <Header>
         <HeaderContent>
           <Logo to="/">
-            <LogoIcon>🎙️</LogoIcon>
-            <LogoText>Daily News Podcast</LogoText>
+            <LogoBox>D</LogoBox>
+            <LogoText>DailyNewsPodcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">{t("nav.home")}</NavLink>
-            <NavLink to="/about">{t("nav.about")}</NavLink>
-            <NavLink to="/contact">{t("nav.contact")}</NavLink>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/about">About</NavLink>
+            <NavLink to="/contact">Contact</NavLink>
           </Nav>
         </HeaderContent>
       </Header>
 
       <Main>
         <PageHeader>
-          <PageTitle>{t("terms.title")}</PageTitle>
-          <LastUpdated>
-            {t("common.lastUpdated", { date: lastUpdatedDate })}
-          </LastUpdated>
+          <PageTitle>Terms of Service</PageTitle>
+          <LastUpdated>Last updated: January 9, 2026</LastUpdated>
         </PageHeader>
 
         <ContentSection>
           <Section>
-            <SectionTitle>{t("terms.article1.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("terms.article1.content")}</Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article2.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("terms.article2.content")}</Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article3.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("terms.article3.intro")}</Paragraph>
-              <List>
-                <ListItem>{t("terms.article3.item1")}</ListItem>
-                <ListItem>{t("terms.article3.item2")}</ListItem>
-                <ListItem>{t("terms.article3.item3")}</ListItem>
-                <ListItem>{t("terms.article3.item4")}</ListItem>
-              </List>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article4.title")}</SectionTitle>
-            <SectionContent>
-              <List>
-                <ListItem>{t("terms.article4.item1")}</ListItem>
-                <ListItem>{t("terms.article4.item2")}</ListItem>
-                <ListItem>{t("terms.article4.item3")}</ListItem>
-              </List>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article5.title")}</SectionTitle>
-            <SectionContent>
-              <List>
-                <ListItem>{t("terms.article5.item1")}</ListItem>
-                <ListItem>{t("terms.article5.item2")}</ListItem>
-                <ListItem>{t("terms.article5.item3")}</ListItem>
-              </List>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article6.title")}</SectionTitle>
-            <SectionContent>
-              <List>
-                <ListItem>
-                  <Trans i18nKey="terms.article6.item1">
-                    <strong>AI 생성 콘텐츠 한계:</strong> 본 서비스는 AI 기술을
-                    활용하여 콘텐츠를 생성합니다.
-                  </Trans>
-                </ListItem>
-                <ListItem>
-                  <Trans i18nKey="terms.article6.item2">
-                    <strong>정보의 정확성:</strong> 제공되는 뉴스 요약은
-                    참고용입니다.
-                  </Trans>
-                </ListItem>
-                <ListItem>
-                  <Trans i18nKey="terms.article6.item3">
-                    <strong>서비스 중단:</strong> 천재지변, 시스템 장애 등
-                    불가항력적인 사유로 인한 서비스 중단에 대해 책임을 지지
-                    않습니다.
-                  </Trans>
-                </ListItem>
-              </List>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article7.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("terms.article7.content")}</Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article8.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("terms.article8.content")}</Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.article9.title")}</SectionTitle>
-            <SectionContent>
-              <Paragraph>{t("terms.article9.content")}</Paragraph>
-            </SectionContent>
-          </Section>
-
-          <Section>
-            <SectionTitle>{t("terms.supplement.title")}</SectionTitle>
+            <SectionTitle>Article 1 (Purpose)</SectionTitle>
             <SectionContent>
               <Paragraph>
-                {t("terms.supplement.content", { date: lastUpdatedDate })}
+                These Terms of Service govern the conditions, procedures,
+                rights, obligations, and responsibilities between users and
+                DailyNewsPodcast ("Service") for the personalized AI news
+                podcast service.
+              </Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 2 (Definition of Service)</SectionTitle>
+            <SectionContent>
+              <Paragraph>
+                "Service" refers to a personalized podcast service that uses
+                artificial intelligence (AI) technology to crawl news based on
+                user preferences, summarize content, and convert it into audio
+                format for daily delivery.
+              </Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 3 (User Obligations)</SectionTitle>
+            <SectionContent>
+              <Paragraph>Users must not engage in the following:</Paragraph>
+              <List>
+                <ListItem>
+                  Actions that interfere with normal service operation
+                </ListItem>
+                <ListItem>
+                  Actions that damage others' reputation or cause harm
+                </ListItem>
+                <ListItem>
+                  Unauthorized reproduction, distribution, or sale of content
+                  received through the service
+                </ListItem>
+                <ListItem>Other actions that violate relevant laws</ListItem>
+              </List>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>
+              Article 4 (Service Provision and Changes)
+            </SectionTitle>
+            <SectionContent>
+              <List>
+                <ListItem>
+                  The service is provided 24 hours a day, 365 days a year in
+                  principle.
+                </ListItem>
+                <ListItem>
+                  The service provider may temporarily suspend the service due
+                  to technical changes, system maintenance, etc.
+                </ListItem>
+                <ListItem>
+                  If there are changes to the service content, we will notify
+                  you through service announcements.
+                </ListItem>
+              </List>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 5 (Copyright of Content)</SectionTitle>
+            <SectionContent>
+              <List>
+                <ListItem>
+                  The copyright of AI-generated content provided by the service
+                  belongs to the service provider.
+                </ListItem>
+                <ListItem>
+                  Users may only use the content for personal and non-commercial
+                  purposes.
+                </ListItem>
+                <ListItem>
+                  The copyright of original news belongs to the respective news
+                  providers; the service summarizes and provides the news.
+                </ListItem>
+              </List>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 6 (Disclaimer)</SectionTitle>
+            <SectionContent>
+              <List>
+                <ListItem>
+                  <strong>AI-Generated Content Limitations:</strong> This
+                  service generates content using AI technology. Due to the
+                  nature of AI, errors and inaccurate information may be
+                  included, and the service provider is not responsible for any
+                  resulting damages.
+                </ListItem>
+                <ListItem>
+                  <strong>Accuracy of Information:</strong> News summaries
+                  provided are for reference only. Please verify accurate
+                  information from original news sources.
+                </ListItem>
+                <ListItem>
+                  <strong>Service Interruption:</strong> We are not responsible
+                  for service interruptions due to force majeure such as natural
+                  disasters or system failures.
+                </ListItem>
+              </List>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 7 (Advertising)</SectionTitle>
+            <SectionContent>
+              <Paragraph>
+                The service may display advertisements for service operation,
+                and users agree to the display of advertisements while using the
+                service. Transactions related to advertisements are matters
+                between advertisers and users, and the service provider is not
+                responsible for them.
+              </Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 8 (Dispute Resolution)</SectionTitle>
+            <SectionContent>
+              <Paragraph>
+                The service provider and users shall sincerely negotiate to
+                resolve disputes arising from service use. If negotiation fails,
+                litigation may be filed with the competent court.
+              </Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Article 9 (Changes to Terms)</SectionTitle>
+            <SectionContent>
+              <Paragraph>
+                These Terms may be modified according to changes in relevant
+                laws or service policies. Changes will be announced through
+                service notifications. If you do not agree to the changed terms,
+                you may discontinue use of the service.
+              </Paragraph>
+            </SectionContent>
+          </Section>
+
+          <Section>
+            <SectionTitle>Supplementary Provisions</SectionTitle>
+            <SectionContent>
+              <Paragraph>
+                These Terms take effect from January 9, 2026.
               </Paragraph>
             </SectionContent>
           </Section>
         </ContentSection>
 
         <BackToHome>
-          <BackLink to="/">{t("common.backToHome")}</BackLink>
+          <BackLink to="/">← Back to Home</BackLink>
         </BackToHome>
       </Main>
 
-      <Footer>
+      <FooterSection>
         <FooterContent>
           <FooterLogo>
-            <LogoIcon>🎙️</LogoIcon>
-            <FooterLogoText>Daily News Podcast</FooterLogoText>
+            <LogoBox>D</LogoBox>
+            <FooterLogoText>DailyNewsPodcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">{t("footer.about")}</FooterLink>
+            <FooterLink to="/about">About</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
+            <FooterLink to="/contact">Contact</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
+            <FooterLink to="/privacy">Privacy</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
+            <FooterLink to="/terms">Terms</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            {t("footer.copyright", { year: currentYear })}
+            © {currentYear} DailyNewsPodcast. All rights reserved.
           </FooterCopyright>
         </FooterContent>
-      </Footer>
+      </FooterSection>
     </Container>
   );
 };
 
 export default TermsPage;
 
-// Styled Components
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
 `;
 
 const Header = styled.header`
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
@@ -219,14 +261,23 @@ const Logo = styled(Link)`
   text-decoration: none;
 `;
 
-const LogoIcon = styled.span`
-  font-size: 1.5rem;
+const LogoBox = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background: #4f46e5;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
 `;
 
 const LogoText = styled.span`
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -241,16 +292,16 @@ const Nav = styled.nav`
   }
 `;
 
-const NavLink = styled(Link)<{ $active?: boolean }>`
-  color: ${(props) => (props.$active ? "#667eea" : "#4b5563")};
+const NavLink = styled(Link)`
+  color: #4b5563;
   text-decoration: none;
-  font-weight: ${(props) => (props.$active ? "600" : "500")};
+  font-weight: 500;
   font-size: 0.9375rem;
   padding: 0.5rem;
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
@@ -344,20 +395,20 @@ const BackToHome = styled.div`
 const BackLink = styled(Link)`
   display: inline-flex;
   align-items: center;
-  color: #667eea;
+  color: #4f46e5;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s;
 
   &:hover {
-    color: #764ba2;
+    color: #4338ca;
   }
 `;
 
-const Footer = styled.footer`
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-top: 1px solid #e2e8f0;
+const FooterSection = styled.footer`
+  background: white;
+  border-top: 1px solid #f3f4f6;
   padding: 3rem 2rem;
   margin-top: 4rem;
 `;
@@ -381,7 +432,7 @@ const FooterLogo = styled.div`
 const FooterLogoText = styled.span`
   font-size: 1.125rem;
   font-weight: 700;
-  color: #334155;
+  color: #111827;
 `;
 
 const FooterLinks = styled.div`
@@ -397,19 +448,19 @@ const FooterLinks = styled.div`
 `;
 
 const FooterLink = styled(Link)`
-  color: #64748b;
+  color: #6b7280;
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
 const FooterDivider = styled.span`
-  color: #cbd5e1;
+  color: #d1d5db;
   font-size: 0.875rem;
 
   @media (max-width: 768px) {
@@ -419,6 +470,6 @@ const FooterDivider = styled.span`
 
 const FooterCopyright = styled.p`
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 0;
 `;

@@ -1,39 +1,32 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useTranslation, Trans } from "react-i18next";
 import styled from "styled-components";
 
 const ContactPage = () => {
-  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
     <Container>
       <Helmet>
-        <html lang={i18n.language} />
-        <title>{t("contact.seo.title")}</title>
-        <meta name="description" content={t("contact.seo.description")} />
-        <link rel="canonical" href="https://dailynewspod.com/contact" />
-        <meta property="og:title" content={t("contact.seo.title")} />
+        <title>Contact - DailyNewsPodcast | Get in Touch</title>
         <meta
-          property="og:description"
-          content={t("contact.seo.description")}
+          name="description"
+          content="Contact DailyNewsPodcast for inquiries, feedback, or partnership opportunities."
         />
-        <meta property="og:url" content="https://dailynewspod.com/contact" />
-        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://dailynewspodcast.com/contact" />
       </Helmet>
 
       <Header>
         <HeaderContent>
           <Logo to="/">
-            <LogoIcon>🎙️</LogoIcon>
-            <LogoText>Daily News Podcast</LogoText>
+            <LogoBox>D</LogoBox>
+            <LogoText>DailyNewsPodcast</LogoText>
           </Logo>
           <Nav>
-            <NavLink to="/">{t("nav.home")}</NavLink>
-            <NavLink to="/about">{t("nav.about")}</NavLink>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/about">About</NavLink>
             <NavLink to="/contact" $active>
-              {t("nav.contact")}
+              Contact
             </NavLink>
           </Nav>
         </HeaderContent>
@@ -42,130 +35,164 @@ const ContactPage = () => {
       <Main>
         <PageHeader>
           <PageIcon>📬</PageIcon>
-          <PageTitle>{t("contact.title")}</PageTitle>
-          <PageSubtitle>{t("contact.subtitle")}</PageSubtitle>
+          <PageTitle>Contact Us</PageTitle>
+          <PageSubtitle>
+            We'd love to hear from you. Reach out anytime!
+          </PageSubtitle>
         </PageHeader>
 
         <ContentSection>
           <ContactCard>
             <ContactCardHeader>
               <ContactCardIcon>✉️</ContactCardIcon>
-              <ContactCardTitle>{t("contact.email.title")}</ContactCardTitle>
+              <ContactCardTitle>Email Us</ContactCardTitle>
             </ContactCardHeader>
             <ContactCardContent>
-              <ContactEmail href="mailto:contact@dailynewspod.com">
-                contact@dailynewspod.com
+              <ContactEmail href="mailto:contact@dailynewspodcast.com">
+                contact@dailynewspodcast.com
               </ContactEmail>
               <ContactDescription>
-                <Trans i18nKey="contact.email.desc">
-                  일반적인 문의사항, 서비스 피드백, 협업 제안 등 모든 문의를
-                  환영합니다.
-                  <br />
-                  보내주신 이메일은 영업일 기준 1-2일 내에 답변드리겠습니다.
-                </Trans>
+                General inquiries, service feedback, collaboration proposals—we
+                welcome all messages.
+                <br />
+                We'll respond within 1-2 business days.
               </ContactDescription>
             </ContactCardContent>
           </ContactCard>
 
           <Section>
-            <SectionTitle>{t("contact.faq.title")}</SectionTitle>
+            <SectionTitle>💬 Frequently Asked Questions</SectionTitle>
             <FAQList>
               <FAQItem>
-                <FAQQuestion>{t("contact.faq.q1")}</FAQQuestion>
-                <FAQAnswer>{t("contact.faq.a1")}</FAQAnswer>
+                <FAQQuestion>Is there a service fee?</FAQQuestion>
+                <FAQAnswer>
+                  We offer a free tier with basic features. Premium plans
+                  starting at $19/month unlock additional podcasts, premium
+                  voices, and advanced features.
+                </FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>{t("contact.faq.q2")}</FAQQuestion>
-                <FAQAnswer>{t("contact.faq.a2")}</FAQAnswer>
+                <FAQQuestion>How often are podcasts delivered?</FAQQuestion>
+                <FAQAnswer>
+                  Free tier delivers weekly podcasts. Pro subscribers get daily
+                  podcasts delivered to their inbox every morning.
+                </FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>{t("contact.faq.q3")}</FAQQuestion>
-                <FAQAnswer>{t("contact.faq.a3")}</FAQAnswer>
+                <FAQQuestion>How accurate is the AI summary?</FAQQuestion>
+                <FAQAnswer>
+                  Our AI crawls thousands of sources and provides high-quality
+                  summaries. However, we recommend verifying critical
+                  information from original sources.
+                </FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>{t("contact.faq.q4")}</FAQQuestion>
-                <FAQAnswer>{t("contact.faq.a4")}</FAQAnswer>
+                <FAQQuestion>Can I customize the voice?</FAQQuestion>
+                <FAQAnswer>
+                  Yes! Premium users can choose from multiple neural voices with
+                  different accents and personas.
+                </FAQAnswer>
               </FAQItem>
               <FAQItem>
-                <FAQQuestion>{t("contact.faq.q5")}</FAQQuestion>
-                <FAQAnswer>{t("contact.faq.a5")}</FAQAnswer>
+                <FAQQuestion>
+                  Can I use my own podcast app to listen?
+                </FAQQuestion>
+                <FAQAnswer>
+                  Absolutely! Pro subscribers get a private RSS feed that works
+                  with Spotify, Apple Podcasts, and any podcast player.
+                </FAQAnswer>
               </FAQItem>
             </FAQList>
           </Section>
 
           <Section>
-            <SectionTitle>{t("contact.tips.title")}</SectionTitle>
+            <SectionTitle>📝 Contact Tips</SectionTitle>
             <InfoBox>
               <InfoItem>
                 <InfoIcon>💡</InfoIcon>
-                <InfoText>{t("contact.tips.tip1")}</InfoText>
+                <InfoText>
+                  Providing specific details helps us respond faster and more
+                  effectively.
+                </InfoText>
               </InfoItem>
               <InfoItem>
                 <InfoIcon>🔒</InfoIcon>
-                <InfoText>{t("contact.tips.tip2")}</InfoText>
+                <InfoText>
+                  Your information is only used to respond to your inquiry and
+                  is not shared.
+                </InfoText>
               </InfoItem>
               <InfoItem>
                 <InfoIcon>⏰</InfoIcon>
-                <InfoText>{t("contact.tips.tip3")}</InfoText>
+                <InfoText>
+                  We typically respond within 1-2 business days. Thank you for
+                  your patience!
+                </InfoText>
               </InfoItem>
             </InfoBox>
           </Section>
 
           <Section>
-            <SectionTitle>{t("contact.partnership.title")}</SectionTitle>
+            <SectionTitle>🤝 Partnership Inquiries</SectionTitle>
             <SectionContent>
-              <Paragraph>{t("contact.partnership.desc")}</Paragraph>
+              <Paragraph>
+                Interested in collaboration, advertising, or partnership with
+                DailyNewsPodcast? We welcome various forms of partnership
+                opportunities.
+              </Paragraph>
             </SectionContent>
             <PartnershipBox>
               <PartnershipIcon>🤝</PartnershipIcon>
-              <PartnershipEmail href="mailto:contact@dailynewspod.com">
-                contact@dailynewspod.com
+              <PartnershipEmail href="mailto:contact@dailynewspodcast.com">
+                contact@dailynewspodcast.com
               </PartnershipEmail>
             </PartnershipBox>
           </Section>
         </ContentSection>
 
         <CTASection>
-          <CTATitle>{t("contact.cta.title")}</CTATitle>
-          <CTADescription>{t("contact.cta.desc")}</CTADescription>
-          <CTAButton to="/">{t("contact.cta.button")}</CTAButton>
+          <CTATitle>Ready to Get Started?</CTATitle>
+          <CTADescription>
+            Create your personalized AI news podcast today.
+          </CTADescription>
+          <CTAButton to="/">Create My Podcast →</CTAButton>
         </CTASection>
       </Main>
 
-      <Footer>
+      <FooterSection>
         <FooterContent>
           <FooterLogo>
-            <LogoIcon>🎙️</LogoIcon>
-            <FooterLogoText>Daily News Podcast</FooterLogoText>
+            <LogoBox>D</LogoBox>
+            <FooterLogoText>DailyNewsPodcast</FooterLogoText>
           </FooterLogo>
           <FooterLinks>
-            <FooterLink to="/about">{t("footer.about")}</FooterLink>
+            <FooterLink to="/about">About</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/contact">{t("footer.contact")}</FooterLink>
+            <FooterLink to="/contact">Contact</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/privacy">{t("footer.privacy")}</FooterLink>
+            <FooterLink to="/privacy">Privacy</FooterLink>
             <FooterDivider>|</FooterDivider>
-            <FooterLink to="/terms">{t("footer.terms")}</FooterLink>
+            <FooterLink to="/terms">Terms</FooterLink>
           </FooterLinks>
           <FooterCopyright>
-            {t("footer.copyright", { year: currentYear })}
+            © {currentYear} DailyNewsPodcast. All rights reserved.
           </FooterCopyright>
         </FooterContent>
-      </Footer>
+      </FooterSection>
     </Container>
   );
 };
 
 export default ContactPage;
 
-// Styled Components
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
 `;
 
 const Header = styled.header`
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
@@ -194,14 +221,23 @@ const Logo = styled(Link)`
   text-decoration: none;
 `;
 
-const LogoIcon = styled.span`
-  font-size: 1.5rem;
+const LogoBox = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background: #4f46e5;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
 `;
 
 const LogoText = styled.span`
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -217,7 +253,7 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)<{ $active?: boolean }>`
-  color: ${(props) => (props.$active ? "#667eea" : "#4b5563")};
+  color: ${(props) => (props.$active ? "#4f46e5" : "#4b5563")};
   text-decoration: none;
   font-weight: ${(props) => (props.$active ? "600" : "500")};
   font-size: 0.9375rem;
@@ -225,7 +261,7 @@ const NavLink = styled(Link)<{ $active?: boolean }>`
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
@@ -277,7 +313,7 @@ const ContentSection = styled.div`
 `;
 
 const ContactCard = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   border-radius: 20px;
   padding: 2rem;
   color: white;
@@ -423,7 +459,7 @@ const PartnershipIcon = styled.span`
 `;
 
 const PartnershipEmail = styled.a`
-  color: #667eea;
+  color: #4f46e5;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
@@ -456,7 +492,7 @@ const CTADescription = styled.p`
 
 const CTAButton = styled(Link)`
   display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(to right, #4f46e5, #2563eb);
   color: white;
   font-size: 1rem;
   font-weight: 700;
@@ -467,13 +503,13 @@ const CTAButton = styled(Link)`
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
   }
 `;
 
-const Footer = styled.footer`
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-top: 1px solid #e2e8f0;
+const FooterSection = styled.footer`
+  background: white;
+  border-top: 1px solid #f3f4f6;
   padding: 3rem 2rem;
   margin-top: 4rem;
 `;
@@ -497,7 +533,7 @@ const FooterLogo = styled.div`
 const FooterLogoText = styled.span`
   font-size: 1.125rem;
   font-weight: 700;
-  color: #334155;
+  color: #111827;
 `;
 
 const FooterLinks = styled.div`
@@ -513,19 +549,19 @@ const FooterLinks = styled.div`
 `;
 
 const FooterLink = styled(Link)`
-  color: #64748b;
+  color: #6b7280;
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
   transition: color 0.2s;
 
   &:hover {
-    color: #667eea;
+    color: #4f46e5;
   }
 `;
 
 const FooterDivider = styled.span`
-  color: #cbd5e1;
+  color: #d1d5db;
   font-size: 0.875rem;
 
   @media (max-width: 768px) {
@@ -535,6 +571,6 @@ const FooterDivider = styled.span`
 
 const FooterCopyright = styled.p`
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: #9ca3af;
   margin: 0;
 `;
